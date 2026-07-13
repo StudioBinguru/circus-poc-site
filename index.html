@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>서커스 공연 구성 PoC</title>
+<style>
+:root{
+  --night:#122428;--night2:#1b3435;--paper:#fff7e8;--paper2:#efe2ca;--ink:#271d1b;--muted:#786c5c;
+  --red:#aa3538;--red2:#72262b;--gold:#f2bd50;--green:#3d7d60;--blue:#44758b;--line:#d8c6a8;
+  --shadow:0 18px 50px rgba(5,15,16,.28)
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:'Malgun Gothic','맑은 고딕',sans-serif;letter-spacing:0}
+body{background:radial-gradient(circle at 50% -10%,#31595a 0,#182f32 48%,var(--night) 100%);color:var(--ink);overflow-x:hidden}
+button,select{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.38}
+.game{width:min(1220px,100%);margin:0 auto;padding:18px 18px 50px}
+.hud{display:flex;align-items:center;gap:14px;color:#fff7e8;margin-bottom:13px}
+.logo{position:relative;width:48px;height:40px;flex:0 0 auto;background:repeating-linear-gradient(110deg,#f4c55d 0 10px,#a93438 10px 20px);clip-path:polygon(50% 0,100% 100%,0 100%)}
+.logo:after{content:"";position:absolute;width:10px;height:15px;left:19px;bottom:0;background:#21191a;border-radius:8px 8px 0 0}
+.title h1{font-size:21px;margin:0}.title small{font-size:10px;color:#e9c96f}
+.hud-stats{display:flex;gap:7px;margin-left:auto}.hud-stat{width:84px;height:54px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.07);border-radius:6px;padding:7px 9px}
+.hud-stat span{display:flex;align-items:center;gap:5px;color:#bcd0cc;font-size:10px}.hud-stat b{display:block;font-size:18px;margin-top:2px}
+.icon{display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;background:rgba(255,255,255,.12);font-style:normal;font-size:11px}
+.icon-button{border:0;background:transparent;color:#d9e5e2;width:34px;height:34px;font-size:20px;border-radius:50%;padding:0}.icon-button:hover{background:rgba(255,255,255,.1)}
+
+.weather{position:relative;overflow:hidden;display:grid;grid-template-columns:74px 1fr auto;align-items:center;gap:15px;background:var(--paper);border-radius:8px 8px 0 0;padding:14px 18px;border-bottom:1px solid var(--line);box-shadow:var(--shadow)}
+.weather-art{position:relative;width:62px;height:54px;display:grid;place-items:center;background:#244348;color:#fff;border-radius:7px;font-size:34px;z-index:1}
+.weather-copy{z-index:1}.weather-copy h2{font-size:17px;margin:0 0 3px}.weather-copy p{font-size:11px;color:var(--muted);margin:0}
+.rule{z-index:1;max-width:320px;border-left:4px solid var(--gold);background:#eadfc9;padding:9px 12px;font-size:11px}.rule b{display:block;margin-bottom:2px}
+.rain{position:absolute;inset:0;pointer-events:none;opacity:.25;background-image:repeating-linear-gradient(105deg,transparent 0 24px,#5d8792 25px 27px,transparent 28px 54px);background-size:110px 90px;animation:rainMove 1.1s linear infinite}
+.wind{position:absolute;inset:0;pointer-events:none;opacity:.22;background:repeating-linear-gradient(0deg,transparent 0 14px,#6e9998 15px 16px,transparent 17px 38px);animation:windMove 2.2s linear infinite}
+@keyframes rainMove{to{background-position:-50px 90px}}@keyframes windMove{to{background-position:180px 0}}
+
+.roster-wrap{background:#eadfcf;padding:12px 18px 15px;border-bottom:1px solid #cdbb9c}
+.section-label{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:700;margin-bottom:8px}.section-label small{font-weight:400;color:var(--muted)}
+.roster{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.member{position:relative;display:grid;grid-template-columns:44px 1fr;gap:9px;align-items:center;min-height:70px;text-align:left;border:2px solid transparent;background:var(--paper);border-radius:7px;padding:8px;color:var(--ink);transition:transform .16s,border-color .16s}
+.member:hover{transform:translateY(-2px);border-color:#b6905a}.member.selected{border-color:var(--red);box-shadow:0 0 0 3px rgba(170,53,56,.12)}.member.assigned{border-color:var(--green)}.member.unavailable{filter:grayscale(1);opacity:.43}
+.portrait{position:relative;width:44px;height:52px;border-radius:22px 22px 12px 12px;background:var(--portrait,#6b8290);overflow:hidden;border:2px solid #fff4db;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.portrait:before{content:"";position:absolute;width:20px;height:20px;border-radius:50%;background:#f2c9a4;left:10px;top:7px}.portrait:after{content:"";position:absolute;width:34px;height:26px;border-radius:16px 16px 5px 5px;background:#2f2930;left:3px;bottom:-5px}
+.member b{display:block;font-size:13px}.member small{display:block;font-size:10px;color:var(--muted);line-height:1.45}.status{font-size:10px;color:var(--green);font-weight:700;margin-top:3px}
+
+.board{display:grid;grid-template-columns:minmax(0,1.65fr) 310px;background:#dcccad;box-shadow:var(--shadow);min-height:600px}
+.stage{position:relative;overflow:hidden;padding:20px 18px 22px;border-right:1px solid #bfae91;background:linear-gradient(90deg,#9c3035 0 18px,#e6d4b4 18px calc(100% - 18px),#9c3035 calc(100% - 18px));}
+.stage:before{content:"";position:absolute;left:18px;right:18px;top:0;height:48px;background:repeating-linear-gradient(100deg,#8f2a31 0 38px,#b83f43 38px 76px);clip-path:polygon(0 0,100% 0,96% 70%,90% 40%,84% 72%,78% 40%,72% 72%,66% 40%,60% 72%,54% 40%,48% 72%,42% 40%,36% 72%,30% 40%,24% 72%,18% 40%,12% 72%,6% 40%,0 70%);z-index:2}
+.bulbs{position:absolute;left:28px;right:28px;top:14px;height:10px;z-index:3;background:radial-gradient(circle,#ffe989 0 3px,transparent 4px) 0 0/34px 10px repeat-x;filter:drop-shadow(0 0 5px #ffd764)}
+.stage-title{position:relative;z-index:3;margin:34px 4px 10px;display:flex;justify-content:space-between;align-items:end}.stage-title h3{margin:0;font-size:15px}.stage-title small{font-size:10px;color:#715f4b}
+.rings{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.ring{position:relative;min-height:330px;background:linear-gradient(#fff9ec,#f5e8cf);border:2px solid #a67b45;border-radius:48% 48% 8px 8px/11% 11% 8px 8px;padding:13px 11px 34px;box-shadow:inset 0 -18px 0 rgba(161,109,56,.08),0 7px 16px rgba(71,46,30,.12);animation:ringIn .28s ease both}
+@keyframes ringIn{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+.ring.empty{display:grid;place-items:center;border-style:dashed;color:#99866d;background:rgba(255,248,232,.58)}
+.empty-mark{display:grid;place-items:center;width:64px;height:64px;border:2px dashed #af9875;border-radius:50%;font-size:30px;animation:emptyPulse 1.8s ease-in-out infinite}
+@keyframes emptyPulse{50%{transform:scale(1.06);border-color:#a93539;color:#a93539}}
+.ring-number{position:absolute;top:8px;right:12px;width:20px;height:20px;border-radius:50%;background:#482d2b;color:#fff;text-align:center;line-height:20px;font-size:10px}
+.act-art{height:68px;display:grid;place-items:center;font-size:44px;color:var(--act-color,#7d4a43);text-shadow:0 3px 0 rgba(255,255,255,.8)}
+.act-name{text-align:center;font-weight:800;font-size:14px}.act-needs{text-align:center;color:var(--muted);font-size:10px;margin:3px 0 8px}
+.cast{display:flex;gap:5px;justify-content:center;min-height:42px;margin-bottom:7px}
+.cast-slot{width:42px;height:42px;border:1px dashed #aa9575;border-radius:50%;display:grid;place-items:center;background:#fff9ee;color:#8c7962;font-size:18px;position:relative}
+.cast-slot.filled{border-style:solid;border-color:var(--green);background:#dfeadf;color:#254e3c}.cast-slot strong{font-size:11px}.cast-slot .tiny-x{position:absolute;right:-5px;top:-6px;width:16px;height:16px;border:0;border-radius:50%;background:var(--red);color:#fff;font-size:11px;line-height:15px;padding:0}
+.cast-drop{min-height:31px;border:1px dashed #b5a17f;border-radius:5px;display:grid;place-items:center;color:#8a765e;font-size:10px;margin-bottom:7px}.cast-drop:hover,.cast-drop.ready{border-color:var(--red);background:#fff2df}
+.gear-row{display:grid;gap:4px;margin-bottom:7px}.gear-select{width:100%;border:1px solid #c7b493;background:#fffaf0;border-radius:4px;padding:5px;font-size:10px;color:var(--ink)}
+.act-score{display:grid;grid-template-columns:58px 1fr;align-items:center;gap:7px;background:#eadcc3;border-radius:5px;padding:7px}
+.score-seal{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:#243f40;color:#ffe29a;border:3px double #d5ac55;font-size:19px;font-weight:900;box-shadow:inset 0 0 0 2px #243f40}
+.modifiers{display:flex;flex-wrap:wrap;align-content:center;gap:4px;min-height:42px}.modifier{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#fff8e8;border:1px solid #bda681;color:#6e5b43;font-size:11px;font-weight:800}.modifier.good{border-color:#6a9b7e;color:#286146;background:#e4f0e5}.modifier.bad{border-color:#b66c6c;color:#8c292d;background:#f6dede}
+.ring-remove{position:absolute;bottom:8px;right:10px;width:22px;height:22px;border:0;background:transparent;color:var(--red);font-size:20px;padding:0}
+.repertoire-title{position:relative;z-index:1;margin:17px 4px 8px;font-size:12px;font-weight:700}
+.repertoire{position:relative;z-index:1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.act-card{border:1px solid #bca785;background:#fff6e5;border-radius:6px;padding:8px 6px;color:var(--ink);min-height:100px;transition:transform .15s,border-color .15s}.act-card:hover{transform:translateY(-3px);border-color:var(--red)}.act-card.selected{filter:grayscale(.7);opacity:.4}
+.act-card .art{font-size:29px;color:var(--act-color);height:35px}.act-card b{display:block;font-size:11px}.act-card small{font-size:9px;color:var(--muted)}.pips{display:flex;gap:3px;margin-top:5px}.pip{width:15px;height:15px;border-radius:50%;display:grid;place-items:center;background:#eadbc0;color:#5c4a38;font-size:8px}
+
+.control{background:#efe5d3;padding:16px 14px}.backstage{background:#fff8e9;border:1px solid var(--line);border-radius:7px;padding:10px;margin-bottom:12px}.backstage-head{display:flex;align-items:center;justify-content:space-between}.backstage h3{font-size:12px;margin:0}.badge{font-size:8px;border-radius:3px;background:#e7d7b9;padding:2px 4px;color:#705c41}.backstage p{font-size:9px;color:var(--muted);margin:4px 0 7px}.back-drop{min-height:58px;border:1px dashed #b7a27f;border-radius:5px;display:grid;place-items:center;text-align:center;color:#8c785f;font-size:10px;background:#fffdf5}.back-drop.filled{border-style:solid;border-color:var(--green);color:#285742}.back-drop:hover,.back-drop.ready{border-color:var(--red)}
+.scoreboard{background:#1d393b;color:#fff;border-radius:7px;padding:13px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.05)}
+.score-top{display:flex;align-items:end;justify-content:space-between}.score-top span{font-size:10px;color:#bfd0cc}.score-top b{font-size:26px;line-height:1}.target{font-size:12px;color:#f1cb72}.meter{height:13px;background:#102728;border-radius:8px;margin:9px 0 12px;overflow:hidden;border:1px solid rgba(255,255,255,.12)}.meter-fill{height:100%;background:linear-gradient(90deg,#d9554e,#efbd4f);width:var(--progress);transition:width .35s ease;box-shadow:0 0 10px rgba(242,189,80,.5)}
+.ledger{font-size:10px;color:#c7d4d1}.ledger div{display:flex;justify-content:space-between;margin:5px 0}.ledger .money{color:#f2d17f}.warning{min-height:35px;border-top:1px solid rgba(255,255,255,.14);padding-top:8px;margin-top:8px;font-size:9px;color:#f5cf7d;line-height:1.45}
+.perform{position:relative;width:100%;height:46px;border:0;border-radius:5px;margin-top:10px;background:linear-gradient(#c94a47,#922f34);color:#fff;font-weight:800;overflow:hidden}.perform:before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 20%,rgba(255,255,255,.24) 45%,transparent 70%);transform:translateX(-120%)}.perform:hover:before{animation:shine .7s ease}@keyframes shine{to{transform:translateX(120%)}}
+.legend{font-size:9px;color:#7b6c58;line-height:1.55;margin-top:10px}
+
+.overlay{position:fixed;inset:0;z-index:20;background:rgba(5,13,14,.78);display:grid;place-items:center;padding:18px}.overlay.hidden{display:none}.modal{width:min(650px,100%);background:var(--paper);border:4px solid #5f332f;border-radius:9px;padding:20px;box-shadow:0 25px 80px rgba(0,0,0,.5);animation:modalIn .28s ease both}@keyframes modalIn{from{transform:scale(.92);opacity:0}to{transform:none;opacity:1}}
+.modal h2{margin:0 0 5px;font-size:20px}.modal p{font-size:11px;color:var(--muted)}.result-score{font-size:50px;font-weight:900;color:var(--red);text-align:center;animation:scorePop .45s .18s both}@keyframes scorePop{from{transform:scale(.5);opacity:0}70%{transform:scale(1.12)}to{transform:scale(1);opacity:1}}
+.result-list{background:#f1e4cf;border-radius:5px;padding:8px 10px;max-height:170px;overflow:auto}.result-list div{display:flex;justify-content:space-between;border-bottom:1px solid #dbc9ad;padding:5px;font-size:10px}.result-list div:last-child{border-bottom:0}
+.reward-grid,.choice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:13px}.reward,.choice{border:1px solid #cbb796;background:#fff9ed;border-radius:6px;padding:10px;text-align:left;color:var(--ink);min-height:78px}.reward:hover,.choice:hover{border-color:var(--red);transform:translateY(-2px)}.reward i{display:block;font-style:normal;font-size:24px;color:var(--red)}.reward b,.choice b{display:block;font-size:11px}.reward small,.choice small{font-size:9px;color:var(--muted)}
+.continue{border:0;background:var(--red);color:#fff;border-radius:5px;padding:10px 16px;font-weight:700;margin-top:10px}
+.showtime{position:fixed;inset:0;z-index:30;background:#130d10;overflow:hidden;display:grid;place-items:center;color:#ffe69a}.showtime.hidden{display:none}.curtain{position:absolute;top:0;bottom:0;width:54%;background:repeating-linear-gradient(90deg,#6e1922 0 34px,#9d2931 34px 68px);box-shadow:inset 0 0 50px rgba(0,0,0,.45)}.curtain.left{left:0;animation:curtainLeft 1.15s .35s ease-in forwards}.curtain.right{right:0;animation:curtainRight 1.15s .35s ease-in forwards}.show-mark{z-index:2;text-align:center;animation:pulse 1s infinite}.show-mark .star{font-size:54px}.show-mark b{display:block;font-size:17px}@keyframes curtainLeft{to{transform:translateX(-96%)}}@keyframes curtainRight{to{transform:translateX(96%)}}@keyframes pulse{50%{transform:scale(1.08);filter:brightness(1.25)}}
+
+@media(max-width:900px){.board{grid-template-columns:1fr}.stage{border-right:0}.control{display:grid;grid-template-columns:1fr 1fr;gap:10px}.legend{grid-column:1/-1}.rings{grid-template-columns:1fr}.ring{min-height:260px;border-radius:8px}.repertoire{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:580px){.game{padding:10px 8px 35px}.title small{display:none}.hud{align-items:flex-start}.hud-stats{display:grid;grid-template-columns:repeat(2,68px)}.hud-stat{width:68px}.weather{grid-template-columns:52px 1fr}.weather-art{width:48px;height:48px}.rule{grid-column:1/-1;max-width:none}.roster{grid-template-columns:repeat(2,1fr)}.board{display:block}.stage{padding-left:12px;padding-right:12px}.rings{grid-template-columns:1fr}.repertoire{grid-template-columns:repeat(2,1fr)}.control{display:block}.reward-grid,.choice-grid{grid-template-columns:1fr}.member{grid-template-columns:36px 1fr}.portrait{width:36px;height:44px}.portrait:before{left:7px}.portrait:after{left:0}.stage-title small{display:none}}
+</style>
+</head>
+<body>
+<div class="game">
+  <header class="hud">
+    <div class="logo" aria-hidden="true"></div>
+    <div class="title"><h1>PoC</h1><small>공연 구성 시험판 · 명칭과 수치 임시</small></div>
+    <div class="hud-stats" id="hudStats"></div>
+    <button class="icon-button" onclick="reset()" title="처음부터 다시 시작" aria-label="처음부터 다시 시작">↻</button>
+  </header>
+  <div id="app"></div>
+</div>
+<div class="overlay hidden" id="overlay"><div class="modal" id="modal"></div></div>
+<div class="showtime hidden" id="showtime"><div class="curtain left"></div><div class="curtain right"></div><div class="show-mark"><div class="star">✦</div><b>공연 중</b></div></div>
+<script>
+const ACTS={
+  aerial:{name:'공중 묘기',icon:'⌁',color:'#496e89',base:13,cost:4,cast:2,gear:1,primary:'곡예',support:'완력',tags:['높이','장비'],weather:{rain:-5,wind:-7},income:0,desc:'단원 2명 · 높은 흥행'},
+  fire:{name:'불꽃 공연',icon:'♨',color:'#b64237',base:10,cost:4,cast:1,gear:1,primary:'손기술',support:'무대기술',tags:['불','장비'],weather:{rain:-8,wind:-4},income:0,desc:'날씨에 약한 고득점'},
+  magic:{name:'마술',icon:'✦',color:'#695482',base:7,cost:2,cast:1,gear:2,primary:'손기술',support:'연기',tags:['실내','소도구','관객'],weather:{},income:0,desc:'장비 2개로 성장'},
+  comedy:{name:'익살극',icon:'◡',color:'#a06a35',base:9,cost:1,cast:2,gear:0,primary:'연기',support:'곡예',tags:['실내','관객'],weather:{},income:0,desc:'단원 2명 · 장비 불필요'},
+  music:{name:'악기 행진',icon:'♫',color:'#3f795e',base:6,cost:1,cast:1,gear:0,primary:'음악',support:'연기',tags:['소리','관객'],weather:{rain:-2},income:4,desc:'흥행은 낮지만 수입 +4'}
+};
+const MEMBERS=[
+  {id:'a',name:'단원 A',primary:'곡예',secondary:'연기',color:'#54768b'},
+  {id:'b',name:'단원 B',primary:'손기술',secondary:'완력',color:'#97554e'},
+  {id:'c',name:'단원 C',primary:'연기',secondary:'음악',color:'#78704d'},
+  {id:'d',name:'단원 D',primary:'무대기술',secondary:'곡예',color:'#5b765e'}
+];
+const GEARS={
+  net:{name:'안전망',icon:'⌗',tag:'높이',bonus:4},lamp:{name:'집중 조명',icon:'☼',tag:'관객',bonus:3},
+  kit:{name:'정밀 소도구',icon:'✦',tag:'소도구',bonus:4},igniter:{name:'점화 장치',icon:'♨',tag:'불',bonus:5},speaker:{name:'확성 장치',icon:'♫',tag:'관객',bonus:4}
+};
+const ROUNDS=[
+  {weather:'clear',icon:'☼',name:'맑음',place:'첫 번째 순회지',rule:'별도 지역 규칙 없음',target:45,income:7},
+  {weather:'rain',icon:'☂',name:'폭우',place:'두 번째 순회지',rule:'실내 공연 흥행 +3',target:48,income:8,tagBonus:{실내:3}},
+  {weather:'wind',icon:'≋',name:'강풍',place:'세 번째 순회지',rule:'장비 없는 공연 흥행 +3',target:52,income:9,noGearBonus:3},
+  {weather:'dry',icon:'☼',name:'건조함',place:'네 번째 순회지',rule:'관객 공연 흥행 +3',target:57,income:10,tagBonus:{관객:3}},
+  {weather:'rain',icon:'☂',name:'폭우',place:'지역 마지막 공연',rule:'장비 공연 비용 +1',target:62,income:12,gearCost:1}
+];
+let S;
+function reset(){
+  S={round:0,money:14,program:[null,null,null],backstage:'',selected:'',upgrades:{aerial:0,fire:0,magic:0,comedy:0,music:0},gears:['net','lamp','kit','igniter'],unavailable:'',eventDone:false,locked:false};
+  closeModal();document.getElementById('showtime').classList.add('hidden');render();
+}
+function round(){return ROUNDS[S.round]}function member(id){return MEMBERS.find(x=>x.id===id)}function has(m,t){return !!m&&(m.primary===t||m.secondary===t)}
+function talent(m,a){if(!m)return 0;return (m.primary===a.primary?4:m.secondary===a.primary?3:0)+(m.primary===a.support?2:m.secondary===a.support?1:0)}
+function assignment(id){
+  for(let i=0;i<S.program.length;i++){const p=S.program[i];if(p&&p.members.includes(id))return `${i+1}막 · ${ACTS[p.act].name}`}
+  return S.backstage===id?'무대뒤':'대기';
+}
+function clearMember(id){S.program.forEach(p=>{if(p)p.members=p.members.filter(x=>x!==id)});if(S.backstage===id)S.backstage=''}
+function selectMember(id){if(S.unavailable===id)return;S.selected=S.selected===id?'':id;render()}
+function assign(id,target,index){
+  if(!id||S.unavailable===id)return;clearMember(id);
+  if(target==='act'){const p=S.program[index],a=p&&ACTS[p.act];if(!p||p.members.length>=a.cast)return;p.members.push(id)}
+  if(target==='back')S.backstage=id;S.selected='';render();
+}
+function assignSelected(target,index){if(S.selected)assign(S.selected,target,index)}
+function dragStart(e,id){e.dataTransfer.setData('text/plain',id)}function dragOver(e){e.preventDefault();e.currentTarget.classList.add('ready')}
+function dragLeave(e){e.currentTarget.classList.remove('ready')}function dropMember(e,target,index){e.preventDefault();dragLeave(e);assign(e.dataTransfer.getData('text/plain'),target,index)}
+function removeCast(index,id){S.program[index].members=S.program[index].members.filter(x=>x!==id);render()}
+function addAct(id){if(S.program.some(p=>p&&p.act===id))return;const i=S.program.findIndex(x=>!x);if(i<0)return;S.program[i]={act:id,members:[],gears:Array(ACTS[id].gear).fill('')};render()}
+function removeAct(i){S.program[i]=null;render()}
+function usedGears(exceptAct=-1,exceptGear=-1){const list=[];S.program.forEach((p,i)=>p&&p.gears.forEach((g,j)=>{if(g&&(i!==exceptAct||j!==exceptGear))list.push(g)}));return list}
+function setGear(i,j,value){S.program[i].gears[j]=value;render()}
+
+function actCalc(p){
+  const a=ACTS[p.act],r=round(),cast=p.members.map(member),back=member(S.backstage);let score=a.base+S.upgrades[p.act]*3,cost=a.cost,income=a.income,rows=[];
+  rows.push(['★',`기본${S.upgrades[p.act]?` + 강화 ${S.upgrades[p.act]*3}`:''}`,a.base+S.upgrades[p.act]*3,'']);
+  cast.forEach(m=>{const t=talent(m,a);score+=t;rows.push(['●',m.name,t,t?'good':''])});
+  let gearScore=0;p.gears.forEach(id=>{const g=GEARS[id];if(g&&a.tags.includes(g.tag)){let b=g.bonus;if(cast.some(m=>has(m,'손기술')))b++;gearScore+=b}});
+  if(gearScore){score+=gearScore;rows.push(['◆','장비',gearScore,'good'])}
+  if(a.tags.includes('관객')&&cast.some(m=>has(m,'연기'))){score+=2;rows.push(['◉','관객 대응',2,'good'])}
+  let region=0;if(r.tagBonus)Object.entries(r.tagBonus).forEach(([tag,b])=>{if(a.tags.includes(tag))region+=b});if(r.noGearBonus&&a.gear===0)region+=r.noGearBonus;
+  if(region){score+=region;rows.push(['⌂','지역',region,'good'])}
+  const raw=a.weather[r.weather]||0;const weather=S.backstage?(has(back,'무대기술')?0:Math.ceil(raw/2)):raw;if(weather){score+=weather;rows.push(['☂',r.name,weather,'bad'])}
+  if(cast.some(m=>has(m,'완력'))&&a.tags.includes('장비')){cost=Math.max(0,cost-1);rows.push(['₩','완력 비용',-1,'good'])}
+  if(r.gearCost&&a.gear>0)cost+=r.gearCost;
+  return {score,cost,income,rows};
+}
+function total(){
+  let score=0,cost=0,extraIncome=0,details=[];S.program.forEach((p,i)=>{if(!p)return;const c=actCalc(p);score+=c.score;cost+=c.cost;extraIncome+=c.income;details.push({name:`${i+1}막 · ${ACTS[p.act].name}`,score:c.score})});
+  if(S.backstage){const tech=has(member(S.backstage),'무대기술');score+=tech?3:2;details.push({name:'무대뒤 지원',score:tech?3:2})}
+  const income=round().income+extraIncome+Math.floor(Math.max(0,score-round().target)/4);
+  return {score,cost,income,details};
+}
+function isReady(){return S.program.every(p=>p&&p.members.length===ACTS[p.act].cast&&p.gears.every(Boolean))&&S.money>=total().cost}
+function warning(){const t=total();if(S.program.some(p=>!p))return '공연 세 종목 필요';for(const p of S.program){if(p.members.length<ACTS[p.act].cast)return '출연 단원 부족';if(p.gears.some(x=>!x))return '필요 장비 미배정'}if(S.money<t.cost)return '공연 비용 부족';if(t.score<round().target)return `흥행 ${round().target-t.score} 부족`;return t.score>=round().target?'통과 예상':'구성 확인'}
+
+function render(){
+  const r=round(),t=total();document.getElementById('hudStats').innerHTML=`
+    <div class="hud-stat"><span><i class="icon">▣</i>라운드</span><b>${S.round+1}/5</b></div>
+    <div class="hud-stat"><span><i class="icon">★</i>목표</span><b>${r.target}</b></div>
+    <div class="hud-stat"><span><i class="icon">₩</i>보유금</span><b>${S.money}</b></div>`;
+  document.getElementById('app').innerHTML=`
+    <section class="weather"><div class="${r.weather==='rain'?'rain':r.weather==='wind'?'wind':''}"></div><div class="weather-art" title="${r.name}">${r.icon}</div><div class="weather-copy"><h2>${r.place}</h2><p>${r.name} · 이동식 천막 무대</p></div><div class="rule"><b>오늘의 규칙</b>${r.rule}</div></section>
+    <section class="roster-wrap"><div class="section-label"><span>단원</span><small>${S.selected?'배치할 자리 선택 중':''}</small></div><div class="roster">${MEMBERS.map(renderMember).join('')}</div></section>
+    <section class="board"><main class="stage"><div class="bulbs"></div><div class="stage-title"><h3>오늘의 공연</h3><small>세 종목 구성 · 순서 효과 없음</small></div><div class="rings">${S.program.map(renderRing).join('')}</div><div class="repertoire-title">보유 공연</div><div class="repertoire">${Object.entries(ACTS).map(([id,a])=>renderActCard(id,a)).join('')}</div></main>
+    <aside class="control"><section class="backstage"><div class="backstage-head"><h3>무대뒤</h3><span class="badge">검토 중</span></div><p>날씨 손실 완화. 무대기술 보유 시 손실 제거.</p>${renderBackstage()}</section>
+      <section class="scoreboard"><div class="score-top"><div><span>예상 흥행</span><b>${t.score}</b></div><div class="target">/ ${r.target}</div></div><div class="meter"><div class="meter-fill" style="--progress:${Math.min(100,t.score/r.target*100)}%"></div></div><div class="ledger"><div><span>♢ 공연 비용</span><b>${t.cost}</b></div><div class="money"><span>₩ 예상 수입</span><b>${t.income}</b></div><div><span>공연 후 보유금</span><b>${S.money-t.cost+t.income}</b></div></div><div class="warning">${warning()}</div><button class="perform" onclick="perform()" ${isReady()?'':'disabled'}>공연 시작</button></section>
+      <div class="legend">● 단원 · ◆ 장비 · ★ 흥행 · ₩ 돈<br>공연명·단원·수치 모두 시험용.</div></aside></section>`;
+}
+function renderMember(m){const state=assignment(m.id),unavailable=S.unavailable===m.id;return `<button class="member ${S.selected===m.id?'selected':''} ${state!=='대기'?'assigned':''} ${unavailable?'unavailable':''}" onclick="selectMember('${m.id}')" draggable="${!unavailable}" ondragstart="dragStart(event,'${m.id}')" ${unavailable?'disabled':''}><span class="portrait" style="--portrait:${m.color}"></span><span><b>${m.name}</b><small>${m.primary} · ${m.secondary}</small><span class="status">${unavailable?'이번 공연 참여 불가':state}</span></span></button>`}
+function renderRing(p,i){if(!p)return `<div class="ring empty"><span class="ring-number">${i+1}</span><span class="empty-mark" title="아래에서 공연 선택">＋</span></div>`;const a=ACTS[p.act],c=actCalc(p);return `<div class="ring"><span class="ring-number">${i+1}</span><div class="act-art" style="--act-color:${a.color}">${a.icon}</div><div class="act-name">${a.name}${S.upgrades[p.act]?` +${S.upgrades[p.act]}`:''}</div><div class="act-needs">● ${a.cast} · ◆ ${a.gear} · ${a.primary}/${a.support}</div><div class="cast">${Array.from({length:a.cast},(_,n)=>renderCast(p.members[n],i,n)).join('')}</div>${p.members.length<a.cast?`<div class="cast-drop" onclick="assignSelected('act',${i})" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropMember(event,'act',${i})">＋ 단원</div>`:''}<div class="gear-row">${p.gears.map((g,j)=>renderGearSelect(i,j,g)).join('')}</div><div class="act-score"><div class="score-seal" title="예상 흥행">${c.score}</div><div class="modifiers">${c.rows.slice(1).map(x=>`<span class="modifier ${x[3]}" title="${x[1]} ${x[2]>=0?'+':''}${x[2]}">${x[0]}</span>`).join('')}</div></div><button class="ring-remove" onclick="removeAct(${i})" title="공연 빼기" aria-label="공연 빼기">×</button></div>`}
+function renderCast(id,actIndex){if(!id)return `<div class="cast-slot" title="빈 출연 자리">●</div>`;const m=member(id);return `<div class="cast-slot filled" title="${m.name} · ${m.primary}/${m.secondary}"><strong>${m.name.slice(-1)}</strong><button class="tiny-x" onclick="removeCast(${actIndex},'${id}')" title="단원 빼기" aria-label="단원 빼기">×</button></div>`}
+function renderGearSelect(i,j,value){const used=usedGears(i,j);return `<select class="gear-select" onchange="setGear(${i},${j},this.value)" title="장비 선택"><option value="">◆ 장비 선택</option>${S.gears.map(id=>`<option value="${id}" ${value===id?'selected':''} ${used.includes(id)?'disabled':''}>${GEARS[id].icon} ${GEARS[id].name}</option>`).join('')}</select>`}
+function renderBackstage(){if(!S.backstage)return `<div class="back-drop" onclick="assignSelected('back',-1)" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropMember(event,'back',-1)">＋</div>`;const m=member(S.backstage);return `<div class="back-drop filled" onclick="clearMember('${m.id}');render()"><b>${m.name}</b><br>${has(m,'무대기술')?'날씨 손실 제거 · 흥행 +3':'날씨 손실 절반 · 흥행 +2'}</div>`}
+function renderActCard(id,a){const chosen=S.program.some(p=>p&&p.act===id);return `<button class="act-card ${chosen?'selected':''}" style="--act-color:${a.color}" onclick="addAct('${id}')" ${chosen?'disabled':''}><div class="art">${a.icon}</div><b>${a.name}${S.upgrades[id]?` +${S.upgrades[id]}`:''}</b><small>${a.desc}</small><div class="pips">${Array.from({length:a.cast},()=>'<span class="pip" title="필요 단원">●</span>').join('')}${Array.from({length:a.gear},()=>'<span class="pip" title="필요 장비">◆</span>').join('')}${a.income?'<span class="pip" title="추가 수입">₩</span>':''}</div></button>`}
+
+function perform(){if(!isReady()||S.locked)return;S.locked=true;const show=document.getElementById('showtime');show.classList.remove('hidden');setTimeout(()=>{show.classList.add('hidden');showResult()},1650)}
+function showResult(){const t=total(),pass=t.score>=round().target,final=S.round===ROUNDS.length-1;S.money-=t.cost;if(pass)S.money+=t.income;const modal=document.getElementById('modal');modal.innerHTML=`<h2>${pass?(final?'순회 공연 완료':'공연 성공'):'흥행 실패'}</h2><div class="result-score">${t.score}</div><p style="text-align:center">목표 ${round().target} · 비용 ${t.cost}${pass?` · 수입 ${t.income}`:''}</p><div class="result-list">${t.details.map(x=>`<div><span>${x.name}</span><b>${x.score}</b></div>`).join('')}</div>${pass?(final?`<button class="continue" onclick="reset()">다시 시작</button>`:`<div class="reward-grid">${rewardButtons()}</div>`):`<button class="continue" onclick="reset()">다시 시작</button>`}`;openModal()}
+function rewardButtons(){const selected=S.program.map(p=>p.act),newGear=Object.keys(GEARS).find(id=>!S.gears.includes(id));return `${selected.map(id=>`<button class="reward" onclick="takeReward('upgrade','${id}')"><i>${ACTS[id].icon}</i><b>${ACTS[id].name} 강화</b><small>흥행 +3</small></button>`).join('')}<button class="reward" onclick="takeReward('money','')"><i>₩</i><b>계약금</b><small>돈 +9</small></button><button class="reward" onclick="takeReward('gear','${newGear||''}')" ${newGear?'':'disabled'}><i>◆</i><b>${newGear?GEARS[newGear].name:'새 장비 없음'}</b><small>장비 추가</small></button>`}
+function takeReward(type,id){if(type==='upgrade')S.upgrades[id]++;if(type==='money')S.money+=9;if(type==='gear'&&id)S.gears.push(id);if(S.round===2&&!S.eventDone){showEvent();return}nextRound()}
+function showEvent(){S.eventDone=true;document.getElementById('modal').innerHTML=`<h2>단원 사이의 갈등</h2><p>단원 B와 단원 C가 다음 공연에 함께 참여하지 않겠다고 한다.</p><div class="choice-grid"><button class="choice" onclick="resolveEvent('pay')" ${S.money<6?'disabled':''}><b>₩ 6으로 중재</b><small>둘 다 사용 가능</small></button><button class="choice" onclick="resolveEvent('b')"><b>단원 B 제외</b><small>다음 공연 참여 불가</small></button><button class="choice" onclick="resolveEvent('c')"><b>단원 C 제외</b><small>다음 공연 참여 불가</small></button></div>`}
+function resolveEvent(choice){if(choice==='pay')S.money-=6;else S.unavailable=choice;nextRound()}
+function nextRound(){closeModal();S.locked=false;if(S.round>=ROUNDS.length-1){document.getElementById('modal').innerHTML=`<h2>시험 구간 완료</h2><p>날씨 때문에 공연을 바꿨는지, 돈 공연과 고득점 공연 사이에 고민이 있었는지 확인.</p><button class="continue" onclick="reset()">다시 시작</button>`;openModal();return}S.round++;S.program=[null,null,null];S.backstage='';S.selected='';if(S.round!==3)S.unavailable='';render()}
+function openModal(){document.getElementById('overlay').classList.remove('hidden')}function closeModal(){document.getElementById('overlay').classList.add('hidden')}
+reset();
+</script>
+</body>
+</html>
