@@ -209,8 +209,9 @@
     body { padding: 0; }
     .game-shell { border-left: 0; border-right: 0; }
     .marquee { grid-template-columns: 1fr; }
-    .hud { justify-content: space-between; }
+    .hud { justify-content: space-between; gap: 4px; }
     .hud-item { flex: 1; min-width: 0; }
+    .sound-btn { width: 30px; height: 30px; flex: 0 0 30px; }
     .prep-panel { grid-template-columns: 1fr; }
     .start-wrap { grid-template-columns: 1fr; }
     .job-button { width: 62px; height: 62px; }
@@ -432,12 +433,9 @@
   }
 
   function completeWorkPoint(button) {
-    const expected = workStep;
-    if (Number(button.dataset.step) !== expected) {
-      playTone(120, .06, 'square', .025);
-      button.animate([{ transform: 'translate(-50%, -50%) translateX(-3px)' }, { transform: 'translate(-50%, -50%) translateX(3px)' }], { duration: 100, iterations: 2 });
-      return;
-    }
+    if (button.dataset.done) return;
+    button.dataset.done = 'true';
+    button.disabled = true;
     button.classList.add('done');
     workStep++;
     playTone(330 + workStep * 80, .07, 'square', .035);
