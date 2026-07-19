@@ -175,7 +175,7 @@
   .story-copy p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.65; }
   .story-start { min-width: 132px; min-height: 72px; cursor: pointer; color: white; background: var(--red); border: 3px solid #ff8b79; box-shadow: 0 5px 0 var(--red-dark); font-size: 13px; font-weight: 900; }
   .story-start:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--red-dark); }
-  .plan-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .plan-options { display: grid; grid-template-columns: 1fr; gap: 10px; }
   .plan-button {
     min-height: 112px;
     display: grid;
@@ -251,6 +251,10 @@
   .candidate-art::after { content: ""; position: absolute; left: 7px; bottom: 4px; width: 28px; height: 18px; background: #efc7a2; border: 2px solid #4b3130; border-bottom: 0; }
   .seat-upgrade-art { width: 50px; height: 38px; position: relative; background: #742f39; border: 3px solid #9e4850; box-shadow: 0 12px 0 #742f39, 0 15px 0 #301f24; }
   .price { justify-self: end; align-self: start; color: var(--gold); font: 900 14px/1 Consolas, monospace; }
+  .final-reward { grid-column: 1 / -1; min-height: 94px; display: flex; align-items: center; justify-content: center; gap: 18px; padding: 12px; color: var(--ink); background: #292317; border: 3px solid var(--gold); text-align: center; }
+  .final-reward .reward-star { color: var(--gold); font-size: 38px; text-shadow: 0 3px 0 #70461e; }
+  .final-reward strong { display: block; margin-bottom: 5px; color: var(--gold); font-size: 15px; }
+  .final-reward small { display: block; color: var(--muted); font-size: 10px; line-height: 1.5; }
   .skip-invest { margin-top: 8px; padding: 7px 10px; cursor: pointer; color: var(--muted); background: transparent; border: 1px solid #596279; }
   .skip-invest:hover { color: var(--ink); border-color: var(--muted); }
   .final-panel { padding: 18px; text-align: center; }
@@ -296,7 +300,7 @@
     </div>
     <div class="hud">
       <div class="hud-item"><span class="hud-icon coin-icon"></span><span class="hud-label">돈</span><span class="hud-value" id="moneyValue">10</span></div>
-      <div class="hud-item"><span class="hud-icon day-icon"></span><span class="hud-label">날짜</span><span class="hud-value" id="dayValue">1/4</span></div>
+      <div class="hud-item"><span class="hud-icon day-icon"></span><span class="hud-label">날짜</span><span class="hud-value" id="dayValue">1/7</span></div>
       <div class="hud-item"><span class="hud-icon rep-icon"></span><span class="hud-label">평판</span><span class="hud-value" id="repValue">0</span></div>
       <button class="sound-btn" id="soundButton" aria-label="소리 켜기 또는 끄기" title="소리"><span class="speaker"></span></button>
     </div>
@@ -366,13 +370,13 @@
         <div class="result-stat"><span>매출</span><strong id="resultGross">+0</strong></div>
         <div class="result-stat"><span>비용 후</span><strong id="resultNet">+0</strong></div>
       </div>
-      <div class="section-title">거점 · 지원자와 시설</div>
+      <div class="section-title" id="hubActionTitle">거점 · 지원자와 시설</div>
       <div class="investments" id="investments"></div>
       <button class="skip-invest" id="skipInvest">저축하고 다음 날</button>
     </section>
 
     <section class="final-panel" id="finalPanel">
-      <h2>첫 마을 공연 종료</h2>
+      <h2>7일간의 공연 종료</h2>
       <p id="finalSummary"></p>
       <button class="restart-btn" id="restartButton">처음부터</button>
     </section>
@@ -388,21 +392,30 @@
   const $ = id => document.getElementById(id);
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const COLORS = ['#d9715d', '#e0a94f', '#67aee5', '#66c47d', '#9a7bd8'];
-  const MAX_DAYS = 4;
+  const MAX_DAYS = 7;
   const COUNTDOWN_MS = 1800;
 
-  const SHOWS = {
-    small: {
-      name: '작은 공연', detail: '관객 6명 · 조명 신호 3회 · 운영비 없음', stars: '★',
-      duration: 16000, audience: 6, arrivalEvery: 2200, cues: [2600, 7000, 11200], maxTricks: 3,
-      trickRewards: [3, 5, 8], risks: [0, .12, .32], cost: 0,
-    },
-    big: {
-      name: '큰 공연', detail: '관객 10명 · 조명 신호 5회 · 운영비 4', stars: '★★★',
-      duration: 19500, audience: 10, arrivalEvery: 1600, cues: [2200, 5100, 8100, 11600, 15300], maxTricks: 4,
-      trickRewards: [4, 7, 11, 16], risks: [0, .15, .33, .50], cost: 4,
-    },
-  };
+  const DAILY_SHOWS = [
+    { audience: 4, cues: [3400, 8200], duration: 12500, trickRewards: [3, 5], risks: [0, .10] },
+    { audience: 5, cues: [3200, 8600], duration: 13500, trickRewards: [3, 5], risks: [0, .12] },
+    { audience: 6, cues: [2800, 7200, 11600], duration: 15000, trickRewards: [3, 5, 8], risks: [0, .14, .30] },
+    { audience: 7, cues: [2600, 6900, 11200], duration: 15500, trickRewards: [4, 6, 9], risks: [0, .15, .32] },
+    { audience: 8, cues: [2400, 5900, 9500, 13600], duration: 17000, trickRewards: [4, 6, 10], risks: [0, .16, .34] },
+    { audience: 9, cues: [2200, 5600, 9100, 13900], duration: 18000, trickRewards: [4, 7, 11], risks: [0, .18, .36] },
+  ];
+
+  function showForDay(day = state.day) {
+    if (day === MAX_DAYS) return {
+      key: 'final', name: '마지막 큰 공연', detail: '관객 12명 · 조명 신호 6회 · 높은 묘기 위험 · 보상 2배', stars: '★★★',
+      duration: 21000, audience: 12, entryEvery: 360, cues: [1800, 4500, 7400, 10400, 13900, 17500], cueWindow: 1700,
+      maxTricks: 4, trickRewards: [6, 11, 18, 28], risks: [0, .22, .44, .65], cost: 5, ticketValue: 3, lightValue: 2, finalBonus: 10,
+    };
+    const base = DAILY_SHOWS[day - 1];
+    return {
+      ...base, key: 'daily', name: `${day}일차 공연`, detail: `관객 ${base.audience}명 · 조명 신호 ${base.cues.length}회 · 묘기 ${base.trickRewards.length}개`, stars: '★',
+      entryEvery: 650 - day * 30, cueWindow: 2300, maxTricks: base.trickRewards.length, cost: 0, ticketValue: 2, lightValue: 1, finalBonus: 0,
+    };
+  }
 
   const JOBS = {
     ticket: { name: '매표', worker: '마리', hire: 10, wage: 1, bonus: '1.1초마다 관객 자동 입장', color: '#66c47d' },
@@ -420,7 +433,7 @@
 
   function freshState() {
     return {
-      day: 1,
+        day: 1,
       money: 10,
       reputation: 0,
       phase: 'story',
@@ -447,13 +460,14 @@
   }
 
   function renderAll() {
+    const activeShow = live?.show || showForDay();
     $('moneyValue').textContent = state.money;
     $('dayValue').textContent = `${state.day}/${MAX_DAYS}`;
     $('repValue').textContent = state.reputation;
     $('townLabel').textContent = state.phase === 'story' ? '첫 번째 마을 · 꺼진 천막'
       : state.phase === 'plan' ? '첫 번째 마을 · 거점'
-      : state.phase === 'entry' ? `첫 번째 마을 · ${SHOWS[state.showKey].name} 입장 중`
-      : state.phase === 'live' ? `첫 번째 마을 · ${SHOWS[state.showKey].name} 공연 중`
+      : state.phase === 'entry' ? `첫 번째 마을 · ${activeShow.name} 입장 중`
+      : state.phase === 'live' ? `첫 번째 마을 · ${activeShow.name} 공연 중`
       : '첫 번째 마을 · 거점으로 복귀';
     renderPlans();
     renderStaff();
@@ -471,14 +485,13 @@
   }
 
   function renderPlans() {
-    $('planOptions').innerHTML = Object.entries(SHOWS).map(([key, show]) => {
-      const note = key === 'big' && !Object.keys(state.employees).length ? ' · 직원 없이 매우 바쁨' : '';
-      return `<button class="plan-button" data-show="${key}">
-        <span class="plan-art ${key === 'big' ? 'big' : ''}"><span class="plan-stars">${show.stars}</span></span>
-        <span><strong>${show.name}</strong><small>${show.detail}${note}</small></span>
-      </button>`;
-    }).join('');
-    document.querySelectorAll('[data-show]').forEach(button => button.addEventListener('click', () => startShow(button.dataset.show)));
+    const show = showForDay();
+    const finalNote = show.key === 'final' ? ' · 7일간의 마지막 목표' : ` · 전날보다 관객과 업무가 증가`;
+    $('planOptions').innerHTML = `<button class="plan-button" id="todayShowButton">
+      <span class="plan-art ${show.key === 'final' ? 'big' : ''}"><span class="plan-stars">${show.stars}</span></span>
+      <span><strong>${show.name}</strong><small>${show.detail}${state.day > 1 ? finalNote : ''}</small></span>
+    </button>`;
+    $('todayShowButton').addEventListener('click', startShow);
   }
 
   function renderStaff() {
@@ -488,13 +501,14 @@
       : '<span class="staff-empty">직원 없음 · 세 업무를 단장이 직접 처리</span>';
   }
 
-  function startShow(showKey) {
-    if (state.phase !== 'plan' || !SHOWS[showKey]) return;
+  function startShow() {
+    if (state.phase !== 'plan') return;
+    const show = showForDay();
     state.phase = 'entry';
-    state.showKey = showKey;
+    state.showKey = show.key;
     result = null;
-    const show = SHOWS[showKey];
     live = {
+      show,
       entryStart: performance.now() + 450,
       entryElapsed: -450,
       entryComplete: false,
@@ -562,8 +576,8 @@
   }
 
   function updateEntry() {
-    const show = SHOWS[state.showKey];
-    const arrivalEvery = state.showKey === 'big' ? 460 : 650;
+    const show = live.show;
+    const arrivalEvery = show.entryEvery;
     const expectedArrivals = Math.min(show.audience, Math.floor(live.entryElapsed / arrivalEvery) + 1);
     while (live.arrived < expectedArrivals) {
       live.arrived++;
@@ -591,7 +605,7 @@
     state.phase = 'live';
     live.start = performance.now() + COUNTDOWN_MS;
     live.elapsed = -COUNTDOWN_MS;
-    live.endAt = SHOWS[state.showKey].duration;
+    live.endAt = live.show.duration;
     $('entryControl').classList.remove('on');
     $('stageControl').classList.remove('off');
     $('ticketButton').classList.remove('on');
@@ -617,14 +631,14 @@
   }
 
   function updateLive() {
-    const show = SHOWS[state.showKey];
+    const show = live.show;
     updateLightCue(show);
     updateStage(show);
   }
 
   function updateLightCue(show) {
     if (!live.activeCue && live.cueIndex < show.cues.length && live.elapsed >= show.cues[live.cueIndex]) {
-      live.activeCue = { start: live.elapsed, end: live.elapsed + 2300, handled: false };
+      live.activeCue = { start: live.elapsed, end: live.elapsed + show.cueWindow, handled: false };
       live.cueIndex++;
       playTone(760, .08, 'square', .035);
     }
@@ -726,13 +740,13 @@
   }
 
   function capacityForShow() {
-    const base = state.showKey === 'big' ? 8 : 6;
+    const base = (live?.show || showForDay()).key === 'final' ? 8 : 6;
     return base + state.seatLevel * 2;
   }
 
   function renderLive() {
     if (!live) return;
-    const show = SHOWS[state.showKey];
+    const show = live.show;
     $('liveAudience').textContent = `${live.admitted}/${Math.min(show.audience, capacityForShow())}`;
     if (state.phase === 'entry') {
       $('liveLights').textContent = '-';
@@ -769,10 +783,11 @@
       live.stageState = 'finished';
     }
     state.phase = 'result';
-    const show = SHOWS[state.showKey];
-    const ticketIncome = live.admitted * 2;
-    const lightIncome = live.cueHits;
-    const gross = ticketIncome + lightIncome + live.securedStage;
+    const show = live.show;
+    const ticketIncome = live.admitted * show.ticketValue;
+    const lightIncome = live.cueHits * show.lightValue;
+    const finalBonus = show.key === 'final' && !live.stageFailed && live.stageSuccesses >= show.maxTricks ? show.finalBonus : 0;
+    const gross = ticketIncome + lightIncome + live.securedStage + finalBonus;
     const wages = Object.keys(state.employees).reduce((sum, key) => sum + JOBS[key].wage, 0);
     const net = gross - wages - show.cost;
     const cueTotal = Math.max(1, live.cueHits + live.cueMisses);
@@ -780,7 +795,7 @@
     const repGain = mood >= 82 ? 2 : mood >= 65 ? 1 : 0;
     state.money += net;
     state.reputation += repGain;
-    result = { show, ticketIncome, lightIncome, gross, wages, net, mood, repGain };
+    result = { show, ticketIncome, lightIncome, finalBonus, gross, wages, net, mood, repGain };
     cancelAnimationFrame(animationId);
     $('showTimer').classList.remove('on');
     hideStations();
@@ -790,13 +805,13 @@
     drawScene(live.endAt);
     playSequence([520, 700, 900]);
     setBanner('거점으로 돌아왔습니다');
-    if (state.day >= MAX_DAYS) setTimeout(showFinal, 550);
-    else showPanel('resultPanel');
+    showPanel('resultPanel');
   }
 
   function renderResult() {
     const ending = live.stageFailed ? '묘기 실수로 일찍 종료' : live.stageSuccesses >= result.show.maxTricks ? '모든 묘기 성공' : '수입을 지키며 마무리';
-    $('resultTitle').textContent = `${result.show.name} · ${ending}`;
+    const bonusCopy = result.finalBonus ? ` · 큰 공연 보너스 +${result.finalBonus}` : '';
+    $('resultTitle').textContent = `${result.show.name} · ${ending}${bonusCopy}`;
     $('resultAudience').textContent = `${live.admitted}/${live.arrived}`;
     $('resultMood').textContent = `${result.mood}%`;
     $('resultGross').textContent = `+${result.gross}`;
@@ -805,6 +820,17 @@
   }
 
   function renderInvestments() {
+    if (state.day >= MAX_DAYS) {
+      $('hubActionTitle').textContent = '마지막 큰 공연 완료';
+      $('investments').innerHTML = `<div class="final-reward">
+        <span class="reward-star">★</span>
+        <span><strong>${result.finalBonus ? `큰 공연 보너스 +${result.finalBonus}` : '큰 공연 정산 완료'}</strong><small>총 매출 +${result.gross} · 비용 후 ${result.net >= 0 ? '+' : ''}${result.net}<br>이제 7일 동안 키운 서커스단의 결과를 확인</small></span>
+      </div>`;
+      $('skipInvest').textContent = '7일 결과 보기';
+      return;
+    }
+    $('hubActionTitle').textContent = '거점 · 지원자와 시설';
+    $('skipInvest').textContent = '저축하고 다음 날';
     const employeeOptions = Object.entries(JOBS).filter(([key]) => !state.employees[key]).map(([key, job]) => ({
       key: `hire:${key}`, title: `${job.worker} 지원`, detail: `${job.name} 자동 · ${job.bonus} · 임금 ${job.wage}`, cost: job.hire,
       art: `<span class="candidate-art" style="--candidate:${job.color}"></span>`,
@@ -821,7 +847,7 @@
   }
 
   function invest(key) {
-    if (state.phase !== 'result') return;
+    if (state.phase !== 'result' || state.day >= MAX_DAYS) return;
     const jobKey = key.startsWith('hire:') ? key.split(':')[1] : null;
     const cost = jobKey ? JOBS[jobKey].hire : 12 + state.seatLevel * 6;
     if (state.money < cost) return;
@@ -848,7 +874,7 @@
     state.phase = 'end';
     showPanel('finalPanel');
     const names = Object.keys(state.employees).map(key => JOBS[key].worker);
-    $('finalSummary').textContent = `${names.length ? names.join(' · ') : '직원 없이'} 운영 · 평판 ${state.reputation} · 보유금 ${state.money}`;
+    $('finalSummary').textContent = `7일 운영 완료 · ${names.length ? names.join(' · ') : '직원 없이'} 운영 · 평판 ${state.reputation} · 보유금 ${state.money}`;
   }
 
   function drawScene(elapsed) {
@@ -924,7 +950,7 @@
     const jumping = state.phase === 'live' && live && live.stageState === 'performing';
     const jump = jumping ? Math.abs(Math.sin(activeTime / 220)) * 24 : 0;
     drawPerson(455 + Math.sin(activeTime / 170) * 4, 285 - jump, '#67aee5', activeTime);
-    if (state.showKey === 'big') drawPerson(565 + Math.sin(activeTime / 210) * 4, 295 - jump * .55, '#66c47d', activeTime + 400);
+    if (live?.show.key === 'final') drawPerson(565 + Math.sin(activeTime / 210) * 4, 295 - jump * .55, '#66c47d', activeTime + 400);
     if (jumping) drawJuggling(455, 225 - jump, activeTime);
     if (live && live.stageFailed) drawFailureStars(500, 220, activeTime);
 
