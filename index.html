@@ -304,6 +304,12 @@
     stage: [[38, 57], [50, 42], [62, 57]],
     ticket: [[72, 39], [82, 53], [92, 39]],
   };
+  const WORK_FEEDBACK = {
+    promo: ['첫 포스터 부착', '길목 포스터 부착', '마지막 포스터 부착'],
+    light: ['왼쪽 등불 점등', '중앙 등불 점등', '오른쪽 등불 점등'],
+    stage: ['소품 상자 배치', '공연 고리 설치', '무대 표시 완료'],
+    ticket: ['매표창 열기', '표와 잔돈 준비', '영업 표지 설치'],
+  };
   const COLORS = ['#d9715d', '#e0a94f', '#65a8df', '#63c17b', '#9a7bd8'];
 
   let state;
@@ -311,6 +317,7 @@
   let showResult = null;
   let activeJob = null;
   let workStep = 0;
+  let workDone = new Set();
   let soundOn = true;
   let audioContext = null;
   let bannerTimer = null;
@@ -338,6 +345,7 @@
     showResult = null;
     activeJob = null;
     workStep = 0;
+    workDone = new Set();
     $('prepPanel').style.display = 'grid';
     $('resultPanel').classList.remove('on');
     $('finalPanel').classList.remove('on');
@@ -351,6 +359,7 @@
     state.audience = [];
     activeJob = null;
     workStep = 0;
+    workDone = new Set();
     renderAll();
     drawScene(0);
 
@@ -427,6 +436,7 @@
     if (state.phase !== 'prep' || state.prepared[jobKey] || state.employees[jobKey] || state.prepLeft <= 0) return;
     activeJob = jobKey;
     workStep = 0;
+    workDone = new Set();
     setBanner(JOBS[jobKey].name);
     playTone(260, .06, 'square', .03);
     renderJobs();
@@ -438,9 +448,13 @@
     button.dataset.done = 'true';
     button.disabled = true;
     button.classList.add('done');
+    const part = Number(button.dataset.step);
+    workDone.add(part);
     workStep++;
+    setBanner(WORK_FEEDBACK[activeJob][part]);
     playTone(330 + workStep * 80, .07, 'square', .035);
     renderPrepNote();
+    drawScene(0);
     if (workStep < 3) return;
     const completedJob = activeJob;
     setTimeout(() => finishManualJob(completedJob), 230);
@@ -452,6 +466,7 @@
     state.prepLeft--;
     activeJob = null;
     workStep = 0;
+    workDone = new Set();
     setBanner(`${JOBS[jobKey].name} 완료`);
     renderAll();
     drawScene(0);
@@ -657,10 +672,11 @@
     ctx.fillStyle = '#171520'; ctx.fillRect(-90, 105, 180, 155);
     ctx.fillStyle = '#a43842'; ctx.beginPath(); ctx.moveTo(-100, 92); ctx.lineTo(-28, 155); ctx.lineTo(-100, 260); ctx.fill(); ctx.beginPath(); ctx.moveTo(100, 92); ctx.lineTo(28, 155); ctx.lineTo(100, 260); ctx.fill();
     ctx.fillStyle = '#f4c95d'; ctx.fillRect(-8, -171, 16, 46); ctx.fillStyle = '#d95555'; ctx.beginPath(); ctx.moveTo(8,-171); ctx.lineTo(65,-155); ctx.lineTo(8,-139); ctx.fill();
-    for (let i = -2; i <= 2; i++) {
-      ctx.fillStyle = state.prepared.light ? '#fff0a8' : '#494454'; ctx.beginPath(); ctx.arc(i * 70, 51, 7, 0, Math.PI * 2); ctx.fill();
-      if (state.prepared.light) { ctx.save(); ctx.globalAlpha = .18; ctx.beginPath(); ctx.arc(i * 70, 51, 20, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
-    }
+    [-110, 0, 110].forEach((x, index) => {
+      const on = prepPartReady('light', index);
+      ctx.fillStyle = on ? '#fff0a8' : '#494454'; ctx.beginPath(); ctx.arc(x, 51, 8, 0, Math.PI * 2); ctx.fill();
+      if (on) { ctx.save(); ctx.globalAlpha = .2; ctx.beginPath(); ctx.arc(x, 51, 25, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+    });
     ctx.restore();
   }
 
@@ -672,21 +688,33 @@
 
   function drawPosterBoard(x, y) {
     ctx.fillStyle = '#4a352c'; ctx.fillRect(x-43,y-57,86,105); ctx.fillRect(x-31,y+48,8,42); ctx.fillRect(x+23,y+48,8,42);
-    ctx.fillStyle = state.prepared.promo ? '#d95555' : '#806e59'; ctx.fillRect(x-34,y-48,68,86);
-    if (state.prepared.promo) { ctx.fillStyle='#f4c95d'; drawStar(x,y-6,21,9); }
+    ctx.fillStyle = '#806e59'; ctx.fillRect(x-34,y-48,68,86);
+    [[-23,-36],[3,-36],[-10,2]].forEach(([dx,dy], index) => {
+      ctx.fillStyle = prepPartReady('promo', index) ? ['#d95555','#65a8df','#63c17b'][index] : '#5d5145';
+      ctx.fillRect(x+dx,y+dy,21,30);
+      if (prepPartReady('promo', index)) { ctx.fillStyle='#f4c95d'; drawStar(x+dx+10,y+dy+15,7,3); }
+    });
   }
 
   function drawTicketBooth(x, y) {
     ctx.fillStyle = '#49352b'; ctx.fillRect(x-58,y-56,116,125); ctx.fillStyle='#704535';ctx.fillRect(x-70,y-75,140,24);
-    ctx.fillStyle = state.prepared.ticket ? '#f0d28b' : '#191821'; ctx.fillRect(x-38,y-34,76,48);
+    ctx.fillStyle = prepPartReady('ticket', 0) ? '#f0d28b' : '#191821'; ctx.fillRect(x-38,y-34,76,48);
     ctx.fillStyle='#d95555';ctx.fillRect(x-45,y+34,90,16);
-    if (state.prepared.ticket) { ctx.fillStyle='#7e5634';ctx.fillRect(x-22,y-22,44,23); }
+    ctx.fillStyle = prepPartReady('ticket', 1) ? '#7e5634' : '#2d2929'; ctx.fillRect(x-22,y-22,44,23);
+    if (prepPartReady('ticket', 1)) { ctx.fillStyle='#f0d28b'; for(let i=0;i<3;i++)ctx.fillRect(x-16+i*11,y-18,8,15); }
+    ctx.fillStyle = prepPartReady('ticket', 2) ? '#63c17b' : '#37313a'; ctx.fillRect(x-34,y-68,68,17);
+    if (prepPartReady('ticket', 2)) { ctx.fillStyle='#173127';ctx.fillRect(x-21,y-63,42,6); }
   }
 
   function drawPrepProps() {
-    ctx.fillStyle = state.prepared.stage ? '#65a8df' : '#473f46';
-    ctx.fillRect(410,365,38,38); ctx.fillRect(512,368,45,35);
-    if (state.prepared.stage) { ctx.strokeStyle='#f4c95d';ctx.lineWidth=5;ctx.beginPath();ctx.arc(480,378,36,0,Math.PI*2);ctx.stroke(); }
+    ctx.fillStyle = prepPartReady('stage', 0) ? '#65a8df' : '#473f46'; ctx.fillRect(410,365,38,38);
+    ctx.strokeStyle = prepPartReady('stage', 1) ? '#f4c95d' : '#514853'; ctx.lineWidth=5;ctx.beginPath();ctx.arc(480,378,36,0,Math.PI*2);ctx.stroke();
+    ctx.fillStyle = prepPartReady('stage', 2) ? '#d95555' : '#473f46'; ctx.fillRect(512,368,45,35);
+    if (prepPartReady('stage', 2)) { ctx.fillStyle='#f4c95d';drawStar(534,385,12,5); }
+  }
+
+  function prepPartReady(jobKey, index) {
+    return state.prepared[jobKey] || (activeJob === jobKey && workDone.has(index));
   }
 
   function drawEmployees() {
