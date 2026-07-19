@@ -126,11 +126,38 @@
     transition: transform .12s, border-color .12s, opacity .12s;
   }
   .job-button:hover:not(:disabled) { transform: translate(-50%, -54%); border-color: var(--gold); }
+  .job-button:hover, .job-button:focus-visible { z-index: 15; }
   .job-button:active:not(:disabled) { transform: translate(-50%, -47%); }
   .job-button:disabled { cursor: default; }
   .job-button.prepared { background: #173127e8; border-color: var(--green); }
   .job-button.staffed { box-shadow: 0 5px 0 #080b14, 0 0 0 4px #63c17b55; }
   .job-button.locked { opacity: .38; }
+  .job-button::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 50%; top: calc(100% + 27px);
+    width: max-content;
+    max-width: 190px;
+    transform: translateX(-50%) translateY(-5px);
+    padding: 7px 9px;
+    color: var(--ink);
+    background: #101422f2;
+    border: 2px solid var(--gold);
+    box-shadow: 0 4px 0 #080b14;
+    font-size: 10px;
+    font-weight: 900;
+    line-height: 1.45;
+    white-space: normal;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .12s, transform .12s;
+    z-index: 20;
+  }
+  .job-button:hover::after, .job-button:focus-visible::after { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .job-button[data-job="promo"]::after { left: -10px; transform: translateY(-5px); }
+  .job-button[data-job="promo"]:hover::after, .job-button[data-job="promo"]:focus-visible::after { transform: translateY(0); }
+  .job-button[data-job="ticket"]::after { left: auto; right: -10px; transform: translateY(-5px); }
+  .job-button[data-job="ticket"]:hover::after, .job-button[data-job="ticket"]:focus-visible::after { transform: translateY(0); }
   .job-name { position: absolute; left: 50%; bottom: -22px; transform: translateX(-50%); white-space: nowrap; padding: 2px 7px; color: var(--ink); background: #111523e8; border: 1px solid #596179; font-size: 10px; font-weight: 900; }
   .job-check { position: absolute; right: -5px; top: -5px; width: 25px; height: 25px; display: grid; place-items: center; border-radius: 50%; color: #102019; background: var(--green); border: 2px solid #b9f2c4; font-weight: 900; }
   .job-staff { position: absolute; left: -8px; top: -8px; width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; color: #201a17; background: #efc7a2; border: 2px solid #4a3030; font-size: 9px; font-weight: 900; }
@@ -366,7 +393,7 @@
       const prepared = state.prepared[key];
       const staffed = Boolean(state.employees[key]);
       const locked = !prepared && !staffed && state.prepLeft <= 0;
-      return `<button class="job-button ${prepared ? 'prepared' : ''} ${staffed ? 'staffed' : ''} ${locked ? 'locked' : ''}" data-job="${key}" style="left:${job.pos[0]}%;top:${job.pos[1]}%" ${prepared || staffed || locked ? 'disabled' : ''} title="${job.name}">
+      return `<button class="job-button ${prepared ? 'prepared' : ''} ${staffed ? 'staffed' : ''} ${locked ? 'locked' : ''}" data-job="${key}" data-tip="${JOB_RESULTS[key]}" aria-label="${job.name}: ${JOB_RESULTS[key]}" style="left:${job.pos[0]}%;top:${job.pos[1]}%" ${prepared || staffed || locked ? 'disabled' : ''}>
         ${staffed ? `<span class="job-staff">${job.worker.slice(0, 1)}</span>` : ''}
         ${prepared ? '<span class="job-check">✓</span>' : ''}
         <span class="job-art art-${job.art}"></span>
@@ -733,7 +760,7 @@
     banner.textContent = text;
     banner.classList.add('on');
     clearTimeout(bannerTimer);
-    if (state.phase !== 'show') bannerTimer = setTimeout(hideBanner, 900);
+    if (state.phase !== 'show') bannerTimer = setTimeout(hideBanner, 2200);
   }
   function hideBanner() { $('phaseBanner').classList.remove('on'); }
   function ensureAudio(){if(!soundOn)return;if(!audioContext)audioContext=new(window.AudioContext||window.webkitAudioContext)();if(audioContext.state==='suspended')audioContext.resume();}
