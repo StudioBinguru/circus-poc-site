@@ -146,21 +146,6 @@
   .art-ticket { width: 45px; height: 25px; background: #f0d28b; border: 3px solid #7e5634; transform: translate(-50%, -50%) rotate(-7deg); }
   .art-ticket::after { content: ""; position: absolute; inset: 4px 17px; border-left: 2px dashed #a36d20; }
 
-  .work-point {
-    position: absolute;
-    width: 52px; height: 52px;
-    transform: translate(-50%, -50%);
-    border: 3px solid white;
-    background: var(--gold);
-    box-shadow: 0 0 0 5px #0006, 0 0 18px #f4c95dcc;
-    cursor: pointer;
-    pointer-events: auto;
-    animation: workPulse .75s steps(2, end) infinite;
-  }
-  .work-point::after { content: "+"; display: grid; place-items: center; height: 100%; color: #32230f; font: 900 30px/1 Consolas, monospace; }
-  .work-point.done { animation: none; transform: translate(-50%, -50%) scale(.1); opacity: 0; transition: .2s; }
-  @keyframes workPulse { 50% { transform: translate(-50%, -50%) scale(1.12); } }
-
   .control-area { padding: 10px; background: #1c2032; min-height: 160px; }
   .prep-panel { display: grid; grid-template-columns: 1fr 210px; gap: 10px; }
   .staff-block { min-width: 0; background: var(--panel); border: 2px solid var(--line); padding: 9px; }
@@ -217,7 +202,6 @@
     .job-button { width: 62px; height: 62px; }
     .job-art { transform: translate(-50%, -50%) scale(.78); }
     .job-name { font-size: 9px; }
-    .work-point { width: 42px; height: 42px; }
     .result-head { grid-template-columns: 1fr 1fr; }
     .investments { grid-template-columns: 1fr; }
     .invest-card { min-height: 76px; }
@@ -298,26 +282,17 @@
     stage: { name: '무대', art: 'stage', worker: '로만', color: '#65a8df', hire: 13, wage: 2, bonus: '팁 +관객당 1', pos: [50, 53] },
     ticket: { name: '매표', art: 'ticket', worker: '마리', color: '#63c17b', hire: 11, wage: 1, bonus: '표값 +1', pos: [84, 49] },
   };
-  const WORK_POINTS = {
-    promo: [[8, 39], [18, 53], [28, 39]],
-    light: [[35, 27], [50, 17], [65, 27]],
-    stage: [[38, 57], [50, 42], [62, 57]],
-    ticket: [[72, 39], [82, 53], [92, 39]],
-  };
-  const WORK_FEEDBACK = {
-    promo: ['첫 포스터 부착', '길목 포스터 부착', '마지막 포스터 부착'],
-    light: ['왼쪽 등불 점등', '중앙 등불 점등', '오른쪽 등불 점등'],
-    stage: ['소품 상자 배치', '공연 고리 설치', '무대 표시 완료'],
-    ticket: ['매표창 열기', '표와 잔돈 준비', '영업 표지 설치'],
+  const JOB_RESULTS = {
+    promo: '관객 +4',
+    light: '공연 만족 +17%',
+    stage: '공연 만족 +22%',
+    ticket: '입장 손실 제거 · 표값 +1',
   };
   const COLORS = ['#d9715d', '#e0a94f', '#65a8df', '#63c17b', '#9a7bd8'];
 
   let state;
   let showStart = 0;
   let showResult = null;
-  let activeJob = null;
-  let workStep = 0;
-  let workDone = new Set();
   let soundOn = true;
   let audioContext = null;
   let bannerTimer = null;
@@ -343,9 +318,6 @@
   function resetGame() {
     state = freshState();
     showResult = null;
-    activeJob = null;
-    workStep = 0;
-    workDone = new Set();
     $('prepPanel').style.display = 'grid';
     $('resultPanel').classList.remove('on');
     $('finalPanel').classList.remove('on');
@@ -357,9 +329,6 @@
     state.prepLeft = MAX_PREP;
     state.prepared = { promo: false, light: false, stage: false, ticket: false };
     state.audience = [];
-    activeJob = null;
-    workStep = 0;
-    workDone = new Set();
     renderAll();
     drawScene(0);
 
@@ -393,12 +362,6 @@
       return;
     }
 
-    if (activeJob) {
-      layer.innerHTML = WORK_POINTS[activeJob].map((point, index) => `<button class="work-point" data-step="${index}" style="left:${point[0]}%;top:${point[1]}%" aria-label="${JOBS[activeJob].name} 준비 ${index + 1}"></button>`).join('');
-      layer.querySelectorAll('.work-point').forEach(button => button.addEventListener('click', () => completeWorkPoint(button)));
-      return;
-    }
-
     layer.innerHTML = Object.entries(JOBS).map(([key, job]) => {
       const prepared = state.prepared[key];
       const staffed = Boolean(state.employees[key]);
@@ -428,46 +391,17 @@
   function renderPrepNote() {
     const done = Object.values(state.prepared).filter(Boolean).length;
     const missing = Object.entries(state.prepared).filter(([, value]) => !value).map(([key]) => JOBS[key].name);
-    $('startShow').disabled = state.phase !== 'prep' || Boolean(activeJob);
-    $('prepNote').textContent = activeJob ? `${JOBS[activeJob].name} 준비 ${workStep}/3` : missing.length ? `준비 ${done}/4 · ${missing.join(' · ')}` : '모든 준비 완료';
+    $('startShow').disabled = state.phase !== 'prep';
+    $('prepNote').textContent = missing.length ? `준비 ${done}/4 · ${missing.join(' · ')}` : '모든 준비 완료';
   }
 
   function startManualJob(jobKey) {
     if (state.phase !== 'prep' || state.prepared[jobKey] || state.employees[jobKey] || state.prepLeft <= 0) return;
-    activeJob = jobKey;
-    workStep = 0;
-    workDone = new Set();
-    setBanner(JOBS[jobKey].name);
-    playTone(260, .06, 'square', .03);
-    renderJobs();
-    renderPrepNote();
-  }
-
-  function completeWorkPoint(button) {
-    if (button.dataset.done) return;
-    button.dataset.done = 'true';
-    button.disabled = true;
-    button.classList.add('done');
-    const part = Number(button.dataset.step);
-    workDone.add(part);
-    workStep++;
-    setBanner(WORK_FEEDBACK[activeJob][part]);
-    playTone(330 + workStep * 80, .07, 'square', .035);
-    renderPrepNote();
-    drawScene(0);
-    if (workStep < 3) return;
-    const completedJob = activeJob;
-    setTimeout(() => finishManualJob(completedJob), 230);
-  }
-
-  function finishManualJob(jobKey) {
-    if (activeJob !== jobKey) return;
     state.prepared[jobKey] = true;
     state.prepLeft--;
-    activeJob = null;
-    workStep = 0;
-    workDone = new Set();
-    setBanner(`${JOBS[jobKey].name} 완료`);
+    setBanner(JOB_RESULTS[jobKey]);
+    playTone(390, .08, 'square', .04);
+    setTimeout(() => playTone(520, .08, 'square', .035), 80);
     renderAll();
     drawScene(0);
   }
@@ -494,7 +428,7 @@
   }
 
   function startShow() {
-    if (state.phase !== 'prep' || activeJob) return;
+    if (state.phase !== 'prep') return;
     ensureAudio();
     state.phase = 'show';
     showResult = calculateShow();
@@ -636,6 +570,7 @@
     drawPosterBoard(115, 326);
     drawTicketBooth(810, 305);
     drawPrepProps();
+    drawPrepAudience();
     drawEmployees();
   }
 
@@ -714,7 +649,26 @@
   }
 
   function prepPartReady(jobKey, index) {
-    return state.prepared[jobKey] || (activeJob === jobKey && workDone.has(index));
+    return state.prepared[jobKey];
+  }
+
+  function drawPrepAudience() {
+    const count = 3 + (state.prepared.promo ? 4 : 0) + (state.employees.promo ? 2 : 0);
+    for (let i = 0; i < count; i++) {
+      const row = Math.floor(i / 5);
+      const inRow = i % 5;
+      const x = state.prepared.ticket ? 720 - inRow * 48 : 285 + inRow * 88;
+      const y = 455 + row * 38;
+      drawPrepAudiencePerson(x, y, COLORS[i % COLORS.length]);
+    }
+  }
+
+  function drawPrepAudiencePerson(x, y, color) {
+    ctx.save(); ctx.translate(x, y);
+    ctx.fillStyle = color; ctx.fillRect(-8, 6, 16, 20);
+    ctx.fillStyle = '#e8c29d'; ctx.beginPath(); ctx.arc(0, -2, 8, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#392c30'; ctx.fillRect(-7, -8, 14, 4);
+    ctx.restore();
   }
 
   function drawEmployees() {
