@@ -6,37 +6,37 @@
 <title>PoC | 작은 서커스</title>
 <style>
   :root {
-    --ink: #f7efd8;
-    --muted: #b9af9d;
-    --night: #17192c;
-    --panel: #24283b;
-    --panel-2: #30364c;
-    --line: #4d5368;
-    --red: #d95555;
-    --red-dark: #8e303a;
+    --ink: #f8efd7;
+    --muted: #b8af9f;
+    --night: #121626;
+    --panel: #24293c;
+    --panel-2: #30374e;
+    --line: #4f576d;
+    --red: #d95656;
+    --red-dark: #8c303b;
     --gold: #f4c95d;
-    --green: #63c17b;
-    --blue: #65a8df;
-    --shadow: #0b0d18;
+    --green: #66c47d;
+    --blue: #67aee5;
+    --shadow: #070912;
   }
 
   * { box-sizing: border-box; }
-  html, body { margin: 0; min-height: 100%; background: #101321; }
+  html, body { margin: 0; min-height: 100%; background: #0e111d; }
   body {
+    padding: 14px;
     color: var(--ink);
     font-family: "Malgun Gothic", "Segoe UI", sans-serif;
-    padding: 14px;
-    background: linear-gradient(#171a2a 0 62%, #101321 62% 100%);
+    background: linear-gradient(#171b2d 0 68%, #0e111d 68% 100%);
   }
   button { font: inherit; }
   button:focus-visible { outline: 3px solid #fff1a6; outline-offset: 3px; }
 
   .game-shell {
-    width: min(940px, 100%);
+    width: min(960px, 100%);
     margin: 0 auto;
-    border: 3px solid #060814;
     background: var(--night);
-    box-shadow: 0 12px 0 #080a13, 0 18px 40px #0008;
+    border: 3px solid #050711;
+    box-shadow: 0 12px 0 #070912, 0 20px 44px #0009;
   }
   .marquee {
     min-height: 68px;
@@ -45,9 +45,9 @@
     align-items: center;
     gap: 12px;
     padding: 10px 14px;
-    background: #20243a;
-    border-bottom: 3px solid #090b16;
     position: relative;
+    background: #20253a;
+    border-bottom: 3px solid #090b15;
   }
   .marquee::after {
     content: "";
@@ -57,9 +57,9 @@
     background: repeating-linear-gradient(90deg, var(--gold) 0 14px, var(--red) 14px 28px);
   }
   .brand-row { display: flex; align-items: center; gap: 10px; min-width: 0; }
-  .brand { color: var(--gold); font: 800 13px/1 Consolas, monospace; border: 2px solid var(--gold); padding: 5px 6px; }
-  h1 { margin: 0; font-size: 20px; letter-spacing: 0; white-space: nowrap; }
-  .town { color: var(--muted); font-size: 11px; margin-top: 3px; }
+  .brand { padding: 5px 6px; color: var(--gold); border: 2px solid var(--gold); font: 900 13px/1 Consolas, monospace; }
+  h1 { margin: 0; font-size: 20px; letter-spacing: 0; }
+  .town { margin-top: 3px; color: var(--muted); font-size: 11px; }
   .hud { display: flex; align-items: center; gap: 7px; }
   .hud-item {
     min-width: 74px;
@@ -70,181 +70,169 @@
     align-items: center;
     padding: 5px 7px;
     background: #151828;
-    border: 2px solid #3b4055;
+    border: 2px solid #3b4258;
   }
   .hud-icon { grid-row: 1 / span 2; width: 19px; height: 19px; position: relative; }
-  .coin-icon { border-radius: 50%; background: var(--gold); border: 3px solid #a36d20; box-shadow: inset 0 0 0 2px #ffe79b; }
+  .coin-icon { border-radius: 50%; background: var(--gold); border: 3px solid #9f6c22; box-shadow: inset 0 0 0 2px #ffe69b; }
   .day-icon { border: 3px solid var(--blue); border-radius: 50%; }
-  .day-icon::after { content: ""; position: absolute; left: 6px; top: 1px; width: 3px; height: 7px; background: var(--blue); transform-origin: bottom; transform: rotate(28deg); }
-  .time-icon { border: 3px solid var(--gold); border-radius: 50%; box-shadow: 0 0 8px #f4c95d66; }
-  .time-icon::before { content: ""; position: absolute; left: 6px; top: -6px; width: 3px; height: 5px; background: var(--gold); }
+  .day-icon::after { content: ""; position: absolute; left: 6px; top: 1px; width: 3px; height: 7px; background: var(--blue); transform: rotate(28deg); transform-origin: bottom; }
+  .rep-icon { background: var(--gold); clip-path: polygon(50% 0,61% 35%,100% 38%,69% 59%,79% 100%,50% 76%,21% 100%,31% 59%,0 38%,39% 35%); }
   .hud-label { color: var(--muted); font-size: 9px; line-height: 12px; }
-  .hud-value { font: 800 17px/20px Consolas, monospace; color: var(--ink); }
-  .sound-btn { width: 34px; height: 34px; padding: 0; border: 2px solid #4a5067; background: #151828; cursor: pointer; position: relative; }
+  .hud-value { color: var(--ink); font: 900 17px/20px Consolas, monospace; }
+  .sound-btn { width: 34px; height: 34px; padding: 0; position: relative; cursor: pointer; background: #151828; border: 2px solid #4a5268; }
   .speaker { position: absolute; left: 8px; top: 11px; width: 8px; height: 10px; background: var(--ink); }
   .speaker::before { content: ""; position: absolute; left: 6px; top: -4px; border-top: 9px solid transparent; border-bottom: 9px solid transparent; border-left: 9px solid var(--ink); }
   .speaker::after { content: ""; position: absolute; left: 15px; top: 0; width: 7px; height: 7px; border: 2px solid var(--gold); border-left: 0; border-bottom: 0; transform: rotate(45deg); }
   .sound-btn.muted::after { content: ""; position: absolute; left: 7px; top: 15px; width: 22px; height: 3px; background: var(--red); transform: rotate(-45deg); }
 
-  .scene-frame { position: relative; background: #0a0c16; border-bottom: 3px solid #090b16; overflow: hidden; }
-  canvas { width: 100%; height: auto; aspect-ratio: 96 / 53; display: block; image-rendering: pixelated; }
+  .scene-frame { position: relative; overflow: hidden; background: #090b14; border-bottom: 3px solid #080a14; }
+  canvas { display: block; width: 100%; height: auto; aspect-ratio: 96 / 53; image-rendering: pixelated; }
   .phase-banner {
     position: absolute;
     left: 50%; top: 16px;
-    transform: translate(-50%, -12px);
+    min-width: 190px;
+    padding: 8px 14px;
+    z-index: 12;
     opacity: 0;
-    min-width: 180px;
-    padding: 7px 14px;
-    text-align: center;
-    font-weight: 900;
-    font-size: 14px;
-    color: #1a1720;
+    pointer-events: none;
+    color: #211b16;
     background: var(--gold);
     border: 3px solid #fff0a8;
-    box-shadow: 0 4px 0 #7c4e17;
-    pointer-events: none;
+    box-shadow: 0 4px 0 #79501d;
+    font-size: 14px;
+    font-weight: 900;
+    text-align: center;
+    transform: translate(-50%, -12px);
     transition: opacity .15s, transform .15s;
-    z-index: 8;
   }
   .phase-banner.on { opacity: 1; transform: translate(-50%, 0); }
-  .show-timer { position: absolute; left: 18px; top: 16px; width: 150px; height: 12px; border: 2px solid #f4e9cf; background: #171a2a; display: none; z-index: 8; }
+  .show-timer { position: absolute; left: 16px; right: 16px; top: 12px; height: 12px; z-index: 9; display: none; background: #111523; border: 2px solid #eee4cb; }
   .show-timer.on { display: block; }
-  .show-timer-fill { height: 100%; width: 0; background: var(--gold); }
+  .show-timer-fill { width: 0; height: 100%; background: var(--gold); transition: width .08s linear; }
 
-  .job-layer { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
-  .job-button {
+  .station-layer { position: absolute; inset: 0; z-index: 8; pointer-events: none; }
+  .station-button {
     position: absolute;
-    width: 78px; height: 78px;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    border: 3px solid #f4e9cf;
-    background: #171a2ee8;
-    color: var(--ink);
-    box-shadow: 0 5px 0 #080b14, 0 0 0 4px #0005;
-    cursor: pointer;
+    width: 94px; height: 94px;
+    display: none;
+    place-items: center;
+    padding: 4px;
     pointer-events: auto;
-    transition: transform .12s, border-color .12s, opacity .12s;
+    cursor: pointer;
+    color: var(--ink);
+    background: #15192bea;
+    border: 3px solid #f0e6ce;
+    border-radius: 50%;
+    box-shadow: 0 6px 0 #080a13, 0 0 0 4px #0006;
+    transform: translate(-50%, -50%);
+    transition: transform .12s, border-color .12s, background .12s;
   }
-  .job-button:hover:not(:disabled) { transform: translate(-50%, -54%); border-color: var(--gold); }
-  .job-button:hover, .job-button:focus-visible { z-index: 15; }
-  .job-button:active:not(:disabled) { transform: translate(-50%, -47%); }
-  .job-button:disabled { cursor: default; }
-  .job-button.prepared { background: #173127e8; border-color: var(--green); }
-  .job-button.staffed { box-shadow: 0 5px 0 #080b14, 0 0 0 4px #63c17b55; }
-  .job-button.locked { opacity: .38; }
-  .job-button::after {
+  .station-button.on { display: grid; }
+  .station-button:hover:not(:disabled) { transform: translate(-50%, -55%); border-color: var(--gold); }
+  .station-button:active:not(:disabled) { transform: translate(-50%, -46%); }
+  .station-button:disabled { cursor: default; opacity: .72; }
+  .station-button.urgent { border-color: #fff0a8; background: #6a3f25ed; animation: urgent .55s steps(2, end) infinite; }
+  .station-button.staffed { border-color: var(--green); background: #173127e8; }
+  @keyframes urgent { 50% { box-shadow: 0 6px 0 #080a13, 0 0 0 8px #f4c95d66; } }
+  .station-icon { width: 42px; height: 35px; position: relative; }
+  .ticket-art { background: #efd18d; border: 3px solid #795633; transform: rotate(-6deg); }
+  .ticket-art::after { content: ""; position: absolute; left: 18px; top: 3px; bottom: 3px; border-left: 2px dashed #a3702e; }
+  .light-art { width: 40px; height: 40px; border-radius: 50%; background: #55515e; border: 4px solid #2a2932; }
+  .station-button.urgent .light-art { background: var(--gold); border-color: #fff0a8; box-shadow: 0 0 18px #f4c95d; }
+  .station-copy { display: block; margin-top: 3px; font-size: 10px; font-weight: 900; line-height: 1.2; }
+  .staff-mark { position: absolute; left: -7px; top: -7px; width: 29px; height: 29px; display: grid; place-items: center; color: #241d18; background: #efc7a2; border: 2px solid #4b3130; border-radius: 50%; font-size: 9px; font-weight: 900; }
+  .station-button::after {
     content: attr(data-tip);
     position: absolute;
-    left: 50%; top: calc(100% + 27px);
+    left: 50%; top: calc(100% + 9px);
     width: max-content;
-    max-width: 190px;
-    transform: translateX(-50%) translateY(-5px);
+    max-width: 210px;
     padding: 7px 9px;
-    color: var(--ink);
-    background: #101422f2;
-    border: 2px solid var(--gold);
-    box-shadow: 0 4px 0 #080b14;
-    font-size: 10px;
-    font-weight: 900;
-    line-height: 1.45;
-    white-space: normal;
     opacity: 0;
     pointer-events: none;
+    color: var(--ink);
+    background: #0f1320f2;
+    border: 2px solid var(--gold);
+    font-size: 10px;
+    line-height: 1.4;
+    transform: translateX(-50%) translateY(-4px);
     transition: opacity .12s, transform .12s;
-    z-index: 20;
   }
-  .job-button:hover::after, .job-button:focus-visible::after { opacity: 1; transform: translateX(-50%) translateY(0); }
-  .job-button[data-job="promo"]::after { left: -10px; transform: translateY(-5px); }
-  .job-button[data-job="promo"]:hover::after, .job-button[data-job="promo"]:focus-visible::after { transform: translateY(0); }
-  .job-button[data-job="ticket"]::after { left: auto; right: -10px; transform: translateY(-5px); }
-  .job-button[data-job="ticket"]:hover::after, .job-button[data-job="ticket"]:focus-visible::after { transform: translateY(0); }
-  .job-name { position: absolute; left: 50%; bottom: -22px; transform: translateX(-50%); white-space: nowrap; padding: 2px 7px; color: var(--ink); background: #111523e8; border: 1px solid #596179; font-size: 10px; font-weight: 900; }
-  .job-check { position: absolute; right: -5px; top: -5px; width: 25px; height: 25px; display: grid; place-items: center; border-radius: 50%; color: #102019; background: var(--green); border: 2px solid #b9f2c4; font-weight: 900; }
-  .job-staff { position: absolute; left: -8px; top: -8px; width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; color: #201a17; background: #efc7a2; border: 2px solid #4a3030; font-size: 9px; font-weight: 900; }
-  .job-art { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 42px; height: 42px; }
-  .art-promo { background: var(--red); border: 3px solid #f0d28b; }
-  .art-promo::after { content: "★"; display: grid; place-items: center; height: 100%; color: var(--gold); font-size: 24px; }
-  .art-light { border-radius: 50%; background: var(--gold); border: 4px solid #fff0a8; box-shadow: 0 0 14px #f4c95d; }
-  .art-light::after { content: ""; position: absolute; width: 20px; height: 8px; left: 7px; bottom: -8px; background: #6e5630; border: 3px solid #2e2725; }
-  .art-stage { border: 4px solid var(--blue); border-radius: 50%; }
-  .art-stage::before, .art-stage::after { content: ""; position: absolute; width: 9px; height: 9px; border-radius: 50%; background: var(--gold); top: 12px; }
-  .art-stage::before { left: -6px; }
-  .art-stage::after { right: -6px; }
-  .art-ticket { width: 45px; height: 25px; background: #f0d28b; border: 3px solid #7e5634; transform: translate(-50%, -50%) rotate(-7deg); }
-  .art-ticket::after { content: ""; position: absolute; inset: 4px 17px; border-left: 2px dashed #a36d20; }
+  .station-button:hover::after, .station-button:focus-visible::after { opacity: 1; transform: translateX(-50%) translateY(0); }
+  #ticketButton { left: 84%; top: 68%; }
+  #lightButton { left: 18%; top: 27%; }
 
-  .control-area { padding: 10px; background: #1c2032; min-height: 160px; }
-  .plan-panel { display: block; }
-  .plan-title { color: var(--gold); font-size: 11px; font-weight: 900; margin: 2px 0 8px; }
+  .control-area { min-height: 174px; padding: 10px; background: #1c2133; }
+  .plan-panel, .live-panel, .result-panel, .final-panel { display: none; }
+  .plan-panel.on, .live-panel.on, .result-panel.on, .final-panel.on { display: block; }
+  .section-title { margin: 2px 0 8px; color: var(--gold); font-size: 11px; font-weight: 900; }
   .plan-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .plan-button {
-    min-height: 116px;
+    min-height: 112px;
     display: grid;
     grid-template-columns: 86px 1fr;
     align-items: center;
     gap: 12px;
     padding: 10px;
+    cursor: pointer;
     color: var(--ink);
     background: var(--panel);
     border: 3px solid var(--line);
-    cursor: pointer;
     text-align: left;
     transition: transform .12s, border-color .12s, background .12s;
   }
   .plan-button:hover:not(:disabled) { transform: translateY(-3px); border-color: var(--gold); background: var(--panel-2); }
   .plan-button:active:not(:disabled) { transform: translateY(1px); }
-  .plan-button:disabled { opacity: .4; cursor: default; }
-  .plan-button strong { display: block; font-size: 16px; margin-bottom: 6px; }
+  .plan-button:disabled { opacity: .38; cursor: default; }
+  .plan-button strong { display: block; margin-bottom: 5px; font-size: 16px; }
   .plan-button small { display: block; color: var(--muted); font-size: 10px; line-height: 1.55; }
-  .plan-art { width: 82px; height: 72px; position: relative; background: #171a2a; border: 2px solid #454b61; overflow: hidden; }
-  .plan-art::before { content: ""; position: absolute; left: 12px; right: 12px; bottom: 10px; height: 35px; background: repeating-linear-gradient(90deg, var(--red) 0 12px, #f0d28b 12px 24px); }
-  .plan-art::after { content: ""; position: absolute; left: 5px; bottom: 43px; border-left: 34px solid transparent; border-right: 34px solid transparent; border-bottom: 0; border-top: 24px solid var(--red-dark); }
-  .plan-art.big::before { left: 5px; right: 5px; height: 43px; }
-  .plan-art.big::after { left: -4px; bottom: 50px; border-left-width: 43px; border-right-width: 43px; border-top-width: 28px; }
-  .plan-stars { position: absolute; z-index: 2; left: 50%; bottom: 17px; transform: translateX(-50%); color: var(--gold); font-size: 15px; white-space: nowrap; }
-  .prep-panel { display: grid; grid-template-columns: 1fr 210px; gap: 10px; }
-  .staff-block { min-width: 0; background: var(--panel); border: 2px solid var(--line); padding: 9px; }
-  .block-title { color: var(--muted); font-size: 10px; font-weight: 900; margin-bottom: 7px; }
-  .staff-list { display: flex; gap: 7px; min-height: 76px; overflow-x: auto; align-items: stretch; }
-  .staff-empty { display: flex; align-items: center; color: #777f95; font-size: 11px; }
-  .staff-card { min-width: 132px; display: grid; grid-template-columns: 40px 1fr; gap: 7px; align-items: center; padding: 7px; background: #171a2a; border: 2px solid #454b61; }
-  .staff-face { width: 38px; height: 44px; position: relative; background: var(--staff-color); border: 3px solid #111522; }
-  .staff-face::before { content: ""; position: absolute; left: 7px; top: 5px; width: 19px; height: 19px; border-radius: 50%; background: #efc7a2; border: 2px solid #422f31; }
-  .staff-face::after { content: ""; position: absolute; left: 5px; bottom: 3px; width: 23px; height: 12px; background: #efc7a2; border: 2px solid #422f31; border-bottom: 0; }
-  .staff-copy strong { display: block; font-size: 12px; }
-  .staff-copy span { display: block; margin-top: 3px; color: var(--muted); font-size: 9px; line-height: 1.35; }
-  .start-wrap { display: grid; grid-template-rows: 1fr auto; gap: 8px; }
-  .show-button { min-height: 82px; color: white; background: var(--red); border: 3px solid #ff8a74; box-shadow: inset 0 -8px 0 var(--red-dark), 0 5px 0 #080b14; font-size: 18px; font-weight: 900; cursor: pointer; text-shadow: 0 2px 0 #7e2631; }
-  .show-button:hover:not(:disabled) { filter: brightness(1.1); }
-  .show-button:active:not(:disabled) { transform: translateY(4px); box-shadow: inset 0 -4px 0 var(--red-dark), 0 1px 0 #080b14; }
-  .show-button:disabled { filter: grayscale(.8); opacity: .45; cursor: default; }
-  .prep-note { min-height: 24px; color: var(--muted); font-size: 10px; text-align: center; }
+  .plan-art { width: 82px; height: 70px; position: relative; overflow: hidden; background: #171a29; border: 2px solid #444b61; }
+  .plan-art::before { content: ""; position: absolute; left: 12px; right: 12px; bottom: 9px; height: 34px; background: repeating-linear-gradient(90deg, var(--red) 0 12px, #efd18d 12px 24px); }
+  .plan-art::after { content: ""; position: absolute; left: 5px; bottom: 41px; border-left: 34px solid transparent; border-right: 34px solid transparent; border-top: 25px solid var(--red-dark); }
+  .plan-art.big::before { left: 5px; right: 5px; height: 42px; }
+  .plan-art.big::after { left: -4px; bottom: 49px; border-left-width: 43px; border-right-width: 43px; border-top-width: 28px; }
+  .plan-stars { position: absolute; left: 50%; bottom: 15px; z-index: 2; color: var(--gold); font-size: 14px; transform: translateX(-50%); white-space: nowrap; }
 
-  .result-panel, .final-panel { display: none; }
-  .result-panel.on, .final-panel.on { display: block; }
-  .result-plan { margin-bottom: 8px; padding: 8px 10px; color: var(--gold); background: #171a2a; border: 2px solid #454b61; font-size: 11px; font-weight: 900; text-align: center; }
+  .live-top { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+  .live-stat { min-height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 7px 9px; background: var(--panel); border: 2px solid var(--line); }
+  .live-stat span { color: var(--muted); font-size: 9px; }
+  .live-stat strong { font: 900 18px/1 Consolas, monospace; }
+  .stage-control { min-height: 82px; display: grid; grid-template-columns: 1fr 132px 132px; align-items: stretch; gap: 8px; margin-top: 8px; }
+  .stage-message { display: flex; align-items: center; gap: 10px; padding: 9px 11px; background: #171a2a; border: 2px solid #454d63; }
+  .stage-symbol { width: 42px; height: 42px; flex: 0 0 42px; position: relative; border: 4px solid var(--blue); border-radius: 50%; }
+  .stage-symbol::before, .stage-symbol::after { content: ""; position: absolute; top: 12px; width: 9px; height: 9px; border-radius: 50%; background: var(--gold); }
+  .stage-symbol::before { left: -7px; }
+  .stage-symbol::after { right: -7px; }
+  .stage-copy strong { display: block; margin-bottom: 4px; font-size: 12px; }
+  .stage-copy span { display: block; color: var(--muted); font-size: 10px; line-height: 1.35; }
+  .decision-button { min-height: 78px; cursor: pointer; color: white; border: 3px solid; font-size: 13px; font-weight: 900; box-shadow: 0 5px 0 #080a13; }
+  .decision-button:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 1px 0 #080a13; }
+  .decision-button:disabled { opacity: .28; cursor: default; filter: grayscale(.8); }
+  .continue-button { background: #b94d50; border-color: #ff8b79; }
+  .finish-button { background: #397850; border-color: #83d39a; }
+  .staff-row { min-height: 25px; display: flex; align-items: center; gap: 6px; margin-top: 7px; overflow-x: auto; }
+  .staff-empty { color: #7e879e; font-size: 10px; }
+  .staff-pill { display: inline-flex; align-items: center; gap: 5px; padding: 4px 7px; white-space: nowrap; color: #d9f5df; background: #183126; border: 1px solid #477c59; font-size: 9px; }
+  .staff-face { width: 16px; height: 16px; display: inline-block; background: #efc7a2; border: 2px solid #4b3130; border-radius: 50%; }
+
+  .result-title { margin-bottom: 8px; padding: 8px 10px; color: var(--gold); background: #171a2a; border: 2px solid #454d63; font-size: 11px; font-weight: 900; text-align: center; }
   .result-head { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-bottom: 9px; }
-  .result-stat { background: var(--panel); border: 2px solid var(--line); padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .result-stat { padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; background: var(--panel); border: 2px solid var(--line); }
   .result-stat span { color: var(--muted); font-size: 9px; }
   .result-stat strong { font: 900 18px/1 Consolas, monospace; }
-  .invest-title { color: var(--gold); font-size: 11px; font-weight: 900; margin: 8px 0; }
-  .investments { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-  .invest-card { min-height: 88px; display: grid; grid-template-columns: 46px 1fr auto; align-items: center; gap: 8px; padding: 7px; color: var(--ink); background: var(--panel); border: 2px solid var(--line); cursor: pointer; text-align: left; transition: transform .12s, border-color .12s, background .12s; }
-  .invest-card:hover:not(:disabled) { transform: translateY(-3px); border-color: var(--gold); background: #303548; }
-  .invest-card:disabled { opacity: .35; cursor: default; }
-  .invest-card strong { display: block; font-size: 12px; margin-bottom: 4px; }
-  .invest-card small { display: block; color: var(--muted); font-size: 9px; line-height: 1.35; }
-  .invest-face { width: 42px; height: 48px; position: relative; background: var(--staff-color, #65a8df); border: 3px solid #111522; }
-  .invest-face::before { content: ""; position: absolute; left: 8px; top: 5px; width: 20px; height: 20px; border-radius: 50%; background: #efc7a2; border: 2px solid #422f31; }
-  .invest-face::after { content: ""; position: absolute; left: 6px; bottom: 3px; width: 25px; height: 13px; background: #efc7a2; border: 2px solid #422f31; border-bottom: 0; }
-  .seat-art { width: 44px; height: 44px; position: relative; border: 3px solid #9b4b50; background: #742f39; box-shadow: 0 12px 0 #742f39, 0 15px 0 #301f24; }
-  .price { color: var(--gold); font: 900 14px/1 Consolas, monospace; white-space: nowrap; align-self: start; margin-top: 4px; }
-  .skip-invest { margin-top: 8px; padding: 7px 10px; color: var(--muted); background: transparent; border: 1px solid #596179; cursor: pointer; }
+  .investments { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .invest-card { min-height: 90px; display: grid; grid-template-rows: 1fr auto; gap: 6px; padding: 8px; cursor: pointer; color: var(--ink); background: var(--panel); border: 2px solid var(--line); text-align: left; transition: transform .12s, border-color .12s, background .12s; }
+  .invest-card:hover:not(:disabled) { transform: translateY(-3px); border-color: var(--gold); background: var(--panel-2); }
+  .invest-card:disabled { opacity: .34; cursor: default; }
+  .invest-card strong { display: block; margin-bottom: 3px; font-size: 11px; }
+  .invest-card small { display: block; color: var(--muted); font-size: 9px; line-height: 1.4; }
+  .price { justify-self: end; color: var(--gold); font: 900 14px/1 Consolas, monospace; }
+  .skip-invest { margin-top: 8px; padding: 7px 10px; cursor: pointer; color: var(--muted); background: transparent; border: 1px solid #596279; }
   .skip-invest:hover { color: var(--ink); border-color: var(--muted); }
-  .final-panel { text-align: center; padding: 18px; }
+  .final-panel { padding: 18px; text-align: center; }
   .final-panel h2 { margin: 0 0 8px; color: var(--gold); }
   .final-panel p { margin: 0 0 16px; color: var(--muted); line-height: 1.6; }
-  .restart-btn { padding: 11px 28px; color: white; background: var(--red); border: 3px solid #ff8a74; box-shadow: 0 4px 0 #7e2631; cursor: pointer; font-weight: 900; }
+  .restart-btn { padding: 11px 28px; cursor: pointer; color: white; background: var(--red); border: 3px solid #ff8b79; box-shadow: 0 4px 0 var(--red-dark); font-weight: 900; }
 
   @media (max-width: 760px) {
     body { padding: 0; }
@@ -252,18 +240,19 @@
     .marquee { grid-template-columns: 1fr; }
     .hud { justify-content: space-between; gap: 4px; }
     .hud-item { flex: 1; min-width: 0; }
-    .sound-btn { width: 30px; height: 30px; flex: 0 0 30px; }
-    .prep-panel { grid-template-columns: 1fr; }
+    .sound-btn { width: 32px; height: 32px; flex: 0 0 32px; }
     .plan-options { grid-template-columns: 1fr; }
-    .plan-button { min-height: 94px; grid-template-columns: 72px 1fr; }
+    .plan-button { min-height: 92px; grid-template-columns: 72px 1fr; }
     .plan-art { width: 68px; height: 58px; }
-    .start-wrap { grid-template-columns: 1fr; }
-    .job-button { width: 62px; height: 62px; }
-    .job-art { transform: translate(-50%, -50%) scale(.78); }
-    .job-name { font-size: 9px; }
+    .station-button { width: 76px; height: 76px; }
+    .station-icon { transform: scale(.78); }
+    .station-copy { font-size: 9px; }
+    .stage-control { grid-template-columns: 1fr 96px 96px; }
+    .stage-message { min-width: 0; }
+    .stage-symbol { display: none; }
+    .decision-button { min-height: 70px; font-size: 11px; }
     .result-head { grid-template-columns: 1fr 1fr; }
-    .investments { grid-template-columns: 1fr; }
-    .invest-card { min-height: 76px; }
+    .investments { grid-template-columns: 1fr 1fr; }
   }
 </style>
 </head>
@@ -274,50 +263,63 @@
       <span class="brand">PoC</span>
       <div>
         <h1>작은 서커스</h1>
-        <div class="town" id="townLabel">첫 번째 마을 · 공연 준비</div>
+        <div class="town" id="townLabel">첫 번째 마을 · 오늘 공연</div>
       </div>
     </div>
     <div class="hud">
       <div class="hud-item"><span class="hud-icon coin-icon"></span><span class="hud-label">돈</span><span class="hud-value" id="moneyValue">10</span></div>
-      <div class="hud-item"><span class="hud-icon day-icon"></span><span class="hud-label">날짜</span><span class="hud-value" id="dayValue">1/5</span></div>
-      <div class="hud-item"><span class="hud-icon time-icon"></span><span class="hud-label">준비</span><span class="hud-value" id="timeValue">3</span></div>
-      <button class="sound-btn" id="soundBtn" aria-label="소리 켜기 또는 끄기" title="소리"><span class="speaker"></span></button>
+      <div class="hud-item"><span class="hud-icon day-icon"></span><span class="hud-label">날짜</span><span class="hud-value" id="dayValue">1/4</span></div>
+      <div class="hud-item"><span class="hud-icon rep-icon"></span><span class="hud-label">평판</span><span class="hud-value" id="repValue">0</span></div>
+      <button class="sound-btn" id="soundButton" aria-label="소리 켜기 또는 끄기" title="소리"><span class="speaker"></span></button>
     </div>
   </header>
 
   <section class="scene-frame">
-    <canvas id="scene" width="960" height="530" aria-label="작은 서커스 준비와 공연"></canvas>
-    <div class="job-layer" id="jobLayer"></div>
-    <div class="phase-banner" id="phaseBanner"></div>
+    <canvas id="scene" width="960" height="530" aria-label="서커스 공연 운영 장면"></canvas>
     <div class="show-timer" id="showTimer"><div class="show-timer-fill" id="showTimerFill"></div></div>
+    <div class="phase-banner" id="phaseBanner"></div>
+    <div class="station-layer">
+      <button class="station-button" id="lightButton" data-tip="불이 반짝일 때 누르면 관객의 박수가 커짐" aria-label="조명 신호 처리">
+        <span class="station-icon light-art"></span><span class="station-copy" id="lightCopy">신호 대기</span>
+      </button>
+      <button class="station-button" id="ticketButton" data-tip="줄 선 관객 한 명을 입장시켜 표 수입 획득" aria-label="매표 처리">
+        <span class="station-icon ticket-art"></span><span class="station-copy" id="ticketCopy">대기 0</span>
+      </button>
+    </div>
   </section>
 
   <main class="control-area">
-    <section class="plan-panel" id="planPanel">
-      <div class="plan-title">오늘 올릴 공연</div>
+    <section class="plan-panel on" id="planPanel">
+      <div class="section-title">오늘 올릴 공연</div>
       <div class="plan-options" id="planOptions"></div>
     </section>
 
-    <section class="prep-panel" id="prepPanel">
-      <div class="staff-block">
-        <div class="block-title">함께 일하는 사람</div>
-        <div class="staff-list" id="staffList"></div>
+    <section class="live-panel" id="livePanel">
+      <div class="live-top">
+        <div class="live-stat"><span>입장</span><strong id="liveAudience">0/0</strong></div>
+        <div class="live-stat"><span>조명 성공</span><strong id="liveLights">0</strong></div>
+        <div class="live-stat"><span>무대 수입</span><strong id="liveStage">0</strong></div>
       </div>
-      <div class="start-wrap">
-        <button class="show-button" id="startShow">문 열기</button>
-        <div class="prep-note" id="prepNote"></div>
+      <div class="stage-control">
+        <div class="stage-message">
+          <span class="stage-symbol"></span>
+          <span class="stage-copy"><strong id="stageTitle">첫 묘기 준비</strong><span id="stageDetail">공연이 시작되면 단원을 지켜보세요.</span></span>
+        </div>
+        <button class="decision-button continue-button" id="continueButton" disabled>한 번 더</button>
+        <button class="decision-button finish-button" id="finishButton" disabled>마무리</button>
       </div>
+      <div class="staff-row" id="staffRow"></div>
     </section>
 
     <section class="result-panel" id="resultPanel">
-      <div class="result-plan" id="resultPlan"></div>
+      <div class="result-title" id="resultTitle"></div>
       <div class="result-head">
         <div class="result-stat"><span>입장</span><strong id="resultAudience">0</strong></div>
-        <div class="result-stat"><span>만족</span><strong id="resultMood">0%</strong></div>
+        <div class="result-stat"><span>관객 반응</span><strong id="resultMood">0%</strong></div>
         <div class="result-stat"><span>매출</span><strong id="resultGross">+0</strong></div>
         <div class="result-stat"><span>비용 후</span><strong id="resultNet">+0</strong></div>
       </div>
-      <div class="invest-title">오늘 번 돈으로 하나 선택</div>
+      <div class="section-title">오늘 번 돈으로 하나 선택</div>
       <div class="investments" id="investments"></div>
       <button class="skip-invest" id="skipInvest">저축하고 다음 날</button>
     </section>
@@ -325,7 +327,7 @@
     <section class="final-panel" id="finalPanel">
       <h2>첫 마을 공연 종료</h2>
       <p id="finalSummary"></p>
-      <button class="restart-btn" id="restartBtn">처음부터</button>
+      <button class="restart-btn" id="restartButton">처음부터</button>
     </section>
   </main>
 </div>
@@ -336,369 +338,452 @@
 
   const canvas = document.getElementById('scene');
   const ctx = canvas.getContext('2d');
-  ctx.imageSmoothingEnabled = false;
-
-  const SHOW_MS = 5000;
-  const MAX_DAYS = 5;
-  const MAX_PREP = 3;
-  const JOBS = {
-    promo: { name: '홍보', art: 'promo', worker: '소피', color: '#d95555', hire: 11, wage: 1, bonus: '관객 +2', pos: [15, 48] },
-    light: { name: '조명', art: 'light', worker: '에디', color: '#e0a94f', hire: 12, wage: 2, bonus: '만족 +8%', pos: [50, 24] },
-    stage: { name: '무대', art: 'stage', worker: '로만', color: '#65a8df', hire: 13, wage: 2, bonus: '팁 +관객당 1', pos: [50, 53] },
-    ticket: { name: '매표', art: 'ticket', worker: '마리', color: '#63c17b', hire: 11, wage: 1, bonus: '표값 +1', pos: [84, 49] },
-  };
-  const SHOW_PLANS = {
-    small: {
-      name: '작은 공연', detail: '무대·매표 중심 · 낮은 수입 · 운영비 없음', stars: '★',
-      baseDemand: 4, maxAudience: 4, promoGain: 2, baseSatisfaction: .55, lightGain: .10, stageGain: .20, gateLoss: 1, cost: 0,
-    },
-    big: {
-      name: '큰 공연', detail: '네 준비 모두 중요 · 높은 수입 · 운영비 4', stars: '★★★',
-      baseDemand: 3, maxAudience: 99, promoGain: 5, baseSatisfaction: .45, lightGain: .17, stageGain: .22, gateLoss: 2, cost: 4,
-    },
-  };
-  const COLORS = ['#d9715d', '#e0a94f', '#65a8df', '#63c17b', '#9a7bd8'];
-
-  let state;
-  let showStart = 0;
-  let showResult = null;
-  let soundOn = true;
-  let audioContext = null;
-  let bannerTimer = null;
-
   const $ = id => document.getElementById(id);
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
-  const easeOut = t => 1 - Math.pow(1 - clamp(t, 0, 1), 3);
+  const COLORS = ['#d9715d', '#e0a94f', '#67aee5', '#66c47d', '#9a7bd8'];
+  const MAX_DAYS = 4;
+  const COUNTDOWN_MS = 1800;
+
+  const SHOWS = {
+    small: {
+      name: '작은 공연', detail: '관객 6명 · 조명 신호 3회 · 운영비 없음', stars: '★',
+      duration: 16000, audience: 6, arrivalEvery: 2200, cues: [2600, 7000, 11200], maxTricks: 3,
+      trickRewards: [3, 5, 8], risks: [0, .12, .32], cost: 0,
+    },
+    big: {
+      name: '큰 공연', detail: '관객 10명 · 조명 신호 5회 · 운영비 4', stars: '★★★',
+      duration: 19500, audience: 10, arrivalEvery: 1600, cues: [2200, 5100, 8100, 11600, 15300], maxTricks: 4,
+      trickRewards: [4, 7, 11, 16], risks: [0, .15, .33, .50], cost: 4,
+    },
+  };
+
+  const JOBS = {
+    ticket: { name: '매표', worker: '마리', hire: 10, wage: 1, bonus: '1.1초마다 관객 자동 입장', color: '#66c47d' },
+    light: { name: '조명', worker: '에디', hire: 11, wage: 1, bonus: '조명 신호 자동 처리', color: '#e0a94f' },
+    stage: { name: '무대 진행', worker: '로만', hire: 12, wage: 2, bonus: '보통 방침으로 묘기 판단', color: '#67aee5' },
+  };
+
+  let state;
+  let live = null;
+  let result = null;
+  let animationId = 0;
+  let bannerTimer = 0;
+  let soundOn = true;
+  let audioContext = null;
 
   function freshState() {
     return {
       day: 1,
       money: 10,
       reputation: 0,
-      prepLeft: MAX_PREP,
       phase: 'plan',
-      showPlan: null,
-      prepared: { promo: false, light: false, stage: false, ticket: false },
+      showKey: null,
       employees: {},
       seatLevel: 0,
-      audience: [],
     };
   }
 
   function resetGame() {
+    cancelAnimationFrame(animationId);
     state = freshState();
-    showResult = null;
-    $('planPanel').style.display = 'block';
-    $('prepPanel').style.display = 'none';
-    $('resultPanel').classList.remove('on');
-    $('finalPanel').classList.remove('on');
-    beginPrepDay();
-  }
-
-  function beginPrepDay() {
-    state.phase = 'plan';
-    state.showPlan = null;
-    showResult = null;
-    state.prepLeft = MAX_PREP;
-    state.prepared = { promo: false, light: false, stage: false, ticket: false };
-    state.audience = [];
-    $('planPanel').style.display = 'block';
-    $('prepPanel').style.display = 'none';
+    live = null;
+    result = null;
+    showPanel('planPanel');
+    $('showTimer').classList.remove('on');
+    hideStations();
     renderAll();
     drawScene(0);
   }
 
-  function beginSelectedShow() {
-    state.phase = 'prep';
-    $('planPanel').style.display = 'none';
-    $('prepPanel').style.display = 'grid';
-    renderAll();
-    drawScene(0);
-    const staffed = Object.keys(state.employees);
-    staffed.forEach((jobKey, index) => {
-      setTimeout(() => {
-        if (state.phase !== 'prep') return;
-        state.prepared[jobKey] = true;
-        setBanner(`${JOBS[jobKey].worker} · ${JOBS[jobKey].name} 준비`);
-        playTone(350 + index * 70, .08, 'square', .035);
-        renderAll();
-        drawScene(0);
-      }, 350 + index * 430);
-    });
+  function showPanel(panelId) {
+    ['planPanel', 'livePanel', 'resultPanel', 'finalPanel'].forEach(id => $(id).classList.toggle('on', id === panelId));
   }
 
   function renderAll() {
     $('moneyValue').textContent = state.money;
     $('dayValue').textContent = `${state.day}/${MAX_DAYS}`;
-    $('timeValue').textContent = state.prepLeft;
-    $('townLabel').textContent = state.phase === 'plan' ? '첫 번째 마을 · 공연 고르기' : state.phase === 'show' ? '첫 번째 마을 · 공연 중' : `첫 번째 마을 · ${SHOW_PLANS[state.showPlan]?.name || '공연 준비'}`;
+    $('repValue').textContent = state.reputation;
+    $('townLabel').textContent = state.phase === 'plan' ? '첫 번째 마을 · 오늘 공연'
+      : state.phase === 'live' ? `첫 번째 마을 · ${SHOWS[state.showKey].name} 운영 중`
+      : '첫 번째 마을 · 오늘 정산';
     renderPlans();
-    renderJobs();
     renderStaff();
-    renderPrepNote();
+    if (state.phase === 'live') renderLive();
   }
 
   function renderPlans() {
-    $('planOptions').innerHTML = Object.entries(SHOW_PLANS).map(([key, plan]) => `<button class="plan-button" data-plan="${key}" ${state.money < plan.cost ? 'disabled' : ''}>
-      <span class="plan-art ${key === 'big' ? 'big' : ''}"><span class="plan-stars">${plan.stars}</span></span>
-      <span><strong>${plan.name}</strong><small>${plan.detail}</small></span>
-    </button>`).join('');
-    document.querySelectorAll('[data-plan]').forEach(button => button.addEventListener('click', () => selectShowPlan(button.dataset.plan)));
-  }
-
-  function selectShowPlan(planKey) {
-    if (state.phase !== 'plan' || !SHOW_PLANS[planKey] || state.money < SHOW_PLANS[planKey].cost) return;
-    state.showPlan = planKey;
-    setBanner(SHOW_PLANS[planKey].name);
-    playTone(planKey === 'big' ? 310 : 420, .1, 'square', .04);
-    beginSelectedShow();
-  }
-
-  function renderJobs() {
-    const layer = $('jobLayer');
-    if (state.phase !== 'prep') {
-      layer.innerHTML = '';
-      return;
-    }
-
-    layer.innerHTML = Object.entries(JOBS).map(([key, job]) => {
-      const prepared = state.prepared[key];
-      const staffed = Boolean(state.employees[key]);
-      const locked = !prepared && !staffed && state.prepLeft <= 0;
-      const effect = jobResultText(key);
-      return `<button class="job-button ${prepared ? 'prepared' : ''} ${staffed ? 'staffed' : ''} ${locked ? 'locked' : ''}" data-job="${key}" data-tip="${effect}" aria-label="${job.name}: ${effect}" style="left:${job.pos[0]}%;top:${job.pos[1]}%" ${prepared || staffed || locked ? 'disabled' : ''}>
-        ${staffed ? `<span class="job-staff">${job.worker.slice(0, 1)}</span>` : ''}
-        ${prepared ? '<span class="job-check">✓</span>' : ''}
-        <span class="job-art art-${job.art}"></span>
-        <span class="job-name">${job.name}</span>
+    $('planOptions').innerHTML = Object.entries(SHOWS).map(([key, show]) => {
+      const note = key === 'big' && !Object.keys(state.employees).length ? ' · 직원 없이 매우 바쁨' : '';
+      return `<button class="plan-button" data-show="${key}">
+        <span class="plan-art ${key === 'big' ? 'big' : ''}"><span class="plan-stars">${show.stars}</span></span>
+        <span><strong>${show.name}</strong><small>${show.detail}${note}</small></span>
       </button>`;
     }).join('');
-    layer.querySelectorAll('[data-job]').forEach(button => button.addEventListener('click', () => startManualJob(button.dataset.job)));
+    document.querySelectorAll('[data-show]').forEach(button => button.addEventListener('click', () => startShow(button.dataset.show)));
   }
 
   function renderStaff() {
-    const employees = Object.entries(state.employees);
-    if (!employees.length) {
-      $('staffList').innerHTML = '<div class="staff-empty">아직 직원 없음</div>';
-      return;
-    }
-    $('staffList').innerHTML = employees.map(([jobKey, employee]) => `<div class="staff-card">
-      <span class="staff-face" style="--staff-color:${JOBS[jobKey].color}"></span>
-      <span class="staff-copy"><strong>${employee.name}</strong><span>${JOBS[jobKey].name} 자동<br>${JOBS[jobKey].bonus} · 임금 ${JOBS[jobKey].wage}</span></span>
-    </div>`).join('');
+    const entries = Object.entries(state.employees);
+    $('staffRow').innerHTML = entries.length ? entries.map(([jobKey, employee]) =>
+      `<span class="staff-pill"><span class="staff-face"></span>${employee.name} · ${JOBS[jobKey].name} 자동</span>`).join('')
+      : '<span class="staff-empty">직원 없음 · 세 업무를 단장이 직접 처리</span>';
   }
 
-  function renderPrepNote() {
-    const done = Object.values(state.prepared).filter(Boolean).length;
-    const missing = Object.entries(state.prepared).filter(([, value]) => !value).map(([key]) => JOBS[key].name);
-    $('startShow').disabled = state.phase !== 'prep';
-    $('startShow').textContent = `${SHOW_PLANS[state.showPlan]?.name || '공연'} 열기`;
-    $('prepNote').textContent = missing.length ? `${SHOW_PLANS[state.showPlan]?.name || ''} · 준비 ${done}/4 · ${missing.join(' · ')}` : '모든 준비 완료';
-  }
-
-  function jobResultText(jobKey) {
-    const plan = SHOW_PLANS[state.showPlan] || SHOW_PLANS.small;
-    if (jobKey === 'promo') return `찾아오는 관객 +${plan.promoGain}`;
-    if (jobKey === 'light') return `공연 만족 +${Math.round(plan.lightGain * 100)}%`;
-    if (jobKey === 'stage') return `공연 만족 +${Math.round(plan.stageGain * 100)}%`;
-    return `입장 손실 제거 · 표값 +1`;
-  }
-
-  function startManualJob(jobKey) {
-    if (state.phase !== 'prep' || state.prepared[jobKey] || state.employees[jobKey] || state.prepLeft <= 0) return;
-    state.prepared[jobKey] = true;
-    state.prepLeft--;
-    setBanner(jobResultText(jobKey));
-    playTone(390, .08, 'square', .04);
-    setTimeout(() => playTone(520, .08, 'square', .035), 80);
-    renderAll();
-    drawScene(0);
-  }
-
-  function calculateShow() {
-    const plan = SHOW_PLANS[state.showPlan];
-    const promoStaff = Boolean(state.employees.promo);
-    const lightStaff = Boolean(state.employees.light);
-    const stageStaff = Boolean(state.employees.stage);
-    const ticketStaff = Boolean(state.employees.ticket);
-    const demand = plan.baseDemand + Math.floor(state.reputation / 4) + (state.prepared.promo ? plan.promoGain : 0) + (promoStaff ? 2 : 0);
-    const capacity = Math.min(6 + state.seatLevel * 3, plan.maxAudience);
-    const queue = Math.min(demand, capacity);
-    const gateLoss = state.prepared.ticket ? 0 : Math.min(plan.gateLoss, Math.max(1, Math.floor(queue * .4)));
-    const attendees = Math.max(1, queue - gateLoss);
-    const satisfaction = clamp(plan.baseSatisfaction + (state.prepared.light ? plan.lightGain : 0) + (state.prepared.stage ? plan.stageGain : 0) + (lightStaff ? .08 : 0), .35, .98);
-    const ticketPrice = state.prepared.ticket ? 2 : 1;
-    const ticketIncome = attendees * (ticketPrice + (ticketStaff ? 1 : 0));
-    const tips = Math.floor(attendees * satisfaction) + (stageStaff ? attendees : 0);
-    const fullPrep = Object.values(state.prepared).every(Boolean);
-    const fullShowBonus = state.showPlan === 'big' && fullPrep ? attendees : 0;
-    const gross = ticketIncome + tips + fullShowBonus;
-    const wages = Object.keys(state.employees).reduce((sum, key) => sum + JOBS[key].wage, 0);
-    const net = gross - wages - plan.cost;
-    const repGain = satisfaction >= .84 ? 2 : satisfaction >= .65 ? 1 : 0;
-    return { plan, demand, capacity, queue, gateLoss, attendees, satisfaction, ticketIncome, tips, gross, wages, net, repGain, fullPrep, fullShowBonus };
-  }
-
-  function startShow() {
-    if (state.phase !== 'prep') return;
-    ensureAudio();
-    state.phase = 'show';
-    showResult = calculateShow();
-    createAudience(showResult);
-    showStart = performance.now();
-    $('prepPanel').style.display = 'none';
-    $('jobLayer').innerHTML = '';
+  function startShow(showKey) {
+    if (state.phase !== 'plan' || !SHOWS[showKey]) return;
+    state.phase = 'live';
+    state.showKey = showKey;
+    result = null;
+    const show = SHOWS[showKey];
+    live = {
+      start: performance.now() + COUNTDOWN_MS,
+      elapsed: -COUNTDOWN_MS,
+      endAt: show.duration,
+      arrived: 0,
+      queue: 0,
+      admitted: 0,
+      left: 0,
+      nextTicketAuto: 0,
+      ticketCooldown: 0,
+      cueIndex: 0,
+      activeCue: null,
+      cueHits: 0,
+      cueMisses: 0,
+      trick: 1,
+      trickBank: 0,
+      securedStage: 0,
+      stageSuccesses: 0,
+      stageState: 'performing',
+      stageTitle: '첫 묘기 준비',
+      stageDetail: '공연 시작과 함께 첫 묘기가 올라갑니다.',
+      nextStageAt: 3000,
+      decisionDeadline: 0,
+      autoDecisionAt: 0,
+      stageFailed: false,
+    };
+    showPanel('livePanel');
     $('showTimer').classList.add('on');
-    playTone(220, .08, 'square', .05);
-    setTimeout(() => playTone(330, .08, 'square', .045), 90);
-    requestAnimationFrame(showLoop);
+    $('ticketButton').classList.add('on');
+    $('lightButton').classList.add('on');
+    applyStaffMarks();
+    renderAll();
+    setBanner('문을 엽니다');
+    playSequence([220, 330, 440]);
+    animationId = requestAnimationFrame(showLoop);
+  }
+
+  function applyStaffMarks() {
+    [['ticketButton', 'ticket'], ['lightButton', 'light']].forEach(([buttonId, jobKey]) => {
+      const button = $(buttonId);
+      const staffed = Boolean(state.employees[jobKey]);
+      button.classList.toggle('staffed', staffed);
+      button.disabled = staffed;
+      button.querySelectorAll('.staff-mark').forEach(mark => mark.remove());
+      if (staffed) button.insertAdjacentHTML('afterbegin', `<span class="staff-mark">${JOBS[jobKey].worker.slice(0, 1)}</span>`);
+    });
+  }
+
+  function hideStations() {
+    $('ticketButton').classList.remove('on', 'urgent', 'staffed');
+    $('lightButton').classList.remove('on', 'urgent', 'staffed');
   }
 
   function showLoop(now) {
-    const elapsed = now - showStart;
-    const progress = Math.min(1, elapsed / SHOW_MS);
+    if (state.phase !== 'live') return;
+    live.elapsed = now - live.start;
+    if (live.elapsed >= 0) updateLive();
+    const progress = clamp(live.elapsed / live.endAt, 0, 1);
     $('showTimerFill').style.width = `${progress * 100}%`;
-    if (elapsed < 1300) setBanner(showResult.gateLoss ? '관객 일부가 줄을 떠납니다' : '관객 입장');
-    else if (elapsed < 4200) setBanner('공연 중');
-    else setBanner('마지막 인사');
-    drawScene(elapsed);
-    if (elapsed < SHOW_MS) requestAnimationFrame(showLoop);
-    else finishShow();
+    renderLive();
+    drawScene(live.elapsed);
+    if (live.elapsed >= live.endAt) finishShow();
+    else animationId = requestAnimationFrame(showLoop);
+  }
+
+  function updateLive() {
+    const show = SHOWS[state.showKey];
+    const expectedArrivals = Math.min(show.audience, Math.floor(live.elapsed / show.arrivalEvery) + 1);
+    while (live.arrived < expectedArrivals) {
+      live.arrived++;
+      if (live.queue >= 4 || live.admitted >= capacityForShow()) {
+        live.left++;
+        setBanner('기다리던 관객이 떠났습니다');
+      } else {
+        live.queue++;
+        playTone(270, .05, 'square', .018);
+      }
+    }
+
+    if (state.employees.ticket && live.queue > 0 && live.elapsed >= live.nextTicketAuto) {
+      admitAudience(true);
+      live.nextTicketAuto = live.elapsed + 1100;
+    }
+
+    updateLightCue(show);
+    updateStage(show);
+  }
+
+  function updateLightCue(show) {
+    if (!live.activeCue && live.cueIndex < show.cues.length && live.elapsed >= show.cues[live.cueIndex]) {
+      live.activeCue = { start: live.elapsed, end: live.elapsed + 2300, handled: false };
+      live.cueIndex++;
+      playTone(760, .08, 'square', .035);
+    }
+    if (!live.activeCue) return;
+    if (state.employees.light && !live.activeCue.handled && live.elapsed >= live.activeCue.start + 480) hitLight(true);
+    if (live.activeCue && !live.activeCue.handled && live.elapsed > live.activeCue.end) {
+      live.cueMisses++;
+      live.activeCue = null;
+      setBanner('조명이 늦었습니다');
+      playTone(140, .12, 'sawtooth', .025);
+    }
+  }
+
+  function updateStage(show) {
+    if (live.stageState === 'performing' && live.elapsed >= live.nextStageAt) resolveTrick(show);
+    if (live.stageState !== 'decision') return;
+    if (state.employees.stage && live.elapsed >= live.autoDecisionAt) {
+      const nextRisk = show.risks[live.trick] ?? 1;
+      if (live.trick < show.maxTricks && nextRisk <= .33 && live.elapsed < show.duration - 3000) continueTrick(true);
+      else finishStage(true);
+    } else if (!state.employees.stage && live.elapsed >= live.decisionDeadline) {
+      finishStage(false, '망설이는 사이 단원이 마무리했습니다');
+    }
+  }
+
+  function resolveTrick(show) {
+    const risk = show.risks[live.trick - 1];
+    const failed = live.trick > 1 && Math.random() < risk;
+    if (failed) {
+      live.trickBank = Math.floor(live.trickBank / 2);
+      live.securedStage = live.trickBank;
+      live.stageFailed = true;
+      live.stageState = 'finished';
+      live.stageTitle = '묘기 실수';
+      live.stageDetail = `무대 수입 ${live.securedStage}만 남기고 공연 종료`;
+      live.endAt = Math.min(live.endAt, live.elapsed + 1700);
+      setBanner('묘기가 무너졌습니다');
+      playSequence([220, 160, 100]);
+      return;
+    }
+
+    const reward = show.trickRewards[live.trick - 1];
+    live.trickBank += reward;
+    live.stageSuccesses++;
+    playSequence([520, 660, 820]);
+    if (live.trick >= show.maxTricks) {
+      finishStage(Boolean(state.employees.stage), '모든 묘기 성공');
+      return;
+    }
+
+    const nextRisk = Math.round(show.risks[live.trick] * 100);
+    live.stageState = 'decision';
+    live.stageTitle = `${live.trick}번째 묘기 성공 · 수입 ${live.trickBank}`;
+    live.stageDetail = `다음 묘기 실수 가능성 ${nextRisk}%`;
+    live.decisionDeadline = live.elapsed + 4400;
+    live.autoDecisionAt = live.elapsed + 750;
+    setBanner('박수가 커집니다');
+  }
+
+  function continueTrick(auto = false) {
+    if (state.phase !== 'live' || live.stageState !== 'decision') return;
+    live.trick++;
+    live.stageState = 'performing';
+    live.nextStageAt = live.elapsed + 1750;
+    live.stageTitle = `${live.trick}번째 묘기 진행`;
+    live.stageDetail = auto ? `${JOBS.stage.worker}이 공연을 이어갑니다.` : '단원이 더 어려운 묘기를 시작합니다.';
+    setBanner(auto ? '무대 감독 · 한 번 더' : '한 번 더 갑니다');
+    playTone(430, .1, 'square', .035);
+  }
+
+  function finishStage(auto = false, message = '') {
+    if (state.phase !== 'live' || !['decision', 'performing'].includes(live.stageState)) return;
+    live.securedStage = live.trickBank;
+    live.stageState = 'finished';
+    live.stageTitle = '공연 마무리';
+    live.stageDetail = message || `무대 수입 ${live.securedStage} 확정`;
+    live.endAt = Math.min(live.endAt, live.elapsed + 1700);
+    setBanner(auto ? '무대 감독 · 마무리' : '현재 흥행을 확정했습니다');
+    playSequence([620, 780, 980]);
+  }
+
+  function admitAudience(auto = false) {
+    if (state.phase !== 'live' || live.elapsed < 0 || live.queue <= 0 || live.admitted >= capacityForShow()) return;
+    if (!auto && live.elapsed < live.ticketCooldown) return;
+    live.queue--;
+    live.admitted++;
+    live.ticketCooldown = live.elapsed + 380;
+    setBanner(auto ? `${JOBS.ticket.worker} · 관객 입장` : '표 한 장 판매');
+    playTone(600, .06, 'square', .025);
+  }
+
+  function hitLight(auto = false) {
+    if (state.phase !== 'live' || !live.activeCue || live.activeCue.handled) return;
+    live.activeCue.handled = true;
+    live.cueHits++;
+    live.activeCue = null;
+    setBanner(auto ? `${JOBS.light.worker} · 조명 성공` : '조명 성공 · 박수 증가');
+    playSequence([700, 900]);
+  }
+
+  function capacityForShow() {
+    const base = state.showKey === 'big' ? 8 : 6;
+    return base + state.seatLevel * 2;
+  }
+
+  function renderLive() {
+    if (!live) return;
+    const show = SHOWS[state.showKey];
+    $('liveAudience').textContent = `${live.admitted}/${Math.min(show.audience, capacityForShow())}`;
+    $('liveLights').textContent = live.cueHits;
+    $('liveStage').textContent = live.stageState === 'finished' ? live.securedStage : live.trickBank;
+    $('stageTitle').textContent = live.stageTitle;
+    $('stageDetail').textContent = state.employees.stage && live.stageState !== 'finished'
+      ? `${live.stageDetail} · ${JOBS.stage.worker} 자동 판단`
+      : live.stageDetail;
+    const canDecide = live.stageState === 'decision' && !state.employees.stage;
+    $('continueButton').disabled = !canDecide;
+    $('finishButton').disabled = !canDecide;
+    $('ticketCopy').textContent = state.employees.ticket ? `${JOBS.ticket.worker} 자동` : `대기 ${live.queue}`;
+    $('lightCopy').textContent = state.employees.light ? `${JOBS.light.worker} 자동` : live.activeCue ? '지금!' : '신호 대기';
+    $('ticketButton').classList.toggle('urgent', !state.employees.ticket && live.queue >= 2);
+    $('lightButton').classList.toggle('urgent', !state.employees.light && Boolean(live.activeCue));
   }
 
   function finishShow() {
-    state.phase = 'result';
-    state.money += showResult.net;
-    state.reputation += showResult.repGain;
-    $('showTimer').classList.remove('on');
-    hideBanner();
-    $('moneyValue').textContent = state.money;
-    $('resultPlan').textContent = showResult.fullShowBonus
-      ? `${showResult.plan.name} · 네 준비 완료 · 흥행 보너스 +${showResult.fullShowBonus}`
-      : `${showResult.plan.name} · 준비 ${Object.values(state.prepared).filter(Boolean).length}/4`;
-    $('resultAudience').textContent = `${showResult.attendees}/${showResult.demand}`;
-    $('resultMood').textContent = `${Math.round(showResult.satisfaction * 100)}%`;
-    $('resultGross').textContent = `+${showResult.gross}`;
-    $('resultNet').textContent = `${showResult.net >= 0 ? '+' : ''}${showResult.net}`;
-    playCoinSound();
-    drawScene(SHOW_MS);
-
-    if (state.day >= MAX_DAYS) {
-      setTimeout(showFinal, 450);
-      return;
+    if (state.phase !== 'live') return;
+    if (live.stageState !== 'finished') {
+      live.securedStage = live.trickBank;
+      live.stageState = 'finished';
     }
+    state.phase = 'result';
+    const show = SHOWS[state.showKey];
+    const ticketIncome = live.admitted * 2;
+    const lightIncome = live.cueHits;
+    const gross = ticketIncome + lightIncome + live.securedStage;
+    const wages = Object.keys(state.employees).reduce((sum, key) => sum + JOBS[key].wage, 0);
+    const net = gross - wages - show.cost;
+    const cueTotal = Math.max(1, live.cueHits + live.cueMisses);
+    const mood = Math.round(clamp(45 + (live.cueHits / cueTotal) * 28 + live.stageSuccesses * 6 - live.left * 5 - (live.stageFailed ? 12 : 0), 20, 98));
+    const repGain = mood >= 82 ? 2 : mood >= 65 ? 1 : 0;
+    state.money += net;
+    state.reputation += repGain;
+    result = { show, ticketIncome, lightIncome, gross, wages, net, mood, repGain };
+    cancelAnimationFrame(animationId);
+    $('showTimer').classList.remove('on');
+    hideStations();
+    hideBanner();
+    renderResult();
+    renderAll();
+    drawScene(live.endAt);
+    playSequence([520, 700, 900]);
+    if (state.day >= MAX_DAYS) setTimeout(showFinal, 550);
+    else showPanel('resultPanel');
+  }
+
+  function renderResult() {
+    const ending = live.stageFailed ? '묘기 실수로 일찍 종료' : live.stageSuccesses >= result.show.maxTricks ? '모든 묘기 성공' : '수입을 지키며 마무리';
+    $('resultTitle').textContent = `${result.show.name} · ${ending}`;
+    $('resultAudience').textContent = `${live.admitted}/${live.arrived}`;
+    $('resultMood').textContent = `${result.mood}%`;
+    $('resultGross').textContent = `+${result.gross}`;
+    $('resultNet').textContent = `${result.net >= 0 ? '+' : ''}${result.net}`;
     renderInvestments();
-    $('resultPanel').classList.add('on');
   }
 
   function renderInvestments() {
-    const employeeCards = Object.entries(JOBS).filter(([key]) => !state.employees[key]).map(([key, job]) => ({
-      key: `hire:${key}`,
-      title: `${job.worker} 고용`,
-      detail: `${job.name} 자동 · ${job.bonus} · 임금 ${job.wage}`,
-      cost: job.hire,
-      art: `<span class="invest-face" style="--staff-color:${job.color}"></span>`,
+    const employeeOptions = Object.entries(JOBS).filter(([key]) => !state.employees[key]).map(([key, job]) => ({
+      key: `hire:${key}`, title: `${job.worker} 고용`, detail: `${job.name} 자동 · ${job.bonus} · 임금 ${job.wage}`, cost: job.hire,
     }));
-    const seatCost = 12 + state.seatLevel * 7;
-    const options = [...employeeCards, {
-      key: 'seat', title: '객석 늘리기', detail: `좌석 ${6 + state.seatLevel * 3} → ${9 + state.seatLevel * 3}`,
-      cost: seatCost, art: '<span class="seat-art"></span>',
+    const seatCost = 12 + state.seatLevel * 6;
+    const options = [...employeeOptions, {
+      key: 'seat', title: '객석 늘리기', detail: `모든 공연의 좌석 ${capacityForShow()} → ${capacityForShow() + 2}`, cost: seatCost,
     }];
     $('investments').innerHTML = options.map(option => `<button class="invest-card" data-invest="${option.key}" ${state.money < option.cost ? 'disabled' : ''}>
-      ${option.art}<span><strong>${option.title}</strong><small>${option.detail}</small></span><span class="price">${option.cost}</span>
+      <span><strong>${option.title}</strong><small>${option.detail}</small></span><span class="price">${option.cost}</span>
     </button>`).join('');
     document.querySelectorAll('[data-invest]').forEach(button => button.addEventListener('click', () => invest(button.dataset.invest)));
   }
 
   function invest(key) {
     if (state.phase !== 'result') return;
-    let cost;
-    if (key.startsWith('hire:')) cost = JOBS[key.split(':')[1]].hire;
-    else cost = 12 + state.seatLevel * 7;
+    const jobKey = key.startsWith('hire:') ? key.split(':')[1] : null;
+    const cost = jobKey ? JOBS[jobKey].hire : 12 + state.seatLevel * 6;
     if (state.money < cost) return;
     state.money -= cost;
-    if (key.startsWith('hire:')) {
-      const jobKey = key.split(':')[1];
-      state.employees[jobKey] = { name: JOBS[jobKey].worker };
-      playInvestmentSound([300, 400, 520]);
-    } else {
-      state.seatLevel++;
-      playInvestmentSound([180, 250, 340]);
-    }
+    if (jobKey) state.employees[jobKey] = { name: JOBS[jobKey].worker };
+    else state.seatLevel++;
+    playSequence(jobKey ? [320, 430, 560] : [180, 260, 360]);
     nextDay();
   }
 
   function nextDay() {
+    if (state.day >= MAX_DAYS) return showFinal();
     state.day++;
-    $('resultPanel').classList.remove('on');
-    beginPrepDay();
+    state.phase = 'plan';
+    state.showKey = null;
+    live = null;
+    result = null;
+    showPanel('planPanel');
+    renderAll();
+    drawScene(0);
   }
 
   function showFinal() {
-    $('resultPanel').classList.remove('on');
-    $('planPanel').style.display = 'none';
-    $('prepPanel').style.display = 'none';
-    $('finalPanel').classList.add('on');
+    state.phase = 'end';
+    showPanel('finalPanel');
     const names = Object.keys(state.employees).map(key => JOBS[key].worker);
-    $('finalSummary').textContent = `${names.length ? names.join(' · ') : '직원 없이'} 운영 · ${6 + state.seatLevel * 3}석 · 평판 ${state.reputation} · 보유금 ${state.money}`;
-  }
-
-  function createAudience(result) {
-    const seats = seatPositions(result.capacity);
-    state.audience = seats.slice(0, result.attendees).map((seat, index) => ({
-      ...seat,
-      index,
-      side: index % 2 ? 1 : -1,
-      delay: index * 80,
-      color: COLORS[index % COLORS.length],
-      moodSeed: (index * 37) % 100,
-    }));
-  }
-
-  function seatPositions(count) {
-    const positions = [];
-    const rows = count > 9 ? 3 : 2;
-    const perRow = Math.ceil(count / rows);
-    for (let i = 0; i < count; i++) {
-      const row = Math.floor(i / perRow);
-      const inRow = i % perRow;
-      const rowCount = Math.min(perRow, count - row * perRow);
-      const spacing = Math.min(82, 590 / Math.max(1, rowCount - 1));
-      const startX = 480 - (rowCount - 1) * spacing / 2;
-      positions.push({ x: startX + inRow * spacing, y: 374 + row * 48, row });
-    }
-    return positions;
+    $('finalSummary').textContent = `${names.length ? names.join(' · ') : '직원 없이'} 운영 · 평판 ${state.reputation} · 보유금 ${state.money}`;
   }
 
   function drawScene(elapsed) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    if (state.phase === 'show' || state.phase === 'result' || state.phase === 'end') drawShowScene(elapsed);
-    else drawPrepScene();
+    if (state.phase === 'plan') drawCamp();
+    else drawPerformance(elapsed);
   }
 
-  function drawPrepScene() {
+  function drawCamp() {
     drawNightSky();
     ctx.fillStyle = '#35483a'; ctx.fillRect(0, 260, 960, 270);
     ctx.fillStyle = '#8b6844'; ctx.beginPath(); ctx.ellipse(480, 420, 410, 92, 0, 0, Math.PI * 2); ctx.fill();
-    drawWagon(38, 247);
-    drawTent(480, 250, .92);
-    drawPosterBoard(115, 326);
-    drawTicketBooth(810, 305);
-    drawPrepProps();
-    drawPrepAudience();
-    drawEmployees();
+    drawWagon(45, 276);
+    drawTent(505, 285, .88);
+    drawSign(790, 355);
+    Object.keys(state.employees).forEach((key, index) => drawPerson(245 + index * 55, 410, JOBS[key].color, 0));
   }
 
-  function drawShowScene(elapsed) {
-    ctx.fillStyle = state.prepared.light ? '#3a2928' : '#181822'; ctx.fillRect(0, 0, 960, 530);
-    ctx.fillStyle = '#6e3438'; ctx.fillRect(0, 0, 115, 530); ctx.fillRect(845, 0, 115, 530);
-    ctx.fillStyle = '#b8464e';
-    for (let x = 0; x < 960; x += 96) ctx.fillRect(x, 0, 48, 92);
-    ctx.fillStyle = '#352521'; ctx.fillRect(0, 455, 960, 75);
-    drawStageInterior(elapsed);
-    drawShowSeats();
-    drawAudience(elapsed);
-    if (elapsed > 4200) drawConfetti(elapsed);
+  function drawPerformance(elapsed) {
+    const cueOn = live && live.activeCue;
+    ctx.fillStyle = '#312324'; ctx.fillRect(0, 0, 960, 530);
+    ctx.fillStyle = '#6f3439'; ctx.fillRect(0, 0, 118, 530); ctx.fillRect(842, 0, 118, 530);
+    ctx.fillStyle = '#b9474e'; for (let x = 0; x < 960; x += 96) ctx.fillRect(x, 0, 48, 90);
+    ctx.fillStyle = '#352620'; ctx.fillRect(0, 455, 960, 75);
+
+    if (cueOn || state.employees.light) {
+      ctx.save(); ctx.globalAlpha = cueOn ? .32 : .16; ctx.fillStyle = '#fff0a8';
+      ctx.beginPath(); ctx.moveTo(245, 0); ctx.lineTo(345, 355); ctx.lineTo(520, 355); ctx.lineTo(355, 0); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(610, 0); ctx.lineTo(455, 355); ctx.lineTo(635, 355); ctx.lineTo(715, 0); ctx.fill(); ctx.restore();
+    }
+    [300, 480, 660].forEach((x, index) => {
+      ctx.fillStyle = cueOn ? '#fff0a8' : '#6f675d'; ctx.beginPath(); ctx.arc(x, 44, 13, 0, Math.PI * 2); ctx.fill();
+      if (cueOn) { ctx.save(); ctx.globalAlpha = .2; ctx.beginPath(); ctx.arc(x, 44, 31 + index * 2, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+    });
+
+    ctx.fillStyle = '#5a3a2b'; ctx.fillRect(215, 327, 525, 44); ctx.fillStyle = '#7d4d34'; ctx.fillRect(230, 316, 495, 18);
+    const activeTime = Math.max(0, elapsed);
+    const jumping = live && live.stageState === 'performing';
+    const jump = jumping ? Math.abs(Math.sin(activeTime / 220)) * 24 : 0;
+    drawPerson(455 + Math.sin(activeTime / 170) * 4, 285 - jump, '#67aee5', activeTime);
+    if (state.showKey === 'big') drawPerson(565 + Math.sin(activeTime / 210) * 4, 295 - jump * .55, '#66c47d', activeTime + 400);
+    if (jumping) drawJuggling(455, 225 - jump, activeTime);
+    if (live && live.stageFailed) drawFailureStars(500, 220, activeTime);
+
+    drawSeats();
+    drawAudience(activeTime);
+    drawQueue();
+    drawTicketBooth(805, 335);
+    drawWorkers(activeTime);
+    if (live && live.stageState === 'finished' && !live.stageFailed) drawConfetti(activeTime);
   }
 
   function drawNightSky() {
@@ -715,18 +800,13 @@
 
   function drawTent(cx, ground, scale) {
     ctx.save(); ctx.translate(cx, ground); ctx.scale(scale, scale);
-    ctx.fillStyle = '#d95555'; ctx.fillRect(-245, 40, 490, 220);
-    ctx.fillStyle = '#f0d28b'; for (let x = -245; x < 245; x += 72) ctx.fillRect(x, 40, 34, 220);
-    ctx.fillStyle = '#8e303a'; ctx.beginPath(); ctx.moveTo(-270, 50); ctx.lineTo(0, -128); ctx.lineTo(270, 50); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#d95656'; ctx.fillRect(-245, 40, 490, 220);
+    ctx.fillStyle = '#efd18d'; for (let x = -245; x < 245; x += 72) ctx.fillRect(x, 40, 34, 220);
+    ctx.fillStyle = '#8c303b'; ctx.beginPath(); ctx.moveTo(-270, 50); ctx.lineTo(0, -128); ctx.lineTo(270, 50); ctx.closePath(); ctx.fill();
     ctx.strokeStyle = '#f4c95d'; ctx.lineWidth = 6; ctx.stroke();
     ctx.fillStyle = '#171520'; ctx.fillRect(-90, 105, 180, 155);
     ctx.fillStyle = '#a43842'; ctx.beginPath(); ctx.moveTo(-100, 92); ctx.lineTo(-28, 155); ctx.lineTo(-100, 260); ctx.fill(); ctx.beginPath(); ctx.moveTo(100, 92); ctx.lineTo(28, 155); ctx.lineTo(100, 260); ctx.fill();
-    ctx.fillStyle = '#f4c95d'; ctx.fillRect(-8, -171, 16, 46); ctx.fillStyle = '#d95555'; ctx.beginPath(); ctx.moveTo(8,-171); ctx.lineTo(65,-155); ctx.lineTo(8,-139); ctx.fill();
-    [-110, 0, 110].forEach((x, index) => {
-      const on = prepPartReady('light', index);
-      ctx.fillStyle = on ? '#fff0a8' : '#494454'; ctx.beginPath(); ctx.arc(x, 51, 8, 0, Math.PI * 2); ctx.fill();
-      if (on) { ctx.save(); ctx.globalAlpha = .2; ctx.beginPath(); ctx.arc(x, 51, 25, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
-    });
+    ctx.fillStyle = '#f4c95d'; ctx.fillRect(-8, -171, 16, 46); ctx.fillStyle = '#d95656'; ctx.beginPath(); ctx.moveTo(8,-171); ctx.lineTo(65,-155); ctx.lineTo(8,-139); ctx.fill();
     ctx.restore();
   }
 
@@ -736,142 +816,107 @@
     ctx.fillStyle = '#2f2725'; [x+35,x+123].forEach(wx => { ctx.beginPath(); ctx.arc(wx,y+126,23,0,Math.PI*2); ctx.fill(); ctx.strokeStyle='#a57b4d';ctx.lineWidth=5;ctx.stroke(); });
   }
 
-  function drawPosterBoard(x, y) {
-    ctx.fillStyle = '#4a352c'; ctx.fillRect(x-43,y-57,86,105); ctx.fillRect(x-31,y+48,8,42); ctx.fillRect(x+23,y+48,8,42);
-    ctx.fillStyle = '#806e59'; ctx.fillRect(x-34,y-48,68,86);
-    [[-23,-36],[3,-36],[-10,2]].forEach(([dx,dy], index) => {
-      ctx.fillStyle = prepPartReady('promo', index) ? ['#d95555','#65a8df','#63c17b'][index] : '#5d5145';
-      ctx.fillRect(x+dx,y+dy,21,30);
-      if (prepPartReady('promo', index)) { ctx.fillStyle='#f4c95d'; drawStar(x+dx+10,y+dy+15,7,3); }
-    });
+  function drawSign(x, y) {
+    ctx.fillStyle = '#49352b'; ctx.fillRect(x-48,y-60,96,105); ctx.fillRect(x-34,y+45,8,45); ctx.fillRect(x+26,y+45,8,45);
+    ctx.fillStyle = '#efd18d'; ctx.fillRect(x-38,y-50,76,80); ctx.fillStyle='#d95656'; drawStar(x,y-10,21,9);
   }
 
   function drawTicketBooth(x, y) {
-    ctx.fillStyle = '#49352b'; ctx.fillRect(x-58,y-56,116,125); ctx.fillStyle='#704535';ctx.fillRect(x-70,y-75,140,24);
-    ctx.fillStyle = prepPartReady('ticket', 0) ? '#f0d28b' : '#191821'; ctx.fillRect(x-38,y-34,76,48);
-    ctx.fillStyle='#d95555';ctx.fillRect(x-45,y+34,90,16);
-    ctx.fillStyle = prepPartReady('ticket', 1) ? '#7e5634' : '#2d2929'; ctx.fillRect(x-22,y-22,44,23);
-    if (prepPartReady('ticket', 1)) { ctx.fillStyle='#f0d28b'; for(let i=0;i<3;i++)ctx.fillRect(x-16+i*11,y-18,8,15); }
-    ctx.fillStyle = prepPartReady('ticket', 2) ? '#63c17b' : '#37313a'; ctx.fillRect(x-34,y-68,68,17);
-    if (prepPartReady('ticket', 2)) { ctx.fillStyle='#173127';ctx.fillRect(x-21,y-63,42,6); }
+    ctx.fillStyle = '#49352b'; ctx.fillRect(x-54,y-52,108,116); ctx.fillStyle='#704535';ctx.fillRect(x-65,y-70,130,23);
+    ctx.fillStyle = '#f0d28b'; ctx.fillRect(x-35,y-31,70,45); ctx.fillStyle='#d95656';ctx.fillRect(x-42,y+33,84,15);
   }
 
-  function drawPrepProps() {
-    ctx.fillStyle = prepPartReady('stage', 0) ? '#65a8df' : '#473f46'; ctx.fillRect(410,365,38,38);
-    ctx.strokeStyle = prepPartReady('stage', 1) ? '#f4c95d' : '#514853'; ctx.lineWidth=5;ctx.beginPath();ctx.arc(480,378,36,0,Math.PI*2);ctx.stroke();
-    ctx.fillStyle = prepPartReady('stage', 2) ? '#d95555' : '#473f46'; ctx.fillRect(512,368,45,35);
-    if (prepPartReady('stage', 2)) { ctx.fillStyle='#f4c95d';drawStar(534,385,12,5); }
-  }
-
-  function prepPartReady(jobKey, index) {
-    return state.prepared[jobKey];
-  }
-
-  function drawPrepAudience() {
-    if (!state.showPlan) return;
-    const plan = SHOW_PLANS[state.showPlan];
-    const count = Math.min(10, plan.baseDemand + (state.prepared.promo ? plan.promoGain : 0) + (state.employees.promo ? 2 : 0));
-    for (let i = 0; i < count; i++) {
-      const row = Math.floor(i / 5);
-      const inRow = i % 5;
-      const x = state.prepared.ticket ? 720 - inRow * 48 : 285 + inRow * 88;
-      const y = 455 + row * 38;
-      drawPrepAudiencePerson(x, y, COLORS[i % COLORS.length]);
-    }
-  }
-
-  function drawPrepAudiencePerson(x, y, color) {
-    ctx.save(); ctx.translate(x, y);
-    ctx.fillStyle = color; ctx.fillRect(-8, 6, 16, 20);
-    ctx.fillStyle = '#e8c29d'; ctx.beginPath(); ctx.arc(0, -2, 8, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#392c30'; ctx.fillRect(-7, -8, 14, 4);
-    ctx.restore();
-  }
-
-  function drawEmployees() {
-    Object.keys(state.employees).forEach((key, index) => {
-      const pos = { promo:[150,390], light:[374,304], stage:[480,390], ticket:[812,405] }[key];
-      drawPerson(pos[0], pos[1], JOBS[key].color, Math.sin(performance.now()/180+index)*3, false);
+  function drawSeats() {
+    const seats = seatPositions(capacityForShow());
+    seats.forEach(seat => {
+      ctx.fillStyle='#742f39';ctx.fillRect(seat.x-14,seat.y-2,28,18);ctx.fillStyle='#9e4850';ctx.fillRect(seat.x-12,seat.y,24,8);ctx.fillStyle='#33252b';ctx.fillRect(seat.x-11,seat.y+16,4,10);ctx.fillRect(seat.x+7,seat.y+16,4,10);
     });
   }
 
-  function drawStageInterior(elapsed) {
-    const lit = state.prepared.light;
-    if (lit) {
-      ctx.save(); ctx.globalAlpha=.24; ctx.fillStyle='#fff0a8';
-      ctx.beginPath();ctx.moveTo(250,0);ctx.lineTo(330,370);ctx.lineTo(520,370);ctx.lineTo(350,0);ctx.fill();
-      ctx.beginPath();ctx.moveTo(610,0);ctx.lineTo(460,370);ctx.lineTo(650,370);ctx.lineTo(710,0);ctx.fill();ctx.restore();
+  function seatPositions(count) {
+    const positions = [];
+    const rows = count > 8 ? 3 : 2;
+    const perRow = Math.ceil(count / rows);
+    for (let i = 0; i < count; i++) {
+      const row = Math.floor(i / perRow);
+      const inRow = i % perRow;
+      const rowCount = Math.min(perRow, count - row * perRow);
+      const spacing = Math.min(78, 530 / Math.max(1, rowCount - 1));
+      const startX = 455 - (rowCount - 1) * spacing / 2;
+      positions.push({ x: startX + inRow * spacing, y: 382 + row * 45 });
     }
-    ctx.fillStyle='#5a3a2b';ctx.fillRect(220,330,520,42);ctx.fillStyle='#774c34';ctx.fillRect(235,320,490,18);
-    const active = Math.max(0, elapsed - 1200);
-    const prepared = state.prepared.stage;
-    const isBig = state.showPlan === 'big';
-    if (isBig) {
-      drawPerformer(410, 291, '#65a8df', active, prepared ? 26 : 8, true);
-      drawPerformer(555, 296, '#63c17b', active, prepared ? 18 : 5, false);
-      if (prepared) { ctx.strokeStyle='#f4c95d';ctx.lineWidth=6;ctx.beginPath();ctx.arc(485,280,48+Math.sin(active/180)*3,0,Math.PI*2);ctx.stroke(); }
-      if (Object.values(state.prepared).every(Boolean)) {
-        ctx.fillStyle='#f4c95d';
-        [[350,190],[485,150],[620,190]].forEach(([x,y], index) => drawStar(x, y + Math.sin(active/180 + index) * 8, 10, 4));
-      }
-    } else {
-      drawPerformer(480, 294, '#65a8df', active, prepared ? 20 : 7, true);
-      if (prepared) { ctx.strokeStyle='#f4c95d';ctx.lineWidth=5;ctx.beginPath();ctx.arc(480,280,42+Math.sin(active/200)*2,0,Math.PI*2);ctx.stroke(); }
-    }
-  }
-
-  function drawPerformer(x, y, color, time, jumpHeight, lead) {
-    const jump = state.phase === 'show' && time > 0 ? Math.abs(Math.sin(time/(lead?230:310))) * jumpHeight : 0;
-    ctx.save();ctx.translate(x+Math.sin(time/170)*4,y-jump);
-    drawPerson(0,0,color,0,true);
-    if (lead && state.phase==='show' && time>0) for(let i=0;i<3;i++){const a=time/320+i*Math.PI*2/3;ctx.fillStyle=COLORS[i];ctx.beginPath();ctx.arc(Math.cos(a)*35,-52+Math.sin(a)*15,7,0,Math.PI*2);ctx.fill();}
-    ctx.restore();
-  }
-
-  function drawPerson(x, y, color, sway, local) {
-    ctx.save(); if (!local) ctx.translate(x+sway,y); else ctx.translate(x,y);
-    ctx.fillStyle='#1a1720';ctx.fillRect(-12,30,8,18);ctx.fillRect(5,30,8,18);
-    ctx.fillStyle=color;ctx.fillRect(-18,-5,36,37);
-    ctx.fillStyle='#efc7a2';ctx.beginPath();ctx.arc(0,-19,14,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#422f31';ctx.lineWidth=3;ctx.stroke();
-    ctx.fillStyle=color;ctx.fillRect(-16,-35,32,8);ctx.fillStyle='#422f31';ctx.fillRect(-7,-20,3,3);ctx.fillRect(5,-20,3,3);
-    ctx.restore();
-  }
-
-  function drawShowSeats() {
-    seatPositions(showResult ? showResult.capacity : 6).forEach(seat => { ctx.fillStyle='#742f39';ctx.fillRect(seat.x-14,seat.y-2,28,18);ctx.fillStyle='#9e4850';ctx.fillRect(seat.x-12,seat.y,24,8);ctx.fillStyle='#33252b';ctx.fillRect(seat.x-11,seat.y+16,4,10);ctx.fillRect(seat.x+7,seat.y+16,4,10); });
+    return positions;
   }
 
   function drawAudience(elapsed) {
-    if (!state.audience.length) return;
-    const showProgress=clamp((elapsed-1300)/2700,0,1);
-    state.audience.forEach(person=>{
-      const arrival=easeOut((elapsed-person.delay)/850);let x=person.side<0?-30:990;let y=468;x+=(person.x-x)*arrival;y+=(person.y-25-y)*arrival;
-      const happy=showResult.satisfaction>person.moodSeed/110;const bob=elapsed>1300&&happy?Math.abs(Math.sin(elapsed/145+person.index))*8*showProgress:0;
-      drawAudiencePerson(x,y-bob,person.color,happy&&elapsed>1300,person.index,elapsed);
-    });
+    if (!live) return;
+    const seats = seatPositions(capacityForShow());
+    for (let i = 0; i < live.admitted; i++) {
+      const seat = seats[i];
+      const cheer = live.cueHits > 0 || live.stageSuccesses > 0;
+      const bob = cheer ? Math.abs(Math.sin(elapsed / 150 + i)) * 6 : 0;
+      drawAudiencePerson(seat.x, seat.y - 22 - bob, COLORS[i % COLORS.length], cheer, i, elapsed);
+    }
   }
 
-  function drawAudiencePerson(x,y,color,cheering,index,elapsed){ctx.save();ctx.translate(x,y);ctx.fillStyle=color;ctx.fillRect(-10,9,20,24);ctx.fillStyle='#e8c29d';ctx.beginPath();ctx.arc(0,0,10,0,Math.PI*2);ctx.fill();ctx.fillStyle='#392c30';ctx.fillRect(-8,-7,16,5);if(cheering){const wave=Math.sin(elapsed/100+index)*4;ctx.strokeStyle='#e8c29d';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(-8,13);ctx.lineTo(-16,-3+wave);ctx.moveTo(8,13);ctx.lineTo(16,-3-wave);ctx.stroke();if(elapsed>2500&&index%3===0){ctx.fillStyle='#f4c95d';drawStar(0,-28,5,2);}}ctx.restore();}
-  function drawConfetti(elapsed){const t=clamp((elapsed-4200)/800,0,1);const count=state.showPlan==='big'&&Object.values(state.prepared).every(Boolean)?34:14;for(let i=0;i<count;i++){ctx.fillStyle=COLORS[i%COLORS.length];ctx.fillRect(280+(i*53%400),140+((i*31)%140)-t*70,7,7);}}
-  function drawStar(x,y,outer,inner){ctx.beginPath();for(let i=0;i<10;i++){const radius=i%2===0?outer:inner;const angle=-Math.PI/2+i*Math.PI/5;const px=x+Math.cos(angle)*radius;const py=y+Math.sin(angle)*radius;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);}ctx.closePath();ctx.fill();}
+  function drawQueue() {
+    if (!live) return;
+    for (let i = 0; i < live.queue; i++) drawAudiencePerson(870 + (i % 2) * 34, 360 + Math.floor(i / 2) * 45, COLORS[(i + 2) % COLORS.length], false, i, 0);
+  }
+
+  function drawAudiencePerson(x, y, color, cheering, index, elapsed) {
+    ctx.save(); ctx.translate(x,y); ctx.fillStyle=color; ctx.fillRect(-10,9,20,24); ctx.fillStyle='#e8c29d'; ctx.beginPath(); ctx.arc(0,0,10,0,Math.PI*2); ctx.fill(); ctx.fillStyle='#392c30'; ctx.fillRect(-8,-7,16,5);
+    if (cheering) { const wave=Math.sin(elapsed/100+index)*4; ctx.strokeStyle='#e8c29d';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(-8,13);ctx.lineTo(-16,-3+wave);ctx.moveTo(8,13);ctx.lineTo(16,-3-wave);ctx.stroke(); }
+    ctx.restore();
+  }
+
+  function drawPerson(x, y, color, time) {
+    ctx.save(); ctx.translate(x,y); ctx.fillStyle='#1a1720';ctx.fillRect(-12,30,8,18);ctx.fillRect(5,30,8,18);ctx.fillStyle=color;ctx.fillRect(-18,-5,36,37);ctx.fillStyle='#efc7a2';ctx.beginPath();ctx.arc(0,-19,14,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#422f31';ctx.lineWidth=3;ctx.stroke();ctx.fillStyle=color;ctx.fillRect(-16,-35,32,8);ctx.fillStyle='#422f31';ctx.fillRect(-7,-20,3,3);ctx.fillRect(5,-20,3,3);ctx.restore();
+  }
+
+  function drawWorkers(elapsed) {
+    if (state.employees.ticket) drawPerson(790 + Math.sin(elapsed/170)*3, 392, JOBS.ticket.color, elapsed);
+    if (state.employees.light) drawPerson(170 + Math.sin(elapsed/190)*3, 145, JOBS.light.color, elapsed);
+    if (state.employees.stage) drawPerson(690 + Math.sin(elapsed/200)*3, 292, JOBS.stage.color, elapsed);
+  }
+
+  function drawJuggling(x, y, elapsed) {
+    for (let i=0;i<3;i++) { const angle=elapsed/320+i*Math.PI*2/3;ctx.fillStyle=COLORS[i];ctx.beginPath();ctx.arc(x+Math.cos(angle)*38,y+Math.sin(angle)*18,7,0,Math.PI*2);ctx.fill(); }
+  }
+
+  function drawFailureStars(x, y, elapsed) {
+    ctx.fillStyle='#f4c95d'; for(let i=0;i<3;i++){const a=elapsed/330+i*Math.PI*2/3;drawStar(x+Math.cos(a)*45,y+Math.sin(a)*18,8,3);}
+  }
+
+  function drawConfetti(elapsed) {
+    const t=(elapsed%1200)/1200; for(let i=0;i<24;i++){ctx.fillStyle=COLORS[i%COLORS.length];ctx.fillRect(300+(i*53%390),145+((i*31)%130)+t*90,7,7);}
+  }
+
+  function drawStar(x,y,outer,inner) {
+    ctx.beginPath(); for(let i=0;i<10;i++){const radius=i%2===0?outer:inner;const angle=-Math.PI/2+i*Math.PI/5;const px=x+Math.cos(angle)*radius;const py=y+Math.sin(angle)*radius;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);} ctx.closePath();ctx.fill();
+  }
 
   function setBanner(text) {
     const banner = $('phaseBanner');
     banner.textContent = text;
     banner.classList.add('on');
     clearTimeout(bannerTimer);
-    if (state.phase !== 'show') bannerTimer = setTimeout(hideBanner, 2200);
+    bannerTimer = setTimeout(hideBanner, 1150);
   }
+
   function hideBanner() { $('phaseBanner').classList.remove('on'); }
   function ensureAudio(){if(!soundOn)return;if(!audioContext)audioContext=new(window.AudioContext||window.webkitAudioContext)();if(audioContext.state==='suspended')audioContext.resume();}
   function playTone(freq,duration,type='square',volume=.03){if(!soundOn)return;ensureAudio();const osc=audioContext.createOscillator();const gain=audioContext.createGain();osc.type=type;osc.frequency.value=freq;gain.gain.setValueAtTime(volume,audioContext.currentTime);gain.gain.exponentialRampToValueAtTime(.0001,audioContext.currentTime+duration);osc.connect(gain);gain.connect(audioContext.destination);osc.start();osc.stop(audioContext.currentTime+duration);}
-  function playCoinSound(){[620,780,980].forEach((freq,i)=>setTimeout(()=>playTone(freq,.12,'square',.04),i*90));}
-  function playInvestmentSound(notes){notes.forEach((freq,i)=>setTimeout(()=>playTone(freq,.1,'square',.04),i*80));}
+  function playSequence(notes){notes.forEach((freq,index)=>setTimeout(()=>playTone(freq,.1,'square',.035),index*80));}
 
-  $('startShow').addEventListener('click', startShow);
-  $('skipInvest').addEventListener('click', () => { if (state.phase === 'result') nextDay(); });
-  $('restartBtn').addEventListener('click', resetGame);
-  $('soundBtn').addEventListener('click', () => { soundOn=!soundOn;$('soundBtn').classList.toggle('muted',!soundOn);if(soundOn)playTone(440,.08,'square',.04); });
+  $('ticketButton').addEventListener('click', () => admitAudience(false));
+  $('lightButton').addEventListener('click', () => hitLight(false));
+  $('continueButton').addEventListener('click', () => continueTrick(false));
+  $('finishButton').addEventListener('click', () => finishStage(false));
+  $('skipInvest').addEventListener('click', nextDay);
+  $('restartButton').addEventListener('click', resetGame);
+  $('soundButton').addEventListener('click', () => { soundOn = !soundOn; $('soundButton').classList.toggle('muted', !soundOn); if (soundOn) playTone(440,.08,'square',.04); });
+
   resetGame();
 })();
 </script>
