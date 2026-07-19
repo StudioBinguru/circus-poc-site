@@ -174,6 +174,34 @@
   .art-ticket::after { content: ""; position: absolute; inset: 4px 17px; border-left: 2px dashed #a36d20; }
 
   .control-area { padding: 10px; background: #1c2032; min-height: 160px; }
+  .plan-panel { display: block; }
+  .plan-title { color: var(--gold); font-size: 11px; font-weight: 900; margin: 2px 0 8px; }
+  .plan-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .plan-button {
+    min-height: 116px;
+    display: grid;
+    grid-template-columns: 86px 1fr;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    color: var(--ink);
+    background: var(--panel);
+    border: 3px solid var(--line);
+    cursor: pointer;
+    text-align: left;
+    transition: transform .12s, border-color .12s, background .12s;
+  }
+  .plan-button:hover:not(:disabled) { transform: translateY(-3px); border-color: var(--gold); background: var(--panel-2); }
+  .plan-button:active:not(:disabled) { transform: translateY(1px); }
+  .plan-button:disabled { opacity: .4; cursor: default; }
+  .plan-button strong { display: block; font-size: 16px; margin-bottom: 6px; }
+  .plan-button small { display: block; color: var(--muted); font-size: 10px; line-height: 1.55; }
+  .plan-art { width: 82px; height: 72px; position: relative; background: #171a2a; border: 2px solid #454b61; overflow: hidden; }
+  .plan-art::before { content: ""; position: absolute; left: 12px; right: 12px; bottom: 10px; height: 35px; background: repeating-linear-gradient(90deg, var(--red) 0 12px, #f0d28b 12px 24px); }
+  .plan-art::after { content: ""; position: absolute; left: 5px; bottom: 43px; border-left: 34px solid transparent; border-right: 34px solid transparent; border-bottom: 0; border-top: 24px solid var(--red-dark); }
+  .plan-art.big::before { left: 5px; right: 5px; height: 43px; }
+  .plan-art.big::after { left: -4px; bottom: 50px; border-left-width: 43px; border-right-width: 43px; border-top-width: 28px; }
+  .plan-stars { position: absolute; z-index: 2; left: 50%; bottom: 17px; transform: translateX(-50%); color: var(--gold); font-size: 15px; white-space: nowrap; }
   .prep-panel { display: grid; grid-template-columns: 1fr 210px; gap: 10px; }
   .staff-block { min-width: 0; background: var(--panel); border: 2px solid var(--line); padding: 9px; }
   .block-title { color: var(--muted); font-size: 10px; font-weight: 900; margin-bottom: 7px; }
@@ -194,6 +222,7 @@
 
   .result-panel, .final-panel { display: none; }
   .result-panel.on, .final-panel.on { display: block; }
+  .result-plan { margin-bottom: 8px; padding: 8px 10px; color: var(--gold); background: #171a2a; border: 2px solid #454b61; font-size: 11px; font-weight: 900; text-align: center; }
   .result-head { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-bottom: 9px; }
   .result-stat { background: var(--panel); border: 2px solid var(--line); padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   .result-stat span { color: var(--muted); font-size: 9px; }
@@ -225,6 +254,9 @@
     .hud-item { flex: 1; min-width: 0; }
     .sound-btn { width: 30px; height: 30px; flex: 0 0 30px; }
     .prep-panel { grid-template-columns: 1fr; }
+    .plan-options { grid-template-columns: 1fr; }
+    .plan-button { min-height: 94px; grid-template-columns: 72px 1fr; }
+    .plan-art { width: 68px; height: 58px; }
     .start-wrap { grid-template-columns: 1fr; }
     .job-button { width: 62px; height: 62px; }
     .job-art { transform: translate(-50%, -50%) scale(.78); }
@@ -261,6 +293,11 @@
   </section>
 
   <main class="control-area">
+    <section class="plan-panel" id="planPanel">
+      <div class="plan-title">오늘 올릴 공연</div>
+      <div class="plan-options" id="planOptions"></div>
+    </section>
+
     <section class="prep-panel" id="prepPanel">
       <div class="staff-block">
         <div class="block-title">함께 일하는 사람</div>
@@ -273,11 +310,12 @@
     </section>
 
     <section class="result-panel" id="resultPanel">
+      <div class="result-plan" id="resultPlan"></div>
       <div class="result-head">
         <div class="result-stat"><span>입장</span><strong id="resultAudience">0</strong></div>
         <div class="result-stat"><span>만족</span><strong id="resultMood">0%</strong></div>
         <div class="result-stat"><span>매출</span><strong id="resultGross">+0</strong></div>
-        <div class="result-stat"><span>임금 후</span><strong id="resultNet">+0</strong></div>
+        <div class="result-stat"><span>비용 후</span><strong id="resultNet">+0</strong></div>
       </div>
       <div class="invest-title">오늘 번 돈으로 하나 선택</div>
       <div class="investments" id="investments"></div>
@@ -309,11 +347,15 @@
     stage: { name: '무대', art: 'stage', worker: '로만', color: '#65a8df', hire: 13, wage: 2, bonus: '팁 +관객당 1', pos: [50, 53] },
     ticket: { name: '매표', art: 'ticket', worker: '마리', color: '#63c17b', hire: 11, wage: 1, bonus: '표값 +1', pos: [84, 49] },
   };
-  const JOB_RESULTS = {
-    promo: '관객 +4',
-    light: '공연 만족 +17%',
-    stage: '공연 만족 +22%',
-    ticket: '입장 손실 제거 · 표값 +1',
+  const SHOW_PLANS = {
+    small: {
+      name: '작은 공연', detail: '무대·매표 중심 · 낮은 수입 · 운영비 없음', stars: '★',
+      baseDemand: 4, maxAudience: 4, promoGain: 2, baseSatisfaction: .55, lightGain: .10, stageGain: .20, gateLoss: 1, cost: 0,
+    },
+    big: {
+      name: '큰 공연', detail: '네 준비 모두 중요 · 높은 수입 · 운영비 4', stars: '★★★',
+      baseDemand: 3, maxAudience: 99, promoGain: 5, baseSatisfaction: .45, lightGain: .17, stageGain: .22, gateLoss: 2, cost: 4,
+    },
   };
   const COLORS = ['#d9715d', '#e0a94f', '#65a8df', '#63c17b', '#9a7bd8'];
 
@@ -334,7 +376,8 @@
       money: 10,
       reputation: 0,
       prepLeft: MAX_PREP,
-      phase: 'prep',
+      phase: 'plan',
+      showPlan: null,
       prepared: { promo: false, light: false, stage: false, ticket: false },
       employees: {},
       seatLevel: 0,
@@ -345,20 +388,32 @@
   function resetGame() {
     state = freshState();
     showResult = null;
-    $('prepPanel').style.display = 'grid';
+    $('planPanel').style.display = 'block';
+    $('prepPanel').style.display = 'none';
     $('resultPanel').classList.remove('on');
     $('finalPanel').classList.remove('on');
     beginPrepDay();
   }
 
   function beginPrepDay() {
-    state.phase = 'prep';
+    state.phase = 'plan';
+    state.showPlan = null;
+    showResult = null;
     state.prepLeft = MAX_PREP;
     state.prepared = { promo: false, light: false, stage: false, ticket: false };
     state.audience = [];
+    $('planPanel').style.display = 'block';
+    $('prepPanel').style.display = 'none';
     renderAll();
     drawScene(0);
+  }
 
+  function beginSelectedShow() {
+    state.phase = 'prep';
+    $('planPanel').style.display = 'none';
+    $('prepPanel').style.display = 'grid';
+    renderAll();
+    drawScene(0);
     const staffed = Object.keys(state.employees);
     staffed.forEach((jobKey, index) => {
       setTimeout(() => {
@@ -376,10 +431,27 @@
     $('moneyValue').textContent = state.money;
     $('dayValue').textContent = `${state.day}/${MAX_DAYS}`;
     $('timeValue').textContent = state.prepLeft;
-    $('townLabel').textContent = state.phase === 'show' ? '첫 번째 마을 · 공연 중' : '첫 번째 마을 · 공연 준비';
+    $('townLabel').textContent = state.phase === 'plan' ? '첫 번째 마을 · 공연 고르기' : state.phase === 'show' ? '첫 번째 마을 · 공연 중' : `첫 번째 마을 · ${SHOW_PLANS[state.showPlan]?.name || '공연 준비'}`;
+    renderPlans();
     renderJobs();
     renderStaff();
     renderPrepNote();
+  }
+
+  function renderPlans() {
+    $('planOptions').innerHTML = Object.entries(SHOW_PLANS).map(([key, plan]) => `<button class="plan-button" data-plan="${key}" ${state.money < plan.cost ? 'disabled' : ''}>
+      <span class="plan-art ${key === 'big' ? 'big' : ''}"><span class="plan-stars">${plan.stars}</span></span>
+      <span><strong>${plan.name}</strong><small>${plan.detail}</small></span>
+    </button>`).join('');
+    document.querySelectorAll('[data-plan]').forEach(button => button.addEventListener('click', () => selectShowPlan(button.dataset.plan)));
+  }
+
+  function selectShowPlan(planKey) {
+    if (state.phase !== 'plan' || !SHOW_PLANS[planKey] || state.money < SHOW_PLANS[planKey].cost) return;
+    state.showPlan = planKey;
+    setBanner(SHOW_PLANS[planKey].name);
+    playTone(planKey === 'big' ? 310 : 420, .1, 'square', .04);
+    beginSelectedShow();
   }
 
   function renderJobs() {
@@ -393,7 +465,8 @@
       const prepared = state.prepared[key];
       const staffed = Boolean(state.employees[key]);
       const locked = !prepared && !staffed && state.prepLeft <= 0;
-      return `<button class="job-button ${prepared ? 'prepared' : ''} ${staffed ? 'staffed' : ''} ${locked ? 'locked' : ''}" data-job="${key}" data-tip="${JOB_RESULTS[key]}" aria-label="${job.name}: ${JOB_RESULTS[key]}" style="left:${job.pos[0]}%;top:${job.pos[1]}%" ${prepared || staffed || locked ? 'disabled' : ''}>
+      const effect = jobResultText(key);
+      return `<button class="job-button ${prepared ? 'prepared' : ''} ${staffed ? 'staffed' : ''} ${locked ? 'locked' : ''}" data-job="${key}" data-tip="${effect}" aria-label="${job.name}: ${effect}" style="left:${job.pos[0]}%;top:${job.pos[1]}%" ${prepared || staffed || locked ? 'disabled' : ''}>
         ${staffed ? `<span class="job-staff">${job.worker.slice(0, 1)}</span>` : ''}
         ${prepared ? '<span class="job-check">✓</span>' : ''}
         <span class="job-art art-${job.art}"></span>
@@ -419,14 +492,23 @@
     const done = Object.values(state.prepared).filter(Boolean).length;
     const missing = Object.entries(state.prepared).filter(([, value]) => !value).map(([key]) => JOBS[key].name);
     $('startShow').disabled = state.phase !== 'prep';
-    $('prepNote').textContent = missing.length ? `준비 ${done}/4 · ${missing.join(' · ')}` : '모든 준비 완료';
+    $('startShow').textContent = `${SHOW_PLANS[state.showPlan]?.name || '공연'} 열기`;
+    $('prepNote').textContent = missing.length ? `${SHOW_PLANS[state.showPlan]?.name || ''} · 준비 ${done}/4 · ${missing.join(' · ')}` : '모든 준비 완료';
+  }
+
+  function jobResultText(jobKey) {
+    const plan = SHOW_PLANS[state.showPlan] || SHOW_PLANS.small;
+    if (jobKey === 'promo') return `찾아오는 관객 +${plan.promoGain}`;
+    if (jobKey === 'light') return `공연 만족 +${Math.round(plan.lightGain * 100)}%`;
+    if (jobKey === 'stage') return `공연 만족 +${Math.round(plan.stageGain * 100)}%`;
+    return `입장 손실 제거 · 표값 +1`;
   }
 
   function startManualJob(jobKey) {
     if (state.phase !== 'prep' || state.prepared[jobKey] || state.employees[jobKey] || state.prepLeft <= 0) return;
     state.prepared[jobKey] = true;
     state.prepLeft--;
-    setBanner(JOB_RESULTS[jobKey]);
+    setBanner(jobResultText(jobKey));
     playTone(390, .08, 'square', .04);
     setTimeout(() => playTone(520, .08, 'square', .035), 80);
     renderAll();
@@ -434,24 +516,27 @@
   }
 
   function calculateShow() {
+    const plan = SHOW_PLANS[state.showPlan];
     const promoStaff = Boolean(state.employees.promo);
     const lightStaff = Boolean(state.employees.light);
     const stageStaff = Boolean(state.employees.stage);
     const ticketStaff = Boolean(state.employees.ticket);
-    const demand = 5 + Math.floor(state.reputation / 3) + (state.prepared.promo ? 4 : 0) + (promoStaff ? 2 : 0) + Math.floor(Math.random() * 2);
-    const capacity = 6 + state.seatLevel * 3;
+    const demand = plan.baseDemand + Math.floor(state.reputation / 4) + (state.prepared.promo ? plan.promoGain : 0) + (promoStaff ? 2 : 0);
+    const capacity = Math.min(6 + state.seatLevel * 3, plan.maxAudience);
     const queue = Math.min(demand, capacity);
-    const gateLoss = state.prepared.ticket ? 0 : Math.min(2, Math.max(1, Math.floor(queue * .3)));
+    const gateLoss = state.prepared.ticket ? 0 : Math.min(plan.gateLoss, Math.max(1, Math.floor(queue * .4)));
     const attendees = Math.max(1, queue - gateLoss);
-    const satisfaction = clamp(.46 + (state.prepared.light ? .17 : 0) + (state.prepared.stage ? .22 : 0) + (lightStaff ? .08 : 0), .35, .98);
+    const satisfaction = clamp(plan.baseSatisfaction + (state.prepared.light ? plan.lightGain : 0) + (state.prepared.stage ? plan.stageGain : 0) + (lightStaff ? .08 : 0), .35, .98);
     const ticketPrice = state.prepared.ticket ? 2 : 1;
     const ticketIncome = attendees * (ticketPrice + (ticketStaff ? 1 : 0));
     const tips = Math.floor(attendees * satisfaction) + (stageStaff ? attendees : 0);
-    const gross = ticketIncome + tips;
+    const fullPrep = Object.values(state.prepared).every(Boolean);
+    const fullShowBonus = state.showPlan === 'big' && fullPrep ? attendees : 0;
+    const gross = ticketIncome + tips + fullShowBonus;
     const wages = Object.keys(state.employees).reduce((sum, key) => sum + JOBS[key].wage, 0);
-    const net = gross - wages;
+    const net = gross - wages - plan.cost;
     const repGain = satisfaction >= .84 ? 2 : satisfaction >= .65 ? 1 : 0;
-    return { demand, capacity, queue, gateLoss, attendees, satisfaction, ticketIncome, tips, gross, wages, net, repGain };
+    return { plan, demand, capacity, queue, gateLoss, attendees, satisfaction, ticketIncome, tips, gross, wages, net, repGain, fullPrep, fullShowBonus };
   }
 
   function startShow() {
@@ -488,6 +573,9 @@
     $('showTimer').classList.remove('on');
     hideBanner();
     $('moneyValue').textContent = state.money;
+    $('resultPlan').textContent = showResult.fullShowBonus
+      ? `${showResult.plan.name} · 네 준비 완료 · 흥행 보너스 +${showResult.fullShowBonus}`
+      : `${showResult.plan.name} · 준비 ${Object.values(state.prepared).filter(Boolean).length}/4`;
     $('resultAudience').textContent = `${showResult.attendees}/${showResult.demand}`;
     $('resultMood').textContent = `${Math.round(showResult.satisfaction * 100)}%`;
     $('resultGross').textContent = `+${showResult.gross}`;
@@ -543,12 +631,12 @@
   function nextDay() {
     state.day++;
     $('resultPanel').classList.remove('on');
-    $('prepPanel').style.display = 'grid';
     beginPrepDay();
   }
 
   function showFinal() {
     $('resultPanel').classList.remove('on');
+    $('planPanel').style.display = 'none';
     $('prepPanel').style.display = 'none';
     $('finalPanel').classList.add('on');
     const names = Object.keys(state.employees).map(key => JOBS[key].worker);
@@ -680,7 +768,9 @@
   }
 
   function drawPrepAudience() {
-    const count = 3 + (state.prepared.promo ? 4 : 0) + (state.employees.promo ? 2 : 0);
+    if (!state.showPlan) return;
+    const plan = SHOW_PLANS[state.showPlan];
+    const count = Math.min(10, plan.baseDemand + (state.prepared.promo ? plan.promoGain : 0) + (state.employees.promo ? 2 : 0));
     for (let i = 0; i < count; i++) {
       const row = Math.floor(i / 5);
       const inRow = i % 5;
@@ -715,9 +805,19 @@
     ctx.fillStyle='#5a3a2b';ctx.fillRect(220,330,520,42);ctx.fillStyle='#774c34';ctx.fillRect(235,320,490,18);
     const active = Math.max(0, elapsed - 1200);
     const prepared = state.prepared.stage;
-    drawPerformer(410, 291, '#65a8df', active, prepared ? 26 : 8, true);
-    drawPerformer(555, 296, '#63c17b', active, prepared ? 12 : 5, false);
-    if (prepared) { ctx.strokeStyle='#f4c95d';ctx.lineWidth=6;ctx.beginPath();ctx.arc(485,280,48+Math.sin(active/180)*3,0,Math.PI*2);ctx.stroke(); }
+    const isBig = state.showPlan === 'big';
+    if (isBig) {
+      drawPerformer(410, 291, '#65a8df', active, prepared ? 26 : 8, true);
+      drawPerformer(555, 296, '#63c17b', active, prepared ? 18 : 5, false);
+      if (prepared) { ctx.strokeStyle='#f4c95d';ctx.lineWidth=6;ctx.beginPath();ctx.arc(485,280,48+Math.sin(active/180)*3,0,Math.PI*2);ctx.stroke(); }
+      if (Object.values(state.prepared).every(Boolean)) {
+        ctx.fillStyle='#f4c95d';
+        [[350,190],[485,150],[620,190]].forEach(([x,y], index) => drawStar(x, y + Math.sin(active/180 + index) * 8, 10, 4));
+      }
+    } else {
+      drawPerformer(480, 294, '#65a8df', active, prepared ? 20 : 7, true);
+      if (prepared) { ctx.strokeStyle='#f4c95d';ctx.lineWidth=5;ctx.beginPath();ctx.arc(480,280,42+Math.sin(active/200)*2,0,Math.PI*2);ctx.stroke(); }
+    }
   }
 
   function drawPerformer(x, y, color, time, jumpHeight, lead) {
@@ -752,7 +852,7 @@
   }
 
   function drawAudiencePerson(x,y,color,cheering,index,elapsed){ctx.save();ctx.translate(x,y);ctx.fillStyle=color;ctx.fillRect(-10,9,20,24);ctx.fillStyle='#e8c29d';ctx.beginPath();ctx.arc(0,0,10,0,Math.PI*2);ctx.fill();ctx.fillStyle='#392c30';ctx.fillRect(-8,-7,16,5);if(cheering){const wave=Math.sin(elapsed/100+index)*4;ctx.strokeStyle='#e8c29d';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(-8,13);ctx.lineTo(-16,-3+wave);ctx.moveTo(8,13);ctx.lineTo(16,-3-wave);ctx.stroke();if(elapsed>2500&&index%3===0){ctx.fillStyle='#f4c95d';drawStar(0,-28,5,2);}}ctx.restore();}
-  function drawConfetti(elapsed){const t=clamp((elapsed-4200)/800,0,1);for(let i=0;i<18;i++){ctx.fillStyle=COLORS[i%COLORS.length];ctx.fillRect(310+(i*53%340),140+((i*31)%120)-t*70,7,7);}}
+  function drawConfetti(elapsed){const t=clamp((elapsed-4200)/800,0,1);const count=state.showPlan==='big'&&Object.values(state.prepared).every(Boolean)?34:14;for(let i=0;i<count;i++){ctx.fillStyle=COLORS[i%COLORS.length];ctx.fillRect(280+(i*53%400),140+((i*31)%140)-t*70,7,7);}}
   function drawStar(x,y,outer,inner){ctx.beginPath();for(let i=0;i<10;i++){const radius=i%2===0?outer:inner;const angle=-Math.PI/2+i*Math.PI/5;const px=x+Math.cos(angle)*radius;const py=y+Math.sin(angle)*radius;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);}ctx.closePath();ctx.fill();}
 
   function setBanner(text) {
