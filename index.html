@@ -17,7 +17,6 @@
     --gold: #f4c95d;
     --green: #63c17b;
     --blue: #65a8df;
-    --purple: #9a7bd8;
     --shadow: #0b0d18;
   }
 
@@ -26,27 +25,26 @@
   body {
     color: var(--ink);
     font-family: "Malgun Gothic", "Segoe UI", sans-serif;
-    padding: 16px;
-    background:
-      linear-gradient(#171a2a 0 62%, #101321 62% 100%);
+    padding: 14px;
+    background: linear-gradient(#171a2a 0 62%, #101321 62% 100%);
   }
-
   button { font: inherit; }
+  button:focus-visible { outline: 3px solid #fff1a6; outline-offset: 3px; }
+
   .game-shell {
-    width: min(900px, 100%);
+    width: min(940px, 100%);
     margin: 0 auto;
     border: 3px solid #060814;
     background: var(--night);
     box-shadow: 0 12px 0 #080a13, 0 18px 40px #0008;
   }
-
   .marquee {
-    min-height: 66px;
+    min-height: 68px;
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
-    gap: 16px;
-    padding: 10px 16px;
+    gap: 12px;
+    padding: 10px 14px;
     background: #20243a;
     border-bottom: 3px solid #090b16;
     position: relative;
@@ -58,56 +56,38 @@
     height: 3px;
     background: repeating-linear-gradient(90deg, var(--gold) 0 14px, var(--red) 14px 28px);
   }
-  .brand-row { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
-  .brand {
-    color: var(--gold);
-    font: 800 13px/1 Consolas, monospace;
-    border: 2px solid var(--gold);
-    padding: 4px 6px;
-  }
+  .brand-row { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .brand { color: var(--gold); font: 800 13px/1 Consolas, monospace; border: 2px solid var(--gold); padding: 5px 6px; }
   h1 { margin: 0; font-size: 20px; letter-spacing: 0; white-space: nowrap; }
-  .town { color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-  .hud { display: flex; align-items: center; gap: 8px; }
+  .town { color: var(--muted); font-size: 11px; margin-top: 3px; }
+  .hud { display: flex; align-items: center; gap: 7px; }
   .hud-item {
     min-width: 74px;
     display: grid;
-    grid-template-columns: 22px auto;
+    grid-template-columns: 20px auto;
     grid-template-rows: 12px 20px;
     column-gap: 6px;
     align-items: center;
-    padding: 5px 8px;
+    padding: 5px 7px;
     background: #151828;
     border: 2px solid #3b4055;
   }
-  .hud-icon { grid-row: 1 / span 2; width: 20px; height: 20px; position: relative; }
+  .hud-icon { grid-row: 1 / span 2; width: 19px; height: 19px; position: relative; }
   .coin-icon { border-radius: 50%; background: var(--gold); border: 3px solid #a36d20; box-shadow: inset 0 0 0 2px #ffe79b; }
-  .rep-icon { background: var(--green); clip-path: polygon(50% 0, 62% 34%, 100% 38%, 70% 61%, 80% 100%, 50% 78%, 20% 100%, 30% 61%, 0 38%, 38% 34%); }
-  .show-icon { border: 3px solid var(--blue); border-radius: 50%; }
-  .show-icon::after { content: ""; position: absolute; left: 7px; top: 2px; width: 3px; height: 7px; background: var(--blue); transform-origin: bottom; transform: rotate(25deg); }
+  .day-icon { border: 3px solid var(--blue); border-radius: 50%; }
+  .day-icon::after { content: ""; position: absolute; left: 6px; top: 1px; width: 3px; height: 7px; background: var(--blue); transform-origin: bottom; transform: rotate(28deg); }
+  .time-icon { border: 3px solid var(--gold); border-radius: 50%; box-shadow: 0 0 8px #f4c95d66; }
+  .time-icon::before { content: ""; position: absolute; left: 6px; top: -6px; width: 3px; height: 5px; background: var(--gold); }
   .hud-label { color: var(--muted); font-size: 9px; line-height: 12px; }
   .hud-value { font: 800 17px/20px Consolas, monospace; color: var(--ink); }
-
-  .sound-btn {
-    width: 34px; height: 34px; padding: 0;
-    border: 2px solid #4a5067;
-    background: #151828;
-    cursor: pointer;
-    position: relative;
-  }
-  .sound-btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+  .sound-btn { width: 34px; height: 34px; padding: 0; border: 2px solid #4a5067; background: #151828; cursor: pointer; position: relative; }
   .speaker { position: absolute; left: 8px; top: 11px; width: 8px; height: 10px; background: var(--ink); }
-  .speaker::before { content: ""; position: absolute; left: 6px; top: -4px; border-top: 9px solid transparent; border-bottom: 9px solid transparent; border-right: 0; border-left: 9px solid var(--ink); }
+  .speaker::before { content: ""; position: absolute; left: 6px; top: -4px; border-top: 9px solid transparent; border-bottom: 9px solid transparent; border-left: 9px solid var(--ink); }
   .speaker::after { content: ""; position: absolute; left: 15px; top: 0; width: 7px; height: 7px; border: 2px solid var(--gold); border-left: 0; border-bottom: 0; transform: rotate(45deg); }
   .sound-btn.muted::after { content: ""; position: absolute; left: 7px; top: 15px; width: 22px; height: 3px; background: var(--red); transform: rotate(-45deg); }
 
-  .scene-frame {
-    position: relative;
-    background: #0a0c16;
-    border-bottom: 3px solid #090b16;
-    overflow: hidden;
-  }
-  canvas { width: 100%; height: auto; aspect-ratio: 96 / 50; display: block; image-rendering: pixelated; }
+  .scene-frame { position: relative; background: #0a0c16; border-bottom: 3px solid #090b16; overflow: hidden; }
+  canvas { width: 100%; height: auto; aspect-ratio: 96 / 53; display: block; image-rendering: pixelated; }
   .phase-banner {
     position: absolute;
     left: 50%; top: 16px;
@@ -117,185 +97,128 @@
     padding: 7px 14px;
     text-align: center;
     font-weight: 900;
-    font-size: 15px;
+    font-size: 14px;
     color: #1a1720;
     background: var(--gold);
     border: 3px solid #fff0a8;
     box-shadow: 0 4px 0 #7c4e17;
     pointer-events: none;
     transition: opacity .15s, transform .15s;
+    z-index: 8;
   }
-  .phase-banner.show { opacity: 1; transform: translate(-50%, 0); }
-  .show-timer {
-    position: absolute;
-    left: 18px; top: 16px;
-    width: 150px; height: 12px;
-    border: 2px solid #f4e9cf;
-    background: #171a2a;
-    display: none;
-  }
+  .phase-banner.on { opacity: 1; transform: translate(-50%, 0); }
+  .show-timer { position: absolute; left: 18px; top: 16px; width: 150px; height: 12px; border: 2px solid #f4e9cf; background: #171a2a; display: none; z-index: 8; }
   .show-timer.on { display: block; }
   .show-timer-fill { height: 100%; width: 0; background: var(--gold); }
 
-  .control-area { padding: 10px; background: #1c2032; min-height: 178px; }
-  .prep-grid { display: grid; grid-template-columns: 1fr 1.35fr 190px; gap: 12px; align-items: stretch; }
-  .block {
-    background: var(--panel);
-    border: 2px solid var(--line);
-    padding: 10px;
-    min-width: 0;
-  }
-  .block-title { color: var(--muted); font-size: 10px; font-weight: 800; margin-bottom: 8px; }
-
-  .slots { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; height: 98px; }
-  .slot {
-    border: 2px dashed #626a82;
-    background: #171a2a;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  .job-layer { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
+  .job-button {
+    position: absolute;
+    width: 78px; height: 78px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 3px solid #f4e9cf;
+    background: #171a2ee8;
+    color: var(--ink);
+    box-shadow: 0 5px 0 #080b14, 0 0 0 4px #0005;
     cursor: pointer;
-    position: relative;
-    transition: border-color .12s, background .12s, transform .12s;
-  }
-  .slot:hover, .slot.target { border-color: var(--gold); background: #2b2b3f; }
-  .slot:active { transform: translateY(2px); }
-  .slot-label { position: absolute; left: 6px; top: 5px; font-size: 9px; font-weight: 800; color: var(--muted); }
-  .slot-empty { color: #596179; font: 800 34px/1 Consolas, monospace; }
-  .slot-member { display: flex; align-items: center; gap: 7px; max-width: 100%; padding: 18px 5px 2px; }
-  .slot-member strong { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-  .portrait {
-    width: 42px; height: 42px; flex: 0 0 42px;
-    position: relative;
-    background: var(--member-color, var(--blue));
-    border: 3px solid #111522;
-    box-shadow: inset 0 -8px 0 #0002;
-  }
-  .portrait::before { content: ""; position: absolute; width: 20px; height: 20px; left: 8px; top: 5px; background: #f1c8a5; border: 2px solid #422f31; border-radius: 50%; }
-  .portrait::after { content: ""; position: absolute; width: 28px; height: 12px; left: 4px; bottom: 3px; background: #f1c8a5; border: 2px solid #422f31; border-bottom: 0; border-radius: 12px 12px 0 0; }
-  .portrait .hat { position: absolute; z-index: 2; left: 7px; top: 1px; width: 24px; height: 8px; background: var(--member-color); border: 2px solid #422f31; }
-
-  .roster { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-  .member-card {
-    min-height: 98px;
-    background: #171a2a;
-    border: 2px solid #454b61;
-    padding: 6px;
-    cursor: grab;
-    user-select: none;
-    position: relative;
+    pointer-events: auto;
     transition: transform .12s, border-color .12s, opacity .12s;
   }
-  .member-card:hover { border-color: var(--blue); transform: translateY(-2px); }
-  .member-card:active { cursor: grabbing; transform: translateY(1px); }
-  .member-card.selected { border-color: var(--gold); box-shadow: inset 0 0 0 2px #f4c95d44; }
-  .member-card.assigned { background: #1e2233; }
-  .member-top { display: flex; gap: 7px; align-items: center; margin-bottom: 7px; }
-  .member-name { min-width: 0; }
-  .member-name strong { display: block; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .member-name span { color: var(--muted); font-size: 9px; }
-  .stat-line { display: grid; grid-template-columns: 30px 1fr; gap: 5px; align-items: center; margin-top: 4px; color: var(--muted); font-size: 9px; }
-  .pips { display: flex; gap: 3px; }
-  .pip { width: 10px; height: 6px; background: #363b50; border: 1px solid #555c75; }
-  .pip.on.show { background: var(--gold); border-color: #ffe8a0; }
-  .pip.on.help { background: var(--blue); border-color: #a7d9ff; }
-  .fatigue { height: 6px; margin-top: 7px; background: #32374a; border: 1px solid #50566b; }
-  .fatigue-fill { height: 100%; background: var(--green); transition: width .2s, background .2s; }
-  .role-tag { position: absolute; right: 4px; top: 4px; color: var(--gold); font-size: 9px; font-weight: 800; }
+  .job-button:hover:not(:disabled) { transform: translate(-50%, -54%); border-color: var(--gold); }
+  .job-button:active:not(:disabled) { transform: translate(-50%, -47%); }
+  .job-button:disabled { cursor: default; }
+  .job-button.prepared { background: #173127e8; border-color: var(--green); }
+  .job-button.staffed { box-shadow: 0 5px 0 #080b14, 0 0 0 4px #63c17b55; }
+  .job-button.locked { opacity: .38; }
+  .job-name { position: absolute; left: 50%; bottom: -22px; transform: translateX(-50%); white-space: nowrap; padding: 2px 7px; color: var(--ink); background: #111523e8; border: 1px solid #596179; font-size: 10px; font-weight: 900; }
+  .job-check { position: absolute; right: -5px; top: -5px; width: 25px; height: 25px; display: grid; place-items: center; border-radius: 50%; color: #102019; background: var(--green); border: 2px solid #b9f2c4; font-weight: 900; }
+  .job-staff { position: absolute; left: -8px; top: -8px; width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; color: #201a17; background: #efc7a2; border: 2px solid #4a3030; font-size: 9px; font-weight: 900; }
+  .job-art { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 42px; height: 42px; }
+  .art-promo { background: var(--red); border: 3px solid #f0d28b; }
+  .art-promo::after { content: "★"; display: grid; place-items: center; height: 100%; color: var(--gold); font-size: 24px; }
+  .art-light { border-radius: 50%; background: var(--gold); border: 4px solid #fff0a8; box-shadow: 0 0 14px #f4c95d; }
+  .art-light::after { content: ""; position: absolute; width: 20px; height: 8px; left: 7px; bottom: -8px; background: #6e5630; border: 3px solid #2e2725; }
+  .art-stage { border: 4px solid var(--blue); border-radius: 50%; }
+  .art-stage::before, .art-stage::after { content: ""; position: absolute; width: 9px; height: 9px; border-radius: 50%; background: var(--gold); top: 12px; }
+  .art-stage::before { left: -6px; }
+  .art-stage::after { right: -6px; }
+  .art-ticket { width: 45px; height: 25px; background: #f0d28b; border: 3px solid #7e5634; transform: translate(-50%, -50%) rotate(-7deg); }
+  .art-ticket::after { content: ""; position: absolute; inset: 4px 17px; border-left: 2px dashed #a36d20; }
 
-  .start-wrap { display: flex; flex-direction: column; gap: 8px; }
-  .show-button {
-    flex: 1;
-    min-height: 80px;
-    color: white;
-    background: var(--red);
-    border: 3px solid #ff8a74;
-    box-shadow: inset 0 -8px 0 var(--red-dark), 0 5px 0 #080b14;
-    font-size: 18px;
-    font-weight: 900;
+  .work-point {
+    position: absolute;
+    width: 52px; height: 52px;
+    transform: translate(-50%, -50%);
+    border: 3px solid white;
+    background: var(--gold);
+    box-shadow: 0 0 0 5px #0006, 0 0 18px #f4c95dcc;
     cursor: pointer;
-    text-shadow: 0 2px 0 #7e2631;
+    pointer-events: auto;
+    animation: workPulse .75s steps(2, end) infinite;
   }
+  .work-point::after { content: "+"; display: grid; place-items: center; height: 100%; color: #32230f; font: 900 30px/1 Consolas, monospace; }
+  .work-point.done { animation: none; transform: translate(-50%, -50%) scale(.1); opacity: 0; transition: .2s; }
+  @keyframes workPulse { 50% { transform: translate(-50%, -50%) scale(1.12); } }
+
+  .control-area { padding: 10px; background: #1c2032; min-height: 160px; }
+  .prep-panel { display: grid; grid-template-columns: 1fr 210px; gap: 10px; }
+  .staff-block { min-width: 0; background: var(--panel); border: 2px solid var(--line); padding: 9px; }
+  .block-title { color: var(--muted); font-size: 10px; font-weight: 900; margin-bottom: 7px; }
+  .staff-list { display: flex; gap: 7px; min-height: 76px; overflow-x: auto; align-items: stretch; }
+  .staff-empty { display: flex; align-items: center; color: #777f95; font-size: 11px; }
+  .staff-card { min-width: 132px; display: grid; grid-template-columns: 40px 1fr; gap: 7px; align-items: center; padding: 7px; background: #171a2a; border: 2px solid #454b61; }
+  .staff-face { width: 38px; height: 44px; position: relative; background: var(--staff-color); border: 3px solid #111522; }
+  .staff-face::before { content: ""; position: absolute; left: 7px; top: 5px; width: 19px; height: 19px; border-radius: 50%; background: #efc7a2; border: 2px solid #422f31; }
+  .staff-face::after { content: ""; position: absolute; left: 5px; bottom: 3px; width: 23px; height: 12px; background: #efc7a2; border: 2px solid #422f31; border-bottom: 0; }
+  .staff-copy strong { display: block; font-size: 12px; }
+  .staff-copy span { display: block; margin-top: 3px; color: var(--muted); font-size: 9px; line-height: 1.35; }
+  .start-wrap { display: grid; grid-template-rows: 1fr auto; gap: 8px; }
+  .show-button { min-height: 82px; color: white; background: var(--red); border: 3px solid #ff8a74; box-shadow: inset 0 -8px 0 var(--red-dark), 0 5px 0 #080b14; font-size: 18px; font-weight: 900; cursor: pointer; text-shadow: 0 2px 0 #7e2631; }
   .show-button:hover:not(:disabled) { filter: brightness(1.1); }
   .show-button:active:not(:disabled) { transform: translateY(4px); box-shadow: inset 0 -4px 0 var(--red-dark), 0 1px 0 #080b14; }
-  .show-button:disabled { filter: grayscale(.8); opacity: .45; cursor: not-allowed; }
-  .button-sub { color: var(--muted); font-size: 10px; text-align: center; min-height: 28px; }
+  .show-button:disabled { filter: grayscale(.8); opacity: .45; cursor: default; }
+  .prep-note { min-height: 24px; color: var(--muted); font-size: 10px; text-align: center; }
 
-  .result-panel { display: none; }
-  .result-panel.on { display: block; }
-  .result-head {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-bottom: 10px;
-  }
-  .result-stat { background: var(--panel); border: 2px solid var(--line); padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; }
-  .result-stat span { color: var(--muted); font-size: 10px; }
-  .result-stat strong { font: 900 20px/1 Consolas, monospace; }
-  .invest-title { color: var(--gold); font-size: 12px; font-weight: 900; margin: 8px 0; }
-  .investments { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
-  .invest-card {
-    min-height: 96px;
-    display: grid;
-    grid-template-columns: 62px 1fr auto;
-    align-items: center;
-    gap: 9px;
-    padding: 8px;
-    color: var(--ink);
-    background: var(--panel);
-    border: 2px solid var(--line);
-    cursor: pointer;
-    text-align: left;
-    transition: transform .12s, border-color .12s, background .12s;
-  }
+  .result-panel, .final-panel { display: none; }
+  .result-panel.on, .final-panel.on { display: block; }
+  .result-head { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-bottom: 9px; }
+  .result-stat { background: var(--panel); border: 2px solid var(--line); padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .result-stat span { color: var(--muted); font-size: 9px; }
+  .result-stat strong { font: 900 18px/1 Consolas, monospace; }
+  .invest-title { color: var(--gold); font-size: 11px; font-weight: 900; margin: 8px 0; }
+  .investments { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .invest-card { min-height: 88px; display: grid; grid-template-columns: 46px 1fr auto; align-items: center; gap: 8px; padding: 7px; color: var(--ink); background: var(--panel); border: 2px solid var(--line); cursor: pointer; text-align: left; transition: transform .12s, border-color .12s, background .12s; }
   .invest-card:hover:not(:disabled) { transform: translateY(-3px); border-color: var(--gold); background: #303548; }
-  .invest-card:active:not(:disabled) { transform: translateY(1px); }
-  .invest-card:disabled { opacity: .42; cursor: not-allowed; }
-  .invest-card strong { display: block; font-size: 14px; margin-bottom: 4px; }
-  .invest-card small { display: block; color: var(--muted); font-size: 10px; line-height: 1.45; }
-  .price { color: var(--gold); font: 900 15px/1 Consolas, monospace; white-space: nowrap; align-self: start; margin-top: 4px; }
-  .invest-art { width: 58px; height: 62px; position: relative; background: #171a2a; border: 2px solid #444a60; }
-  .recruit-art::before { content: ""; position: absolute; left: 20px; top: 10px; width: 24px; height: 24px; border-radius: 50%; background: #efc7a2; border: 3px solid #432f33; }
-  .recruit-art::after { content: ""; position: absolute; left: 12px; bottom: 6px; width: 40px; height: 28px; background: var(--purple); border: 3px solid #432f33; border-radius: 18px 18px 0 0; }
-  .seat-art::before, .seat-art::after { content: ""; position: absolute; width: 20px; height: 16px; background: var(--red); border: 3px solid #702b34; box-shadow: 0 13px 0 var(--red), 0 16px 0 #702b34; }
-  .seat-art::before { left: 8px; top: 11px; }
-  .seat-art::after { right: 8px; top: 11px; }
-  .poster-art::before { content: "★"; position: absolute; left: 13px; top: 8px; width: 38px; height: 48px; display: grid; place-items: center; color: var(--gold); font-size: 24px; background: var(--red); border: 3px solid #f3d99a; transform: rotate(-4deg); }
-
-  .skip-invest {
-    margin-top: 8px;
-    padding: 7px 12px;
-    color: var(--muted);
-    background: transparent;
-    border: 1px solid #4b5167;
-    cursor: pointer;
-  }
+  .invest-card:disabled { opacity: .35; cursor: default; }
+  .invest-card strong { display: block; font-size: 12px; margin-bottom: 4px; }
+  .invest-card small { display: block; color: var(--muted); font-size: 9px; line-height: 1.35; }
+  .invest-face { width: 42px; height: 48px; position: relative; background: var(--staff-color, #65a8df); border: 3px solid #111522; }
+  .invest-face::before { content: ""; position: absolute; left: 8px; top: 5px; width: 20px; height: 20px; border-radius: 50%; background: #efc7a2; border: 2px solid #422f31; }
+  .invest-face::after { content: ""; position: absolute; left: 6px; bottom: 3px; width: 25px; height: 13px; background: #efc7a2; border: 2px solid #422f31; border-bottom: 0; }
+  .seat-art { width: 44px; height: 44px; position: relative; border: 3px solid #9b4b50; background: #742f39; box-shadow: 0 12px 0 #742f39, 0 15px 0 #301f24; }
+  .price { color: var(--gold); font: 900 14px/1 Consolas, monospace; white-space: nowrap; align-self: start; margin-top: 4px; }
+  .skip-invest { margin-top: 8px; padding: 7px 10px; color: var(--muted); background: transparent; border: 1px solid #596179; cursor: pointer; }
   .skip-invest:hover { color: var(--ink); border-color: var(--muted); }
-
-  .final-panel { display: none; text-align: center; padding: 24px 12px; }
-  .final-panel.on { display: block; }
-  .final-panel h2 { margin: 0 0 8px; color: var(--gold); font-size: 25px; }
-  .final-panel p { color: var(--muted); margin: 5px 0 18px; font-size: 13px; }
+  .final-panel { text-align: center; padding: 18px; }
+  .final-panel h2 { margin: 0 0 8px; color: var(--gold); }
+  .final-panel p { margin: 0 0 16px; color: var(--muted); line-height: 1.6; }
   .restart-btn { padding: 11px 28px; color: white; background: var(--red); border: 3px solid #ff8a74; box-shadow: 0 4px 0 #7e2631; cursor: pointer; font-weight: 900; }
 
-  .bump { animation: bump .35s ease-out; }
-  @keyframes bump { 0% { transform: scale(1); } 45% { transform: scale(1.3); color: var(--gold); } 100% { transform: scale(1); } }
-
-  @media (max-width: 800px) {
+  @media (max-width: 760px) {
     body { padding: 0; }
     .game-shell { border-left: 0; border-right: 0; }
-    .marquee { grid-template-columns: 1fr; gap: 7px; }
-    .hud { overflow-x: auto; padding-bottom: 2px; }
-    .prep-grid { grid-template-columns: 1fr; }
-    .slots { height: 100px; }
-    .roster { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .start-wrap { min-height: 92px; }
-    .show-button { min-height: 64px; }
+    .marquee { grid-template-columns: 1fr; }
+    .hud { justify-content: space-between; }
+    .hud-item { flex: 1; min-width: 0; }
+    .prep-panel { grid-template-columns: 1fr; }
+    .start-wrap { grid-template-columns: 1fr; }
+    .job-button { width: 62px; height: 62px; }
+    .job-art { transform: translate(-50%, -50%) scale(.78); }
+    .job-name { font-size: 9px; }
+    .result-head { grid-template-columns: 1fr 1fr; }
     .investments { grid-template-columns: 1fr; }
-    .invest-card { min-height: 90px; }
+    .invest-card { min-height: 76px; }
   }
 </style>
 </head>
@@ -306,66 +229,50 @@
       <span class="brand">PoC</span>
       <div>
         <h1>작은 서커스</h1>
-        <div class="town" id="townLabel">첫 번째 마을 · 낡은 오두막</div>
+        <div class="town" id="townLabel">첫 번째 마을 · 공연 준비</div>
       </div>
     </div>
     <div class="hud">
-      <div class="hud-item">
-        <span class="hud-icon coin-icon"></span>
-        <span class="hud-label">돈</span>
-        <span class="hud-value" id="moneyValue">4</span>
-      </div>
-      <div class="hud-item">
-        <span class="hud-icon rep-icon"></span>
-        <span class="hud-label">평판</span>
-        <span class="hud-value" id="repValue">0</span>
-      </div>
-      <div class="hud-item">
-        <span class="hud-icon show-icon"></span>
-        <span class="hud-label">공연</span>
-        <span class="hud-value" id="roundValue">1/5</span>
-      </div>
+      <div class="hud-item"><span class="hud-icon coin-icon"></span><span class="hud-label">돈</span><span class="hud-value" id="moneyValue">10</span></div>
+      <div class="hud-item"><span class="hud-icon day-icon"></span><span class="hud-label">날짜</span><span class="hud-value" id="dayValue">1/5</span></div>
+      <div class="hud-item"><span class="hud-icon time-icon"></span><span class="hud-label">준비</span><span class="hud-value" id="timeValue">3</span></div>
       <button class="sound-btn" id="soundBtn" aria-label="소리 켜기 또는 끄기" title="소리"><span class="speaker"></span></button>
     </div>
   </header>
 
   <section class="scene-frame">
-    <canvas id="scene" width="960" height="500" aria-label="서커스 공연장과 관객"></canvas>
+    <canvas id="scene" width="960" height="530" aria-label="작은 서커스 준비와 공연"></canvas>
+    <div class="job-layer" id="jobLayer"></div>
     <div class="phase-banner" id="phaseBanner"></div>
     <div class="show-timer" id="showTimer"><div class="show-timer-fill" id="showTimerFill"></div></div>
   </section>
 
   <main class="control-area">
-    <section id="prepPanel">
-      <div class="prep-grid">
-        <div class="block">
-          <div class="block-title">오늘의 무대</div>
-          <div class="slots" id="slots"></div>
-        </div>
-        <div class="block">
-          <div class="block-title">단원</div>
-          <div class="roster" id="roster"></div>
-        </div>
-        <div class="start-wrap">
-          <button class="show-button" id="startShow">공연 시작</button>
-          <div class="button-sub" id="prepStatus"></div>
-        </div>
+    <section class="prep-panel" id="prepPanel">
+      <div class="staff-block">
+        <div class="block-title">함께 일하는 사람</div>
+        <div class="staff-list" id="staffList"></div>
+      </div>
+      <div class="start-wrap">
+        <button class="show-button" id="startShow">문 열기</button>
+        <div class="prep-note" id="prepNote"></div>
       </div>
     </section>
 
     <section class="result-panel" id="resultPanel">
       <div class="result-head">
-        <div class="result-stat"><span>관객</span><strong id="resultAudience">0</strong></div>
+        <div class="result-stat"><span>입장</span><strong id="resultAudience">0</strong></div>
         <div class="result-stat"><span>만족</span><strong id="resultMood">0%</strong></div>
-        <div class="result-stat"><span>수입</span><strong id="resultRevenue">+0</strong></div>
+        <div class="result-stat"><span>매출</span><strong id="resultGross">+0</strong></div>
+        <div class="result-stat"><span>임금 후</span><strong id="resultNet">+0</strong></div>
       </div>
-      <div class="invest-title">오늘 번 돈을 어디에 쓸까?</div>
+      <div class="invest-title">오늘 번 돈으로 하나 선택</div>
       <div class="investments" id="investments"></div>
-      <button class="skip-invest" id="skipInvest">저축하고 다음 공연</button>
+      <button class="skip-invest" id="skipInvest">저축하고 다음 날</button>
     </section>
 
     <section class="final-panel" id="finalPanel">
-      <h2>첫 여정 종료</h2>
+      <h2>첫 마을 공연 종료</h2>
       <p id="finalSummary"></p>
       <button class="restart-btn" id="restartBtn">처음부터</button>
     </section>
@@ -381,210 +288,209 @@
   ctx.imageSmoothingEnabled = false;
 
   const SHOW_MS = 5000;
-  const MAX_ROUNDS = 5;
-  const COLORS = ['#65a8df', '#e66f5c', '#63c17b', '#9a7bd8', '#e0a94f', '#62c4bd'];
-  const CANDIDATES = [
-    { name: '루', type: '곡예', show: 5, help: 1, color: COLORS[1] },
-    { name: '벨', type: '광대', show: 3, help: 4, color: COLORS[4] },
-    { name: '니코', type: '묘기', show: 4, help: 2, color: COLORS[3] },
-    { name: '조이', type: '진행', show: 2, help: 5, color: COLORS[5] },
-  ];
+  const MAX_DAYS = 5;
+  const MAX_PREP = 3;
+  const JOBS = {
+    promo: { name: '홍보', art: 'promo', worker: '소피', color: '#d95555', hire: 11, wage: 1, bonus: '관객 +2', pos: [15, 48] },
+    light: { name: '조명', art: 'light', worker: '에디', color: '#e0a94f', hire: 12, wage: 2, bonus: '만족 +8%', pos: [50, 24] },
+    stage: { name: '무대', art: 'stage', worker: '로만', color: '#65a8df', hire: 13, wage: 2, bonus: '팁 +관객당 1', pos: [50, 53] },
+    ticket: { name: '매표', art: 'ticket', worker: '마리', color: '#63c17b', hire: 11, wage: 1, bonus: '표값 +1', pos: [84, 49] },
+  };
+  const WORK_POINTS = {
+    promo: [[10, 42], [16, 48], [21, 41]],
+    light: [[39, 25], [50, 20], [61, 25]],
+    stage: [[43, 53], [50, 47], [57, 54]],
+    ticket: [[79, 45], [84, 51], [89, 44]],
+  };
+  const COLORS = ['#d9715d', '#e0a94f', '#65a8df', '#63c17b', '#9a7bd8'];
 
   let state;
   let showStart = 0;
   let showResult = null;
-  let selectedMember = null;
-  let pendingCandidate = null;
+  let activeJob = null;
+  let workStep = 0;
   let soundOn = true;
   let audioContext = null;
+  let bannerTimer = null;
 
   const $ = id => document.getElementById(id);
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+  const easeOut = t => 1 - Math.pow(1 - clamp(t, 0, 1), 3);
 
   function freshState() {
     return {
-      round: 1,
-      money: 4,
+      day: 1,
+      money: 10,
       reputation: 0,
-      seatLevel: 0,
-      promoLevel: 0,
-      members: [
-        { id: 'ara', name: '아라', type: '곡예', show: 4, help: 2, fatigue: 0, color: COLORS[0] },
-        { id: 'pin', name: '핀', type: '광대', show: 2, help: 4, fatigue: 0, color: COLORS[2] },
-      ],
-      slots: { lead: 'ara', support: 'pin' },
+      prepLeft: MAX_PREP,
       phase: 'prep',
+      prepared: { promo: false, light: false, stage: false, ticket: false },
+      employees: {},
+      seatLevel: 0,
       audience: [],
-      lastInvestment: null,
     };
   }
 
   function resetGame() {
     state = freshState();
-    selectedMember = null;
-    pendingCandidate = null;
     showResult = null;
-    $('prepPanel').style.display = 'block';
+    activeJob = null;
+    workStep = 0;
+    $('prepPanel').style.display = 'grid';
     $('resultPanel').classList.remove('on');
     $('finalPanel').classList.remove('on');
-    renderAll();
-    drawScene(0);
+    beginPrepDay();
   }
 
-  function capacity() { return 8 + state.seatLevel * 4; }
-  function memberById(id) { return state.members.find(m => m.id === id); }
-  function assignedRole(id) {
-    if (state.slots.lead === id) return '주연';
-    if (state.slots.support === id) return '보조';
-    return '';
+  function beginPrepDay() {
+    state.phase = 'prep';
+    state.prepLeft = MAX_PREP;
+    state.prepared = { promo: false, light: false, stage: false, ticket: false };
+    state.audience = [];
+    activeJob = null;
+    workStep = 0;
+    renderAll();
+    drawScene(0);
+
+    const staffed = Object.keys(state.employees);
+    staffed.forEach((jobKey, index) => {
+      setTimeout(() => {
+        if (state.phase !== 'prep') return;
+        state.prepared[jobKey] = true;
+        setBanner(`${JOBS[jobKey].worker} · ${JOBS[jobKey].name} 준비`);
+        playTone(350 + index * 70, .08, 'square', .035);
+        renderAll();
+        drawScene(0);
+      }, 350 + index * 430);
+    });
   }
 
   function renderAll() {
     $('moneyValue').textContent = state.money;
-    $('repValue').textContent = state.reputation;
-    $('roundValue').textContent = `${state.round}/${MAX_ROUNDS}`;
-    $('townLabel').textContent = venueName();
-    renderSlots();
-    renderRoster();
-    renderPrepStatus();
+    $('dayValue').textContent = `${state.day}/${MAX_DAYS}`;
+    $('timeValue').textContent = state.prepLeft;
+    $('townLabel').textContent = state.phase === 'show' ? '첫 번째 마을 · 공연 중' : '첫 번째 마을 · 공연 준비';
+    renderJobs();
+    renderStaff();
+    renderPrepNote();
   }
 
-  function venueName() {
-    if (state.seatLevel === 0) return '첫 번째 마을 · 낡은 오두막';
-    if (state.seatLevel === 1) return '첫 번째 마을 · 작은 천막';
-    if (state.seatLevel === 2) return '첫 번째 마을 · 붉은 천막';
-    return '첫 번째 마을 · 커진 서커스장';
-  }
-
-  function portraitHTML(member) {
-    return `<div class="portrait" style="--member-color:${member.color}"><span class="hat"></span></div>`;
-  }
-
-  function renderSlots() {
-    const slots = [
-      { key: 'lead', label: '주연 · 환호를 만듦' },
-      { key: 'support', label: '보조 · 공연을 받침' },
-    ];
-    $('slots').innerHTML = slots.map(slot => {
-      const member = memberById(state.slots[slot.key]);
-      return `<div class="slot" data-slot="${slot.key}">
-        <span class="slot-label">${slot.label}</span>
-        ${member ? `<div class="slot-member">${portraitHTML(member)}<strong>${member.name}</strong></div>` : '<span class="slot-empty">+</span>'}
-      </div>`;
-    }).join('');
-
-    document.querySelectorAll('.slot').forEach(slot => {
-      slot.addEventListener('click', () => {
-        if (state.phase !== 'prep' || !selectedMember) return;
-        assignMember(selectedMember, slot.dataset.slot);
-      });
-      slot.addEventListener('dragover', event => {
-        event.preventDefault();
-        slot.classList.add('target');
-      });
-      slot.addEventListener('dragleave', () => slot.classList.remove('target'));
-      slot.addEventListener('drop', event => {
-        event.preventDefault();
-        slot.classList.remove('target');
-        const id = event.dataTransfer.getData('text/plain');
-        if (id) assignMember(id, slot.dataset.slot);
-      });
-    });
-  }
-
-  function pipHTML(value, kind) {
-    return Array.from({ length: 5 }, (_, i) => `<span class="pip ${i < value ? `on ${kind}` : ''}"></span>`).join('');
-  }
-
-  function renderRoster() {
-    $('roster').innerHTML = state.members.map(member => {
-      const role = assignedRole(member.id);
-      const fatiguePct = Math.min(100, member.fatigue / 6 * 100);
-      const fatigueColor = member.fatigue >= 4 ? '#d95555' : member.fatigue >= 2 ? '#e0a94f' : '#63c17b';
-      return `<div class="member-card ${selectedMember === member.id ? 'selected' : ''} ${role ? 'assigned' : ''}" draggable="true" data-member="${member.id}">
-        ${role ? `<span class="role-tag">${role}</span>` : ''}
-        <div class="member-top">${portraitHTML(member)}<div class="member-name"><strong>${member.name}</strong><span>${member.type}</span></div></div>
-        <div class="stat-line"><span>흥행</span><div class="pips">${pipHTML(member.show, 'show')}</div></div>
-        <div class="stat-line"><span>지원</span><div class="pips">${pipHTML(member.help, 'help')}</div></div>
-        <div class="fatigue" title="피로"><div class="fatigue-fill" style="width:${fatiguePct}%;background:${fatigueColor}"></div></div>
-      </div>`;
-    }).join('');
-
-    document.querySelectorAll('.member-card').forEach(card => {
-      card.addEventListener('click', () => {
-        selectedMember = selectedMember === card.dataset.member ? null : card.dataset.member;
-        renderRoster();
-      });
-      card.addEventListener('dragstart', event => {
-        event.dataTransfer.setData('text/plain', card.dataset.member);
-        selectedMember = card.dataset.member;
-      });
-    });
-  }
-
-  function assignMember(memberId, targetRole) {
-    if (state.phase !== 'prep') return;
-    const otherRole = targetRole === 'lead' ? 'support' : 'lead';
-    const oldTarget = state.slots[targetRole];
-    if (state.slots[otherRole] === memberId) {
-      state.slots[otherRole] = oldTarget || null;
+  function renderJobs() {
+    const layer = $('jobLayer');
+    if (state.phase !== 'prep') {
+      layer.innerHTML = '';
+      return;
     }
-    state.slots[targetRole] = memberId;
-    selectedMember = null;
-    playTone(330, .05, 'square', .035);
+
+    if (activeJob) {
+      layer.innerHTML = WORK_POINTS[activeJob].map((point, index) => `<button class="work-point" data-step="${index}" style="left:${point[0]}%;top:${point[1]}%" aria-label="${JOBS[activeJob].name} 준비 ${index + 1}"></button>`).join('');
+      layer.querySelectorAll('.work-point').forEach(button => button.addEventListener('click', () => completeWorkPoint(button)));
+      return;
+    }
+
+    layer.innerHTML = Object.entries(JOBS).map(([key, job]) => {
+      const prepared = state.prepared[key];
+      const staffed = Boolean(state.employees[key]);
+      const locked = !prepared && !staffed && state.prepLeft <= 0;
+      return `<button class="job-button ${prepared ? 'prepared' : ''} ${staffed ? 'staffed' : ''} ${locked ? 'locked' : ''}" data-job="${key}" style="left:${job.pos[0]}%;top:${job.pos[1]}%" ${prepared || staffed || locked ? 'disabled' : ''} title="${job.name}">
+        ${staffed ? `<span class="job-staff">${job.worker.slice(0, 1)}</span>` : ''}
+        ${prepared ? '<span class="job-check">✓</span>' : ''}
+        <span class="job-art art-${job.art}"></span>
+        <span class="job-name">${job.name}</span>
+      </button>`;
+    }).join('');
+    layer.querySelectorAll('[data-job]').forEach(button => button.addEventListener('click', () => startManualJob(button.dataset.job)));
+  }
+
+  function renderStaff() {
+    const employees = Object.entries(state.employees);
+    if (!employees.length) {
+      $('staffList').innerHTML = '<div class="staff-empty">아직 직원 없음</div>';
+      return;
+    }
+    $('staffList').innerHTML = employees.map(([jobKey, employee]) => `<div class="staff-card">
+      <span class="staff-face" style="--staff-color:${JOBS[jobKey].color}"></span>
+      <span class="staff-copy"><strong>${employee.name}</strong><span>${JOBS[jobKey].name} 자동<br>${JOBS[jobKey].bonus} · 임금 ${JOBS[jobKey].wage}</span></span>
+    </div>`).join('');
+  }
+
+  function renderPrepNote() {
+    const done = Object.values(state.prepared).filter(Boolean).length;
+    const missing = Object.entries(state.prepared).filter(([, value]) => !value).map(([key]) => JOBS[key].name);
+    $('startShow').disabled = state.phase !== 'prep' || Boolean(activeJob);
+    $('prepNote').textContent = activeJob ? `${JOBS[activeJob].name} 준비 ${workStep}/3` : missing.length ? `준비 ${done}/4 · ${missing.join(' · ')}` : '모든 준비 완료';
+  }
+
+  function startManualJob(jobKey) {
+    if (state.phase !== 'prep' || state.prepared[jobKey] || state.employees[jobKey] || state.prepLeft <= 0) return;
+    activeJob = jobKey;
+    workStep = 0;
+    setBanner(JOBS[jobKey].name);
+    playTone(260, .06, 'square', .03);
+    renderJobs();
+    renderPrepNote();
+  }
+
+  function completeWorkPoint(button) {
+    const expected = workStep;
+    if (Number(button.dataset.step) !== expected) {
+      playTone(120, .06, 'square', .025);
+      button.animate([{ transform: 'translate(-50%, -50%) translateX(-3px)' }, { transform: 'translate(-50%, -50%) translateX(3px)' }], { duration: 100, iterations: 2 });
+      return;
+    }
+    button.classList.add('done');
+    workStep++;
+    playTone(330 + workStep * 80, .07, 'square', .035);
+    renderPrepNote();
+    if (workStep < 3) return;
+    const completedJob = activeJob;
+    setTimeout(() => finishManualJob(completedJob), 230);
+  }
+
+  function finishManualJob(jobKey) {
+    if (activeJob !== jobKey) return;
+    state.prepared[jobKey] = true;
+    state.prepLeft--;
+    activeJob = null;
+    workStep = 0;
+    setBanner(`${JOBS[jobKey].name} 완료`);
     renderAll();
     drawScene(0);
   }
 
-  function renderPrepStatus() {
-    const ready = Boolean(state.slots.lead && state.slots.support);
-    $('startShow').disabled = !ready || state.phase !== 'prep';
-    const resting = state.members.filter(m => !assignedRole(m.id)).length;
-    $('prepStatus').textContent = resting ? `대기 단원 ${resting}명 · 피로 회복` : '주연과 보조를 바꿔 배치 가능';
-  }
-
   function calculateShow() {
-    const lead = memberById(state.slots.lead);
-    const support = memberById(state.slots.support);
-    const cap = capacity();
-    const demand = 6 + state.promoLevel * 3 + Math.floor(state.reputation / 4) + Math.floor(Math.random() * 3);
-    const attendees = Math.min(cap, demand);
-    const fatiguePenalty = lead.fatigue * .65 + support.fatigue * .4;
-    const quality = lead.show * 1.65 + support.help * 1.25 + support.show * .35 + lead.help * .15 - fatiguePenalty;
-    const satisfaction = clamp(.42 + quality / 19, .35, 1);
-    const earlyLeaves = satisfaction < .58 ? Math.max(1, Math.round(attendees * (1 - satisfaction) * .45)) : 0;
-    const paidAudience = attendees;
-    const ticketIncome = paidAudience * 2;
-    const tips = Math.round((paidAudience - earlyLeaves) * satisfaction);
-    const revenue = ticketIncome + tips;
-    const repGain = Math.max(0, Math.round((satisfaction - .48) * 5));
-    return { lead, support, cap, demand, attendees, satisfaction, earlyLeaves, ticketIncome, tips, revenue, repGain };
-  }
-
-  function createAudience(result) {
-    const seats = seatPositions(result.cap);
-    state.audience = seats.slice(0, result.attendees).map((seat, index) => ({
-      ...seat,
-      index,
-      side: index % 2 ? 1 : -1,
-      delay: index * 65,
-      color: ['#d9715d', '#e0a94f', '#65a8df', '#63c17b', '#9a7bd8'][index % 5],
-      moodSeed: (index * 37) % 100,
-      leaves: index >= result.attendees - result.earlyLeaves,
-    }));
+    const promoStaff = Boolean(state.employees.promo);
+    const lightStaff = Boolean(state.employees.light);
+    const stageStaff = Boolean(state.employees.stage);
+    const ticketStaff = Boolean(state.employees.ticket);
+    const demand = 5 + Math.floor(state.reputation / 3) + (state.prepared.promo ? 4 : 0) + (promoStaff ? 2 : 0) + Math.floor(Math.random() * 2);
+    const capacity = 6 + state.seatLevel * 3;
+    const queue = Math.min(demand, capacity);
+    const gateLoss = state.prepared.ticket ? 0 : Math.min(2, Math.max(1, Math.floor(queue * .3)));
+    const attendees = Math.max(1, queue - gateLoss);
+    const satisfaction = clamp(.46 + (state.prepared.light ? .17 : 0) + (state.prepared.stage ? .22 : 0) + (lightStaff ? .08 : 0), .35, .98);
+    const ticketPrice = state.prepared.ticket ? 2 : 1;
+    const ticketIncome = attendees * (ticketPrice + (ticketStaff ? 1 : 0));
+    const tips = Math.floor(attendees * satisfaction) + (stageStaff ? attendees : 0);
+    const gross = ticketIncome + tips;
+    const wages = Object.keys(state.employees).reduce((sum, key) => sum + JOBS[key].wage, 0);
+    const net = gross - wages;
+    const repGain = satisfaction >= .84 ? 2 : satisfaction >= .65 ? 1 : 0;
+    return { demand, capacity, queue, gateLoss, attendees, satisfaction, ticketIncome, tips, gross, wages, net, repGain };
   }
 
   function startShow() {
-    if (state.phase !== 'prep' || !state.slots.lead || !state.slots.support) return;
+    if (state.phase !== 'prep' || activeJob) return;
     ensureAudio();
-    playTone(220, .08, 'square', .05);
-    setTimeout(() => playTone(330, .08, 'square', .045), 90);
     state.phase = 'show';
     showResult = calculateShow();
     createAudience(showResult);
     showStart = performance.now();
     $('prepPanel').style.display = 'none';
+    $('jobLayer').innerHTML = '';
     $('showTimer').classList.add('on');
-    setBanner('문을 엽니다');
+    playTone(220, .08, 'square', .05);
+    setTimeout(() => playTone(330, .08, 'square', .045), 90);
     requestAnimationFrame(showLoop);
   }
 
@@ -592,414 +498,272 @@
     const elapsed = now - showStart;
     const progress = Math.min(1, elapsed / SHOW_MS);
     $('showTimerFill').style.width = `${progress * 100}%`;
-
-    if (elapsed < 1400) setBanner('관객 입장');
+    if (elapsed < 1300) setBanner(showResult.gateLoss ? '관객 일부가 줄을 떠납니다' : '관객 입장');
     else if (elapsed < 4200) setBanner('공연 중');
     else setBanner('마지막 인사');
-
     drawScene(elapsed);
-    if (elapsed < SHOW_MS) {
-      requestAnimationFrame(showLoop);
-      return;
-    }
-    finishShow();
+    if (elapsed < SHOW_MS) requestAnimationFrame(showLoop);
+    else finishShow();
   }
 
   function finishShow() {
     state.phase = 'result';
+    state.money += showResult.net;
+    state.reputation += showResult.repGain;
     $('showTimer').classList.remove('on');
     hideBanner();
-
-    state.money += showResult.revenue;
-    state.reputation += showResult.repGain;
-    state.members.forEach(member => {
-      const role = assignedRole(member.id);
-      if (role === '주연') member.fatigue = Math.min(6, member.fatigue + 2);
-      else if (role === '보조') member.fatigue = Math.min(6, member.fatigue + 1);
-      else member.fatigue = Math.max(0, member.fatigue - 2);
-    });
-
     $('moneyValue').textContent = state.money;
-    $('repValue').textContent = state.reputation;
-    bump($('moneyValue'));
-    $('resultAudience').textContent = `${showResult.attendees - showResult.earlyLeaves}/${showResult.cap}`;
+    $('resultAudience').textContent = `${showResult.attendees}/${showResult.demand}`;
     $('resultMood').textContent = `${Math.round(showResult.satisfaction * 100)}%`;
-    $('resultRevenue').textContent = `+${showResult.revenue}`;
+    $('resultGross').textContent = `+${showResult.gross}`;
+    $('resultNet').textContent = `${showResult.net >= 0 ? '+' : ''}${showResult.net}`;
     playCoinSound();
+    drawScene(SHOW_MS);
 
-    if (state.round >= MAX_ROUNDS) {
+    if (state.day >= MAX_DAYS) {
       setTimeout(showFinal, 450);
       return;
     }
-
-    pendingCandidate = nextCandidate();
     renderInvestments();
     $('resultPanel').classList.add('on');
-    drawScene(SHOW_MS);
-  }
-
-  function investmentCosts() {
-    return {
-      recruit: 18 + Math.max(0, state.members.length - 2) * 7,
-      seats: 12 + state.seatLevel * 6,
-      promo: 10 + state.promoLevel * 5,
-    };
-  }
-
-  function nextCandidate() {
-    const owned = new Set(state.members.map(m => m.name));
-    const available = CANDIDATES.filter(c => !owned.has(c.name));
-    const source = available.length ? available[(state.round - 1) % available.length] : CANDIDATES[state.round % CANDIDATES.length];
-    return { ...source, id: `member-${state.round}-${source.name}`, fatigue: 0 };
   }
 
   function renderInvestments() {
-    const costs = investmentCosts();
-    const options = [
-      {
-        key: 'recruit', title: `${pendingCandidate.name} 영입`, detail: `${pendingCandidate.type} · 흥행 ${pendingCandidate.show} · 지원 ${pendingCandidate.help}`,
-        cost: costs.recruit, art: 'recruit-art',
-      },
-      {
-        key: 'seats', title: '객석 확장', detail: `좌석 ${capacity()} → ${capacity() + 4}`,
-        cost: costs.seats, art: 'seat-art',
-      },
-      {
-        key: 'promo', title: '마을에 홍보', detail: `다음 공연 관객 수요 +3`,
-        cost: costs.promo, art: 'poster-art',
-      },
-    ];
+    const employeeCards = Object.entries(JOBS).filter(([key]) => !state.employees[key]).map(([key, job]) => ({
+      key: `hire:${key}`,
+      title: `${job.worker} 고용`,
+      detail: `${job.name} 자동 · ${job.bonus} · 임금 ${job.wage}`,
+      cost: job.hire,
+      art: `<span class="invest-face" style="--staff-color:${job.color}"></span>`,
+    }));
+    const seatCost = 12 + state.seatLevel * 7;
+    const options = [...employeeCards, {
+      key: 'seat', title: '객석 늘리기', detail: `좌석 ${6 + state.seatLevel * 3} → ${9 + state.seatLevel * 3}`,
+      cost: seatCost, art: '<span class="seat-art"></span>',
+    }];
     $('investments').innerHTML = options.map(option => `<button class="invest-card" data-invest="${option.key}" ${state.money < option.cost ? 'disabled' : ''}>
-      <span class="invest-art ${option.art}"></span>
-      <span><strong>${option.title}</strong><small>${option.detail}</small></span>
-      <span class="price">${option.cost}</span>
+      ${option.art}<span><strong>${option.title}</strong><small>${option.detail}</small></span><span class="price">${option.cost}</span>
     </button>`).join('');
-    document.querySelectorAll('.invest-card').forEach(button => button.addEventListener('click', () => invest(button.dataset.invest)));
+    document.querySelectorAll('[data-invest]').forEach(button => button.addEventListener('click', () => invest(button.dataset.invest)));
   }
 
-  function invest(kind) {
+  function invest(key) {
     if (state.phase !== 'result') return;
-    const costs = investmentCosts();
-    if (state.money < costs[kind]) return;
-    state.money -= costs[kind];
-    state.lastInvestment = kind;
-    if (kind === 'recruit') state.members.push(pendingCandidate);
-    if (kind === 'seats') state.seatLevel++;
-    if (kind === 'promo') state.promoLevel++;
-    playInvestmentSound(kind);
-    nextRound();
+    let cost;
+    if (key.startsWith('hire:')) cost = JOBS[key.split(':')[1]].hire;
+    else cost = 12 + state.seatLevel * 7;
+    if (state.money < cost) return;
+    state.money -= cost;
+    if (key.startsWith('hire:')) {
+      const jobKey = key.split(':')[1];
+      state.employees[jobKey] = { name: JOBS[jobKey].worker };
+      playInvestmentSound([300, 400, 520]);
+    } else {
+      state.seatLevel++;
+      playInvestmentSound([180, 250, 340]);
+    }
+    nextDay();
   }
 
-  function nextRound() {
-    state.round++;
-    state.phase = 'prep';
-    state.audience = [];
-    pendingCandidate = null;
+  function nextDay() {
+    state.day++;
     $('resultPanel').classList.remove('on');
-    $('prepPanel').style.display = 'block';
-    renderAll();
-    drawScene(0);
+    $('prepPanel').style.display = 'grid';
+    beginPrepDay();
   }
 
   function showFinal() {
     $('resultPanel').classList.remove('on');
     $('prepPanel').style.display = 'none';
     $('finalPanel').classList.add('on');
-    $('finalSummary').textContent = `${state.members.length}명의 단원 · ${capacity()}석 · 평판 ${state.reputation} · 보유금 ${state.money}`;
-    drawScene(SHOW_MS);
+    const names = Object.keys(state.employees).map(key => JOBS[key].worker);
+    $('finalSummary').textContent = `${names.length ? names.join(' · ') : '직원 없이'} 운영 · ${6 + state.seatLevel * 3}석 · 평판 ${state.reputation} · 보유금 ${state.money}`;
   }
 
-  function setBanner(text) {
-    const banner = $('phaseBanner');
-    if (banner.textContent !== text) {
-      banner.textContent = text;
-      banner.classList.add('show');
-    }
+  function createAudience(result) {
+    const seats = seatPositions(result.capacity);
+    state.audience = seats.slice(0, result.attendees).map((seat, index) => ({
+      ...seat,
+      index,
+      side: index % 2 ? 1 : -1,
+      delay: index * 80,
+      color: COLORS[index % COLORS.length],
+      moodSeed: (index * 37) % 100,
+    }));
   }
-
-  function hideBanner() { $('phaseBanner').classList.remove('show'); }
-
-  function bump(element) {
-    element.classList.remove('bump');
-    void element.offsetWidth;
-    element.classList.add('bump');
-  }
-
-  function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
-  function easeOut(t) { return 1 - Math.pow(1 - clamp(t, 0, 1), 3); }
 
   function seatPositions(count) {
     const positions = [];
-    const rows = count > 16 ? 3 : 2;
+    const rows = count > 9 ? 3 : 2;
     const perRow = Math.ceil(count / rows);
     for (let i = 0; i < count; i++) {
       const row = Math.floor(i / perRow);
       const inRow = i % perRow;
       const rowCount = Math.min(perRow, count - row * perRow);
-      const spacing = Math.min(72, 590 / Math.max(1, rowCount - 1));
+      const spacing = Math.min(82, 590 / Math.max(1, rowCount - 1));
       const startX = 480 - (rowCount - 1) * spacing / 2;
-      positions.push({ x: startX + inRow * spacing, y: 355 + row * 55, row });
+      positions.push({ x: startX + inRow * spacing, y: 374 + row * 48, row });
     }
     return positions;
   }
 
   function drawScene(elapsed) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawSky();
-    drawGround();
-    drawVenue();
-    drawPromotion();
-    drawStage(elapsed);
-    drawSeats();
+    if (state.phase === 'show' || state.phase === 'result' || state.phase === 'end') drawShowScene(elapsed);
+    else drawPrepScene();
+  }
+
+  function drawPrepScene() {
+    drawNightSky();
+    ctx.fillStyle = '#35483a'; ctx.fillRect(0, 260, 960, 270);
+    ctx.fillStyle = '#8b6844'; ctx.beginPath(); ctx.ellipse(480, 420, 410, 92, 0, 0, Math.PI * 2); ctx.fill();
+    drawWagon(38, 247);
+    drawTent(480, 250, .92);
+    drawPosterBoard(115, 326);
+    drawTicketBooth(810, 305);
+    drawPrepProps();
+    drawEmployees();
+  }
+
+  function drawShowScene(elapsed) {
+    ctx.fillStyle = state.prepared.light ? '#3a2928' : '#181822'; ctx.fillRect(0, 0, 960, 530);
+    ctx.fillStyle = '#6e3438'; ctx.fillRect(0, 0, 115, 530); ctx.fillRect(845, 0, 115, 530);
+    ctx.fillStyle = '#b8464e';
+    for (let x = 0; x < 960; x += 96) ctx.fillRect(x, 0, 48, 92);
+    ctx.fillStyle = '#352521'; ctx.fillRect(0, 455, 960, 75);
+    drawStageInterior(elapsed);
+    drawShowSeats();
     drawAudience(elapsed);
-    drawForeground(elapsed);
+    if (elapsed > 4200) drawConfetti(elapsed);
   }
 
-  function drawSky() {
-    ctx.fillStyle = '#252d46';
-    ctx.fillRect(0, 0, 960, 260);
-    ctx.fillStyle = '#303958';
-    for (let y = 18; y < 240; y += 28) {
-      for (let x = (y / 28 % 2) * 14; x < 960; x += 38) ctx.fillRect(x, y, 2, 2);
-    }
-    ctx.fillStyle = '#f3d27a';
-    ctx.beginPath(); ctx.arc(810, 72, 33, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#252d46';
-    ctx.beginPath(); ctx.arc(825, 61, 29, 0, Math.PI * 2); ctx.fill();
-    drawTownSilhouette();
-  }
-
-  function drawTownSilhouette() {
+  function drawNightSky() {
+    ctx.fillStyle = '#252d46'; ctx.fillRect(0, 0, 960, 300);
+    ctx.fillStyle = '#b9c5dc';
+    for (let y = 20; y < 240; y += 31) for (let x = (y % 2) * 20; x < 960; x += 47) ctx.fillRect(x, y, 2, 2);
+    ctx.fillStyle = '#f3d27a'; ctx.beginPath(); ctx.arc(828, 69, 31, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#252d46'; ctx.beginPath(); ctx.arc(842, 58, 28, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = '#171b2b';
-    const houses = [[0,165,130,95],[105,190,120,70],[760,178,120,82],[845,151,115,109]];
-    houses.forEach(([x,y,w,h],i) => {
-      ctx.fillRect(x,y,w,h);
-      ctx.beginPath(); ctx.moveTo(x-8,y); ctx.lineTo(x+w/2,y-45-(i%2)*14); ctx.lineTo(x+w+8,y); ctx.fill();
-      ctx.fillStyle = '#d9a84c';
-      ctx.fillRect(x+22,y+30,14,18); ctx.fillRect(x+w-35,y+28,14,18);
-      ctx.fillStyle = '#171b2b';
+    [[0,190,135,75],[118,215,112,50],[730,202,110,63],[825,178,135,87]].forEach(([x,y,w,h]) => {
+      ctx.fillRect(x,y,w,h); ctx.beginPath(); ctx.moveTo(x-8,y); ctx.lineTo(x+w/2,y-42); ctx.lineTo(x+w+8,y); ctx.fill();
     });
   }
 
-  function drawGround() {
-    ctx.fillStyle = '#344a3a'; ctx.fillRect(0, 250, 960, 250);
-    ctx.fillStyle = '#2b3e32';
-    for (let x = 0; x < 960; x += 24) ctx.fillRect(x, 280 + (x % 5) * 17, 3, 12);
-    ctx.fillStyle = '#7a5a3b'; ctx.fillRect(80, 446, 800, 54);
-    ctx.fillStyle = '#8f6b46';
-    for (let x = 90; x < 870; x += 42) ctx.fillRect(x, 462 + (x % 3) * 5, 24, 3);
-  }
-
-  function drawVenue() {
-    const level = state.seatLevel;
-    const left = 225 - Math.min(70, level * 24);
-    const width = 510 + Math.min(140, level * 48);
-    const top = 112 - Math.min(25, level * 8);
-
-    ctx.fillStyle = '#4a2e2e'; ctx.fillRect(left - 16, top + 65, width + 32, 205);
-    ctx.fillStyle = '#d95555'; ctx.fillRect(left, top + 50, width, 220);
-    ctx.fillStyle = '#f0d28b';
-    for (let x = left; x < left + width; x += 72) ctx.fillRect(x, top + 50, 35, 220);
-    ctx.fillStyle = '#7e2e38';
-    ctx.beginPath();
-    ctx.moveTo(left - 20, top + 65);
-    ctx.lineTo(480, top - 42 - level * 6);
-    ctx.lineTo(left + width + 20, top + 65);
-    ctx.closePath(); ctx.fill();
+  function drawTent(cx, ground, scale) {
+    ctx.save(); ctx.translate(cx, ground); ctx.scale(scale, scale);
+    ctx.fillStyle = '#d95555'; ctx.fillRect(-245, 40, 490, 220);
+    ctx.fillStyle = '#f0d28b'; for (let x = -245; x < 245; x += 72) ctx.fillRect(x, 40, 34, 220);
+    ctx.fillStyle = '#8e303a'; ctx.beginPath(); ctx.moveTo(-270, 50); ctx.lineTo(0, -128); ctx.lineTo(270, 50); ctx.closePath(); ctx.fill();
     ctx.strokeStyle = '#f4c95d'; ctx.lineWidth = 6; ctx.stroke();
-
-    ctx.fillStyle = '#1b1721'; ctx.fillRect(left + 70, top + 105, width - 140, 165);
-    ctx.fillStyle = '#8b3039'; ctx.fillRect(left + 62, top + 96, 28, 174); ctx.fillRect(left + width - 90, top + 96, 28, 174);
-    ctx.fillStyle = '#d95555';
-    ctx.beginPath(); ctx.moveTo(left + 62, top + 96); ctx.lineTo(left + 130, top + 168); ctx.lineTo(left + 62, top + 270); ctx.fill();
-    ctx.beginPath(); ctx.moveTo(left + width - 62, top + 96); ctx.lineTo(left + width - 130, top + 168); ctx.lineTo(left + width - 62, top + 270); ctx.fill();
-
-    ctx.fillStyle = '#51372d'; ctx.fillRect(left + 70, top + 245, width - 140, 25);
-    ctx.fillStyle = '#f4c95d';
-    for (let x = left + 85; x < left + width - 85; x += 38) {
-      ctx.beginPath(); ctx.arc(x, top + 78, 5, 0, Math.PI * 2); ctx.fill();
-    }
-    ctx.fillStyle = '#f4c95d'; ctx.fillRect(468, top - 60 - level * 6, 24, 55);
-    ctx.fillStyle = '#d95555';
-    ctx.beginPath(); ctx.moveTo(492, top - 60 - level * 6); ctx.lineTo(540, top - 44 - level * 6); ctx.lineTo(492, top - 28 - level * 6); ctx.fill();
-  }
-
-  function drawPromotion() {
-    for (let i = 0; i < state.promoLevel; i++) {
-      const x = i % 2 === 0 ? 115 + i * 18 : 805 - i * 18;
-      const y = 210 + (i % 3) * 42;
-      ctx.save(); ctx.translate(x, y); ctx.rotate((i % 2 ? 1 : -1) * .07);
-      ctx.fillStyle = '#f0d28b'; ctx.fillRect(-20, -26, 40, 52);
-      ctx.fillStyle = '#d95555'; ctx.fillRect(-15, -21, 30, 42);
-      ctx.fillStyle = '#f4c95d'; drawStar(0, 0, 10, 4);
-      ctx.restore();
-    }
-  }
-
-  function drawStage(elapsed) {
-    const lead = memberById(state.slots.lead);
-    const support = memberById(state.slots.support);
-    if (!lead || !support) return;
-    const isShow = state.phase === 'show' || state.phase === 'result' || state.phase === 'end';
-    const activeTime = Math.max(0, elapsed - 1400);
-    drawSpotlight(385, 250, isShow ? .7 : .25);
-    drawSpotlight(575, 250, isShow ? .58 : .2);
-    drawPerformer(lead, 400, 259, isShow ? activeTime : 0, 'lead');
-    drawPerformer(support, 560, 264, isShow ? activeTime : 0, 'support');
-  }
-
-  function drawSpotlight(x, y, alpha) {
-    ctx.save(); ctx.globalAlpha = alpha;
-    ctx.fillStyle = '#f8e6a8';
-    ctx.beginPath(); ctx.moveTo(x - 26, 78); ctx.lineTo(x - 100, y + 38); ctx.lineTo(x + 100, y + 38); ctx.lineTo(x + 26, 78); ctx.fill();
-    ctx.restore();
-  }
-
-  function drawPerformer(member, x, y, time, role) {
-    const jump = state.phase === 'show' && time > 0 ? Math.abs(Math.sin(time / (role === 'lead' ? 230 : 310))) * (role === 'lead' ? 22 : 9) : Math.sin(performance.now() / 450) * 2;
-    const sway = state.phase === 'show' ? Math.sin(time / 170) * 5 : 0;
-    const py = y - jump;
-    ctx.save(); ctx.translate(x + sway, py);
-
-    ctx.fillStyle = '#1a1720'; ctx.fillRect(-13, 34, 9, 17); ctx.fillRect(5, 34, 9, 17);
-    ctx.fillStyle = member.color; ctx.fillRect(-20, -3, 40, 39);
-    ctx.fillStyle = '#f1c8a5';
-    ctx.beginPath(); ctx.arc(0, -18, 15, 0, Math.PI * 2); ctx.fill();
-    ctx.strokeStyle = '#422f31'; ctx.lineWidth = 3; ctx.stroke();
-    ctx.fillStyle = member.color; ctx.fillRect(-17, -36, 34, 8);
-    ctx.fillStyle = '#422f31'; ctx.fillRect(-7, -18, 3, 3); ctx.fillRect(5, -18, 3, 3);
-    ctx.fillStyle = '#d95555'; ctx.fillRect(-3, -10, 7, 3);
-
-    if (role === 'lead' && state.phase === 'show' && time > 0) {
-      for (let i = 0; i < 3; i++) {
-        const angle = time / 330 + i * Math.PI * 2 / 3;
-        const bx = Math.cos(angle) * 34;
-        const by = -52 + Math.sin(angle) * 15;
-        ctx.fillStyle = ['#f4c95d', '#65a8df', '#63c17b'][i];
-        ctx.beginPath(); ctx.arc(bx, by, 7, 0, Math.PI * 2); ctx.fill();
-      }
-    }
-
-    if (role === 'support' && state.phase === 'show' && time > 0) {
-      ctx.strokeStyle = '#f4c95d'; ctx.lineWidth = 4;
-      ctx.beginPath(); ctx.arc(0, 10, 28 + Math.sin(time / 150) * 3, 0, Math.PI * 2); ctx.stroke();
+    ctx.fillStyle = '#171520'; ctx.fillRect(-90, 105, 180, 155);
+    ctx.fillStyle = '#a43842'; ctx.beginPath(); ctx.moveTo(-100, 92); ctx.lineTo(-28, 155); ctx.lineTo(-100, 260); ctx.fill(); ctx.beginPath(); ctx.moveTo(100, 92); ctx.lineTo(28, 155); ctx.lineTo(100, 260); ctx.fill();
+    ctx.fillStyle = '#f4c95d'; ctx.fillRect(-8, -171, 16, 46); ctx.fillStyle = '#d95555'; ctx.beginPath(); ctx.moveTo(8,-171); ctx.lineTo(65,-155); ctx.lineTo(8,-139); ctx.fill();
+    for (let i = -2; i <= 2; i++) {
+      ctx.fillStyle = state.prepared.light ? '#fff0a8' : '#494454'; ctx.beginPath(); ctx.arc(i * 70, 51, 7, 0, Math.PI * 2); ctx.fill();
+      if (state.prepared.light) { ctx.save(); ctx.globalAlpha = .18; ctx.beginPath(); ctx.arc(i * 70, 51, 20, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
     }
     ctx.restore();
   }
 
-  function drawSeats() {
-    const seats = seatPositions(capacity());
-    seats.forEach(seat => {
-      ctx.fillStyle = '#742f39'; ctx.fillRect(seat.x - 14, seat.y - 2, 28, 18);
-      ctx.fillStyle = '#9e4850'; ctx.fillRect(seat.x - 12, seat.y, 24, 8);
-      ctx.fillStyle = '#33252b'; ctx.fillRect(seat.x - 11, seat.y + 16, 4, 10); ctx.fillRect(seat.x + 7, seat.y + 16, 4, 10);
+  function drawWagon(x, y) {
+    ctx.fillStyle = '#315660'; ctx.fillRect(x, y, 155, 120); ctx.fillStyle = '#e7cf91'; ctx.fillRect(x, y, 155, 25);
+    ctx.fillStyle = '#6e3c31'; ctx.fillRect(x+95, y+38, 42, 82); ctx.fillStyle = '#c99a4a'; ctx.fillRect(x+18,y+45,48,42);
+    ctx.fillStyle = '#2f2725'; [x+35,x+123].forEach(wx => { ctx.beginPath(); ctx.arc(wx,y+126,23,0,Math.PI*2); ctx.fill(); ctx.strokeStyle='#a57b4d';ctx.lineWidth=5;ctx.stroke(); });
+  }
+
+  function drawPosterBoard(x, y) {
+    ctx.fillStyle = '#4a352c'; ctx.fillRect(x-43,y-57,86,105); ctx.fillRect(x-31,y+48,8,42); ctx.fillRect(x+23,y+48,8,42);
+    ctx.fillStyle = state.prepared.promo ? '#d95555' : '#806e59'; ctx.fillRect(x-34,y-48,68,86);
+    if (state.prepared.promo) { ctx.fillStyle='#f4c95d'; drawStar(x,y-6,21,9); }
+  }
+
+  function drawTicketBooth(x, y) {
+    ctx.fillStyle = '#49352b'; ctx.fillRect(x-58,y-56,116,125); ctx.fillStyle='#704535';ctx.fillRect(x-70,y-75,140,24);
+    ctx.fillStyle = state.prepared.ticket ? '#f0d28b' : '#191821'; ctx.fillRect(x-38,y-34,76,48);
+    ctx.fillStyle='#d95555';ctx.fillRect(x-45,y+34,90,16);
+    if (state.prepared.ticket) { ctx.fillStyle='#7e5634';ctx.fillRect(x-22,y-22,44,23); }
+  }
+
+  function drawPrepProps() {
+    ctx.fillStyle = state.prepared.stage ? '#65a8df' : '#473f46';
+    ctx.fillRect(410,365,38,38); ctx.fillRect(512,368,45,35);
+    if (state.prepared.stage) { ctx.strokeStyle='#f4c95d';ctx.lineWidth=5;ctx.beginPath();ctx.arc(480,378,36,0,Math.PI*2);ctx.stroke(); }
+  }
+
+  function drawEmployees() {
+    Object.keys(state.employees).forEach((key, index) => {
+      const pos = { promo:[150,390], light:[374,304], stage:[480,390], ticket:[812,405] }[key];
+      drawPerson(pos[0], pos[1], JOBS[key].color, Math.sin(performance.now()/180+index)*3, false);
     });
+  }
+
+  function drawStageInterior(elapsed) {
+    const lit = state.prepared.light;
+    if (lit) {
+      ctx.save(); ctx.globalAlpha=.24; ctx.fillStyle='#fff0a8';
+      ctx.beginPath();ctx.moveTo(250,0);ctx.lineTo(330,370);ctx.lineTo(520,370);ctx.lineTo(350,0);ctx.fill();
+      ctx.beginPath();ctx.moveTo(610,0);ctx.lineTo(460,370);ctx.lineTo(650,370);ctx.lineTo(710,0);ctx.fill();ctx.restore();
+    }
+    ctx.fillStyle='#5a3a2b';ctx.fillRect(220,330,520,42);ctx.fillStyle='#774c34';ctx.fillRect(235,320,490,18);
+    const active = Math.max(0, elapsed - 1200);
+    const prepared = state.prepared.stage;
+    drawPerformer(410, 291, '#65a8df', active, prepared ? 26 : 8, true);
+    drawPerformer(555, 296, '#63c17b', active, prepared ? 12 : 5, false);
+    if (prepared) { ctx.strokeStyle='#f4c95d';ctx.lineWidth=6;ctx.beginPath();ctx.arc(485,280,48+Math.sin(active/180)*3,0,Math.PI*2);ctx.stroke(); }
+  }
+
+  function drawPerformer(x, y, color, time, jumpHeight, lead) {
+    const jump = state.phase === 'show' && time > 0 ? Math.abs(Math.sin(time/(lead?230:310))) * jumpHeight : 0;
+    ctx.save();ctx.translate(x+Math.sin(time/170)*4,y-jump);
+    drawPerson(0,0,color,0,true);
+    if (lead && state.phase==='show' && time>0) for(let i=0;i<3;i++){const a=time/320+i*Math.PI*2/3;ctx.fillStyle=COLORS[i];ctx.beginPath();ctx.arc(Math.cos(a)*35,-52+Math.sin(a)*15,7,0,Math.PI*2);ctx.fill();}
+    ctx.restore();
+  }
+
+  function drawPerson(x, y, color, sway, local) {
+    ctx.save(); if (!local) ctx.translate(x+sway,y); else ctx.translate(x,y);
+    ctx.fillStyle='#1a1720';ctx.fillRect(-12,30,8,18);ctx.fillRect(5,30,8,18);
+    ctx.fillStyle=color;ctx.fillRect(-18,-5,36,37);
+    ctx.fillStyle='#efc7a2';ctx.beginPath();ctx.arc(0,-19,14,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#422f31';ctx.lineWidth=3;ctx.stroke();
+    ctx.fillStyle=color;ctx.fillRect(-16,-35,32,8);ctx.fillStyle='#422f31';ctx.fillRect(-7,-20,3,3);ctx.fillRect(5,-20,3,3);
+    ctx.restore();
+  }
+
+  function drawShowSeats() {
+    seatPositions(showResult ? showResult.capacity : 6).forEach(seat => { ctx.fillStyle='#742f39';ctx.fillRect(seat.x-14,seat.y-2,28,18);ctx.fillStyle='#9e4850';ctx.fillRect(seat.x-12,seat.y,24,8);ctx.fillStyle='#33252b';ctx.fillRect(seat.x-11,seat.y+16,4,10);ctx.fillRect(seat.x+7,seat.y+16,4,10); });
   }
 
   function drawAudience(elapsed) {
     if (!state.audience.length) return;
-    const showProgress = clamp((elapsed - 1400) / 2800, 0, 1);
-    state.audience.forEach(person => {
-      const arrival = easeOut((elapsed - person.delay) / 900);
-      let x = person.side < 0 ? -30 : 990;
-      let y = 455;
-      x += (person.x - x) * arrival;
-      y += (person.y - 26 - y) * arrival;
-
-      if (person.leaves && elapsed > 3300) {
-        const leave = easeOut((elapsed - 3300) / 900);
-        x += (person.side < 0 ? -100 : 100) * leave;
-        y += 70 * leave;
-      }
-
-      const happy = showResult ? showResult.satisfaction > person.moodSeed / 115 : false;
-      const bob = elapsed > 1400 && happy ? Math.abs(Math.sin(elapsed / 145 + person.index)) * 8 * showProgress : 0;
-      drawAudiencePerson(x, y - bob, person.color, happy && elapsed > 1400, person.index, elapsed);
+    const showProgress=clamp((elapsed-1300)/2700,0,1);
+    state.audience.forEach(person=>{
+      const arrival=easeOut((elapsed-person.delay)/850);let x=person.side<0?-30:990;let y=468;x+=(person.x-x)*arrival;y+=(person.y-25-y)*arrival;
+      const happy=showResult.satisfaction>person.moodSeed/110;const bob=elapsed>1300&&happy?Math.abs(Math.sin(elapsed/145+person.index))*8*showProgress:0;
+      drawAudiencePerson(x,y-bob,person.color,happy&&elapsed>1300,person.index,elapsed);
     });
   }
 
-  function drawAudiencePerson(x, y, color, cheering, index, elapsed) {
-    ctx.save(); ctx.translate(x, y);
-    ctx.fillStyle = color; ctx.fillRect(-10, 9, 20, 24);
-    ctx.fillStyle = '#e8c29d';
-    ctx.beginPath(); ctx.arc(0, 0, 10, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#392c30'; ctx.fillRect(-8, -7, 16, 5);
-    if (cheering) {
-      const wave = Math.sin(elapsed / 100 + index) * 4;
-      ctx.strokeStyle = '#e8c29d'; ctx.lineWidth = 4;
-      ctx.beginPath(); ctx.moveTo(-8, 13); ctx.lineTo(-16, -3 + wave); ctx.moveTo(8, 13); ctx.lineTo(16, -3 - wave); ctx.stroke();
-      if (elapsed > 2500 && index % 3 === 0) {
-        ctx.fillStyle = '#f4c95d'; drawStar(0, -28, 5, 2);
-      }
-    }
-    ctx.restore();
-  }
+  function drawAudiencePerson(x,y,color,cheering,index,elapsed){ctx.save();ctx.translate(x,y);ctx.fillStyle=color;ctx.fillRect(-10,9,20,24);ctx.fillStyle='#e8c29d';ctx.beginPath();ctx.arc(0,0,10,0,Math.PI*2);ctx.fill();ctx.fillStyle='#392c30';ctx.fillRect(-8,-7,16,5);if(cheering){const wave=Math.sin(elapsed/100+index)*4;ctx.strokeStyle='#e8c29d';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(-8,13);ctx.lineTo(-16,-3+wave);ctx.moveTo(8,13);ctx.lineTo(16,-3-wave);ctx.stroke();if(elapsed>2500&&index%3===0){ctx.fillStyle='#f4c95d';drawStar(0,-28,5,2);}}ctx.restore();}
+  function drawConfetti(elapsed){const t=clamp((elapsed-4200)/800,0,1);for(let i=0;i<18;i++){ctx.fillStyle=COLORS[i%COLORS.length];ctx.fillRect(310+(i*53%340),140+((i*31)%120)-t*70,7,7);}}
+  function drawStar(x,y,outer,inner){ctx.beginPath();for(let i=0;i<10;i++){const radius=i%2===0?outer:inner;const angle=-Math.PI/2+i*Math.PI/5;const px=x+Math.cos(angle)*radius;const py=y+Math.sin(angle)*radius;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);}ctx.closePath();ctx.fill();}
 
-  function drawForeground(elapsed) {
-    if (state.phase !== 'show' || elapsed < 4200) return;
-    const t = clamp((elapsed - 4200) / 800, 0, 1);
-    ctx.save(); ctx.globalAlpha = 1 - t * .4;
-    for (let i = 0; i < 18; i++) {
-      const x = 310 + (i * 53 % 340);
-      const y = 140 + ((i * 31) % 120) - t * 70;
-      ctx.fillStyle = ['#f4c95d', '#d95555', '#65a8df', '#63c17b'][i % 4];
-      ctx.fillRect(x, y, 7, 7);
-    }
-    ctx.restore();
+  function setBanner(text) {
+    const banner = $('phaseBanner');
+    banner.textContent = text;
+    banner.classList.add('on');
+    clearTimeout(bannerTimer);
+    if (state.phase !== 'show') bannerTimer = setTimeout(hideBanner, 900);
   }
-
-  function drawStar(x, y, outer, inner) {
-    ctx.beginPath();
-    for (let i = 0; i < 10; i++) {
-      const radius = i % 2 === 0 ? outer : inner;
-      const angle = -Math.PI / 2 + i * Math.PI / 5;
-      const px = x + Math.cos(angle) * radius;
-      const py = y + Math.sin(angle) * radius;
-      if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
-    }
-    ctx.closePath(); ctx.fill();
-  }
-
-  function ensureAudio() {
-    if (!soundOn) return;
-    if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    if (audioContext.state === 'suspended') audioContext.resume();
-  }
-
-  function playTone(freq, duration, type = 'square', volume = .03) {
-    if (!soundOn) return;
-    ensureAudio();
-    const osc = audioContext.createOscillator();
-    const gain = audioContext.createGain();
-    osc.type = type; osc.frequency.value = freq;
-    gain.gain.setValueAtTime(volume, audioContext.currentTime);
-    gain.gain.exponentialRampToValueAtTime(.0001, audioContext.currentTime + duration);
-    osc.connect(gain); gain.connect(audioContext.destination);
-    osc.start(); osc.stop(audioContext.currentTime + duration);
-  }
-
-  function playCoinSound() {
-    [620, 780, 980].forEach((freq, i) => setTimeout(() => playTone(freq, .12, 'square', .04), i * 90));
-  }
-
-  function playInvestmentSound(kind) {
-    const notes = kind === 'recruit' ? [300, 400, 500] : kind === 'seats' ? [180, 240, 320] : [520, 660, 820];
-    notes.forEach((freq, i) => setTimeout(() => playTone(freq, .1, 'square', .04), i * 80));
-  }
+  function hideBanner() { $('phaseBanner').classList.remove('on'); }
+  function ensureAudio(){if(!soundOn)return;if(!audioContext)audioContext=new(window.AudioContext||window.webkitAudioContext)();if(audioContext.state==='suspended')audioContext.resume();}
+  function playTone(freq,duration,type='square',volume=.03){if(!soundOn)return;ensureAudio();const osc=audioContext.createOscillator();const gain=audioContext.createGain();osc.type=type;osc.frequency.value=freq;gain.gain.setValueAtTime(volume,audioContext.currentTime);gain.gain.exponentialRampToValueAtTime(.0001,audioContext.currentTime+duration);osc.connect(gain);gain.connect(audioContext.destination);osc.start();osc.stop(audioContext.currentTime+duration);}
+  function playCoinSound(){[620,780,980].forEach((freq,i)=>setTimeout(()=>playTone(freq,.12,'square',.04),i*90));}
+  function playInvestmentSound(notes){notes.forEach((freq,i)=>setTimeout(()=>playTone(freq,.1,'square',.04),i*80));}
 
   $('startShow').addEventListener('click', startShow);
-  $('skipInvest').addEventListener('click', () => {
-    if (state.phase !== 'result') return;
-    state.lastInvestment = 'save';
-    nextRound();
-  });
+  $('skipInvest').addEventListener('click', () => { if (state.phase === 'result') nextDay(); });
   $('restartBtn').addEventListener('click', resetGame);
-  $('soundBtn').addEventListener('click', () => {
-    soundOn = !soundOn;
-    $('soundBtn').classList.toggle('muted', !soundOn);
-    if (soundOn) playTone(440, .08, 'square', .04);
-  });
-
+  $('soundBtn').addEventListener('click', () => { soundOn=!soundOn;$('soundBtn').classList.toggle('muted',!soundOn);if(soundOn)playTone(440,.08,'square',.04); });
   resetGame();
 })();
 </script>
